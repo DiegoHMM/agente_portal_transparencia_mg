@@ -1,0 +1,3235 @@
+swagger: '2.0'
+info:
+  title: Portal da Transparência - Consultas
+  version: 1.0.0
+  description: >-
+    Documentação dos endpoints de consultas (Remuneracao, Diarias, Receitas e
+    Despesas) do Portal da Transparência (MGapi - homologação). Prefixo comum:
+    /consultas; os endpoints de dados usam o sufixo .json (exceto downloads).
+    Observação: os textos estão sem acentuação apenas na documentação; as
+    respostas da API mantêm a acentuação original.
+host: homologacao.apigw.mgapi.prodemge.gov.br
+basePath: /portaltransparencia/1.0.0
+schemes:
+  - https
+x-observacoes-gerais:
+  periodo: >-
+    Em despesas e diarias, periodo_inicio/periodo_fim usam o formato DDMM
+    (ex. 0101 a 3108 = 01/jan a 31/ago); diarias/individual e os gerar-csv
+    rejeitam outro formato. Em receitas o formato e MM (ex. 01 a 08).
+  user_agent: >-
+    O firewall do gateway bloqueia (403) o User-Agent padrao do Python
+    (Python-urllib); envie um User-Agent proprio.
+  paginacao: >-
+    limit define o tamanho da página (vários endpoints limitam a MAX_ROWS=500).
+    page é a página (base 1); valores <= 0 são normalizados para 1. O offset é
+    aplicado apenas quando limit e page são informados: OFFSET (limit*page-limit).
+  ordenacao: >-
+    order_by define a coluna e order_dir a direção (ASC/DESC). Cada endpoint
+    possui uma whitelist de colunas; valores inválidos usam o padrão do endpoint.
+  export: >-
+    export=true altera o comportamento de paginação (retira o teto padrão) e/ou
+    habilita a exportação dos dados.
+  status_comuns:
+    '200': Dados encontrados.
+    '204': Sem dados para exibir.
+    '400': Parametros obrigatorios ausentes ou invalidos.
+    '422': Validacao de parametros falhou.
+    '500': Erro interno ao processar a consulta.
+paths:
+  /consultas/consultas.json:
+    get:
+      summary: Lista de consultas disponíveis
+      description: >-
+        Lista as consultas cadastradas (metadados/configuração de um domínio de
+        consulta), opcionalmente filtradas por tipo (ex. despesas, receitas).
+      parameters:
+        - name: tipo
+          in: query
+          required: false
+          type: string
+          description: Filtra as consultas por tipo.
+        - name: limit
+          in: query
+          required: false
+          type: integer
+        - name: page
+          in: query
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: Dados encontrados.
+          examples:
+            application/json:
+              status: 200
+              data:
+                consultas:
+                  - id: 1
+                    nome: Remuneracao
+                totalRegistros: 4
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/data-ultima-carga.json:
+    get:
+      summary: Data da última carga por tipo
+      description: >-
+        Retorna a data da última carga do armazém de dados. O parâmetro tipo é
+        mapeado internamente (despesas/receitas -> ARMAZEM, diárias-viagens ->
+        DIARIAS_SCDP, remuneracao -> REMUNERACAO, contratos -> ARMAZEM).
+      parameters:
+        - name: tipo
+          in: query
+          required: false
+          type: string
+          enum: [despesas, receitas, diarias-viagens, remuneracao, contratos]
+          description: Tipo de dado cuja data de carga se deseja consultar.
+      responses:
+        '200':
+          description: Dados encontrados.
+          examples:
+            application/json:
+              status: 200
+              data:
+                - '2026-09-15 03:00:00'
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/remuneracao/orgao.json:
+    get:
+      summary: Remunera por órgão
+      description: Retorna a remunera por órgão, com situações e séries para gráfico.
+      parameters:
+        - name: ano
+          in: query
+          type: integer
+          required: false
+        - name: mes
+          in: query
+          type: integer
+          required: false
+        - name: id_orgao
+          in: query
+          type: integer
+          required: false
+        - name: situacao
+          in: query
+          type: integer
+          required: false
+          description: Código da situação do servidor.
+        - name: termo
+          in: query
+          type: string
+          required: false
+          description: Busca textual (acentos removidos automaticamente).
+        - name: order_by
+          in: query
+          type: string
+          required: false
+          default: nome
+        - name: order_dir
+          in: query
+          type: string
+          required: false
+          default: ASC
+          enum: [ASC, DESC]
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+        - name: export
+          in: query
+          type: boolean
+          required: false
+          default: false
+      responses:
+        '200':
+          description: Dados encontrados.
+          examples:
+            application/json:
+              status: 200
+              data:
+                data_ultima_carga: '2026-09-15 03:00:00'
+                situacoes:
+                  - cd_situacao: 1
+                    situacao: ATIVO
+                    remuneracao_ano:
+                      - mes: 1
+                        valor: 1200000.00
+                orgaos:
+                  - id_orgao: 1234
+                    nome: SECRETARIA DE ESTADO DE FAZENDA
+                qt_orgaos: 42
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/remuneracao/cargo.json:
+    get:
+      summary: Remunera por cargo
+      description: Retorna a remunera por cargo efetivo/comiss.
+      parameters:
+        - name: ano
+          in: query
+          type: integer
+          required: false
+          description: Formato AAAA. Validado no controller.
+        - name: mes
+          in: query
+          type: integer
+          required: false
+          description: Entre 1 e 12. Validado no controller.
+        - name: id_cargo_efetivo
+          in: query
+          type: integer
+          required: false
+        - name: id_cargo_comissao
+          in: query
+          type: integer
+          required: false
+        - name: situacao
+          in: query
+          type: integer
+          required: false
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: order_by
+          in: query
+          type: string
+          required: false
+          default: nome
+        - name: order_dir
+          in: query
+          type: string
+          required: false
+          default: ASC
+          enum: [ASC, DESC]
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+        - name: export
+          in: query
+          type: boolean
+          required: false
+          default: false
+      responses:
+        '200':
+          description: Dados encontrados.
+          examples:
+            application/json:
+              status: 200
+              data:
+                data_ultima_carga: '2026-09-15 03:00:00'
+                cargos:
+                  - nome: ANALISTA
+                    total: 15000000.00
+                total: 320
+        '204':
+          description: Sem dados para exibir.
+        '400':
+          description: ano ou mes em formato inválido.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+  /consultas/remuneracao/individual.json:
+    get:
+      summary: Consulta individual de remunera
+      description: Retorna servidores e valores. ano e mes são obrigatórios.
+      parameters:
+        - name: ano
+          in: query
+          type: integer
+          required: true
+        - name: mes
+          in: query
+          type: integer
+          required: true
+        - name: id_orgao
+          in: query
+          type: integer
+          required: false
+        - name: situacao
+          in: query
+          type: integer
+          required: false
+        - name: nome_servidor
+          in: query
+          type: string
+          required: false
+          description: Espaços são convertidos em curinga (%).
+        - name: masp
+          in: query
+          type: string
+          required: false
+        - name: id_cargo_efetivo
+          in: query
+          type: integer
+          required: false
+        - name: id_cargo_comissao
+          in: query
+          type: integer
+          required: false
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: order_by
+          in: query
+          type: string
+          required: false
+          default: nome_servidor
+        - name: order_dir
+          in: query
+          type: string
+          required: false
+          default: ASC
+          enum: [ASC, DESC]
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+        - name: export
+          in: query
+          type: boolean
+          required: false
+          default: false
+      responses:
+        '200':
+          description: Dados encontrados.
+          examples:
+            application/json:
+              status: 200
+              data:
+                data_ultima_carga: '2026-09-15 03:00:00'
+                servidores:
+                  - nome_servidor: FULANO DE TAL
+                    masp: '1234567'
+                    remuneracao_bruta: 12000.00
+                qt_servidores: 320
+        '204':
+          description: Sem dados para exibir.
+        '400':
+          description: ano e mes são obrigatórios.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/remuneracao/detalhamento.json:
+    get:
+      summary: Detalhamento da remuneração de um servidor
+      description: >-
+        Retorna o detalhamento de rubricas. E obrigatório informar masp OU hash.
+        Nos testes, hash (vindo de remuneracao/individual) funcionou; masp
+        retornou aviso PHP em HTML.
+      parameters:
+        - name: masp
+          in: query
+          type: string
+          required: false
+          description: Obrigatório se hash não for informado.
+        - name: hash
+          in: query
+          type: string
+          required: false
+          description: Obrigatório se masp não for informado. Tem prioridade sobre masp.
+        - name: ano
+          in: query
+          type: integer
+          required: false
+        - name: mes
+          in: query
+          type: integer
+          required: false
+        - name: id_servidor
+          in: query
+          type: integer
+          required: false
+        - name: id_orgao
+          in: query
+          type: integer
+          required: false
+        - name: id_remuneracao
+          in: query
+          type: integer
+          required: false
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: order_by
+          in: query
+          type: string
+          required: false
+        - name: order_dir
+          in: query
+          type: string
+          required: false
+          enum: [ASC, DESC]
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+        - name: export
+          in: query
+          type: boolean
+          required: false
+          default: false
+      responses:
+        '200':
+          description: Dados encontrados.
+          examples:
+            application/json:
+              status: 200
+              data:
+                data_ultima_carga: '2026-09-15 03:00:00'
+                detalhamento:
+                  - nome: FULANO DE TAL
+                    remuneracao_bruta: 12000.00
+                    descontos_totais: 3000.00
+                    remuneracao_liquida: 9000.00
+                qt_registros: 1
+        '204':
+          description: Sem dados para exibir.
+        '400':
+          description: Informe masp ou hash.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/remuneracao/jetons.json:
+    get:
+      summary: Pagamentos de jetons
+      description: >-
+        Retorna a distribuicao por empresa e a tabela de pagamentos de jetons.
+        Retorna 500 (template ausente) quando o mes nao tem dados.
+      parameters:
+        - name: ano
+          in: query
+          type: integer
+          required: false
+        - name: mes
+          in: query
+          type: integer
+          required: false
+          description: Entre 1 e 12; valores fora da faixa são ignorados.
+        - name: id_servidor
+          in: query
+          type: integer
+          required: false
+        - name: id_remuneracao
+          in: query
+          type: integer
+          required: false
+        - name: nome_empresa
+          in: query
+          type: string
+          required: false
+        - name: nome_servidor
+          in: query
+          type: string
+          required: false
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: order_by
+          in: query
+          type: string
+          required: false
+          default: recebedor
+          enum: [recebedor, masp, cargo_efetivo, cargo_em_comissao, vr_jeton, empresa_sigla, mes_ano]
+        - name: order_dir
+          in: query
+          type: string
+          required: false
+          default: ASC
+          enum: [ASC, DESC]
+        - name: limit
+          in: query
+          type: integer
+          required: false
+          default: 25
+        - name: page
+          in: query
+          type: integer
+          required: false
+          default: 1
+        - name: export
+          in: query
+          type: boolean
+          required: false
+          default: false
+      responses:
+        '200':
+          description: Dados encontrados.
+          examples:
+            application/json:
+              status: 200
+              data:
+                data_ultima_carga: '2026-09-15 03:00:00'
+                total_pago_jetons: 500000.00
+                total_empresas: 12
+                total_servidores: 80
+                distribuicao_empresas:
+                  - empresa_sigla: XPTO
+                    valor: 120000.00
+                tabela_pagamentos_jetons:
+                  - recebedor: FULANO DE TAL
+                    vr_jeton: 1500.00
+        '204':
+          description: Sem dados (sem corpo de resposta).
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/remuneracao/situacao.json:
+    get:
+      summary: Remuneração por situação
+      description: >-
+        Retorna valores de remuneração por situação. Nao envie limit/page:
+        o backend retorna 500 (ORA-00933).
+      parameters:
+        - name: ano
+          in: query
+          type: integer
+          required: false
+        - name: mes
+          in: query
+          type: integer
+          required: false
+        - name: situacao
+          in: query
+          type: integer
+          required: false
+        - name: id_orgao
+          in: query
+          type: integer
+          required: false
+      responses:
+        '200':
+          description: Dados encontrados.
+          examples:
+            application/json:
+              status: 200
+              data:
+                - ano: 2026
+                  mes: 1
+                  situacao: ATIVO
+                  valor: 12000000.00
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/remuneracao/lista-orgaos.json:
+    get:
+      summary: Lista de órgãos (remunera
+      parameters:
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: orgao_id
+          in: query
+          type: integer
+          required: false
+        - name: ano
+          in: query
+          type: integer
+          required: false
+        - name: mes
+          in: query
+          type: integer
+          required: false
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+      responses:
+        '200':
+          description: Dados encontrados.
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/remuneracao/lista-cargos-efetivos.json:
+    get:
+      summary: Lista de cargos efetivos
+      parameters:
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: cargo_efetivo_id
+          in: query
+          type: integer
+          required: false
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+      responses:
+        '200':
+          description: Dados encontrados.
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/remuneracao/lista-cargos-comissao.json:
+    get:
+      summary: Lista de cargos em comiss
+      parameters:
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: cargo_comissao_id
+          in: query
+          type: integer
+          required: false
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+      responses:
+        '200':
+          description: Dados encontrados.
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/remuneracao/lista-anos-meses.json:
+    get:
+      summary: Lista de anos e meses disponíveis
+      responses:
+        '200':
+          description: Dados encontrados.
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/remuneracao/lista-empresas.json:
+    get:
+      summary: Lista de empresas (jetons)
+      parameters:
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: empresa_id
+          in: query
+          type: integer
+          required: false
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+      responses:
+        '200':
+          description: Dados encontrados.
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/remuneracao/listar-arquivos.json:
+    get:
+      summary: Lista arquivos de remunera (storage Gestor)
+      parameters:
+        - name: ano
+          in: query
+          type: integer
+          required: false
+        - name: mes
+          in: query
+          type: integer
+          required: false
+      responses:
+        '200':
+          description: Dados encontrados.
+          examples:
+            application/json:
+              status: 200
+              data:
+                data_ultima_carga: '2026-09-15 03:00:00'
+                arquivos:
+                  '2026':
+                    '01':
+                      - nome: Servidores-2026-01.csv
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/diarias/visao-geral.json:
+    get:
+      summary: Visão geral de diárias e viagens
+      description: Retorna totais e órgãos com valores de diárias.
+      parameters:
+        - name: ano
+          in: query
+          type: integer
+          required: false
+        - name: periodo_inicio
+          in: query
+          type: string
+          required: false
+          description: Més inicial (mm), usado com periodo_fim e ano.
+        - name: periodo_fim
+          in: query
+          type: string
+          required: false
+          description: Més final (mm), usado com periodo_inicio e ano.
+        - name: id_orgao
+          in: query
+          type: integer
+          required: false
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: order_by
+          in: query
+          type: string
+          required: false
+          default: nome
+        - name: order_dir
+          in: query
+          type: string
+          required: false
+          default: ASC
+          enum: [ASC, DESC]
+        - name: limit
+          in: query
+          type: integer
+          required: false
+          description: Limitado a MAX_ROWS=500.
+        - name: page
+          in: query
+          type: integer
+          required: false
+        - name: export
+          in: query
+          type: boolean
+          required: false
+          default: false
+      responses:
+        '200':
+          description: Dados encontrados.
+          examples:
+            application/json:
+              status: 200
+              data:
+                data_ultima_carga: '2026-09-15 03:00:00'
+                total_valor_empenhado: 5000000.00
+                total_valor_liquidado: 4200000.00
+                total_valor_pago: 4000000.00
+                total_viajantes: 0
+                qt_orgaos: 20
+                orgaos:
+                  - id_orgao: 1234
+                    nome: SECRETARIA DE ESTADO DE FAZENDA
+                    valor_empenhado: 300000.00
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/diarias/destinos.json:
+    get:
+      summary: Diarias por destino
+      description: Retorna destinos com totais de diárias.
+      parameters:
+        - name: id_destino
+          in: query
+          type: integer
+          required: false
+        - name: ano
+          in: query
+          type: integer
+          required: false
+        - name: periodo_inicio
+          in: query
+          type: string
+          required: false
+        - name: periodo_fim
+          in: query
+          type: string
+          required: false
+        - name: id_viajante
+          in: query
+          type: integer
+          required: false
+        - name: id_destino_tipo
+          in: query
+          type: integer
+          required: false
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: order_by
+          in: query
+          type: string
+          required: false
+          default: nome_destino
+        - name: order_dir
+          in: query
+          type: string
+          required: false
+          default: ASC
+          enum: [ASC, DESC]
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+      responses:
+        '200':
+          description: Dados encontrados.
+          examples:
+            application/json:
+              status: 200
+              data:
+                data_ultima_carga: '2026-09-15 03:00:00'
+                destinos:
+                  - nome_destino: BELO HORIZONTE
+                    valor: 100000.00
+                qt_destinos: 50
+        '204':
+          description: Nenhum dado encontrado para os filtros informados.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/diarias/individual.json:
+    get:
+      summary: Consulta individual de diárias (viajantes)
+      description: >-
+        Primeiro nível da consulta individual. Obrigatorios: ano, periodo_inicio
+        e periodo_fim.
+      parameters:
+        - name: ano
+          in: query
+          type: integer
+          required: true
+        - name: periodo_inicio
+          in: query
+          type: string
+          required: true
+        - name: periodo_fim
+          in: query
+          type: string
+          required: true
+        - name: id_orgao
+          in: query
+          type: integer
+          required: false
+        - name: id_destino
+          in: query
+          type: integer
+          required: false
+        - name: id_destino_tipo
+          in: query
+          type: integer
+          required: false
+        - name: viajante
+          in: query
+          type: string
+          required: false
+        - name: cpf
+          in: query
+          type: integer
+          required: false
+        - name: cargo_comissao
+          in: query
+          type: string
+          required: false
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: order_by
+          in: query
+          type: string
+          required: false
+          default: nome
+        - name: order_dir
+          in: query
+          type: string
+          required: false
+          default: ASC
+          enum: [ASC, DESC]
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+        - name: export
+          in: query
+          type: boolean
+          required: false
+          default: false
+      responses:
+        '200':
+          description: Dados encontrados.
+          examples:
+            application/json:
+              status: 200
+              data:
+                viajantes:
+                  - nome: FULANO DE TAL
+                    valor_total: 8000.00
+                qt_viajantes: 120
+                viajantes_valor_total: 500000.00
+                data_ultima_carga: '2026-09-15 03:00:00'
+        '204':
+          description: Sem dados para exibir.
+        '400':
+          description: ano, periodo_inicio e periodo_fim são obrigatórios.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/diarias/individual-documentos.json:
+    get:
+      summary: Documentos da consulta individual de diárias
+      description: Segundo nível. Obrigatório o parâmetro hash.
+      parameters:
+        - name: hash
+          in: query
+          type: string
+          required: true
+        - name: id_destino_tipo
+          in: query
+          type: integer
+          required: false
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: order_by
+          in: query
+          type: string
+          required: false
+          default: data_iso
+        - name: order_dir
+          in: query
+          type: string
+          required: false
+          default: DESC
+          enum: [ASC, DESC]
+        - name: limit
+          in: query
+          type: integer
+          required: false
+          default: 500
+        - name: page
+          in: query
+          type: integer
+          required: false
+        - name: export
+          in: query
+          type: boolean
+          required: false
+          default: false
+      responses:
+        '200':
+          description: Dados encontrados.
+          examples:
+            application/json:
+              status: 200
+              data:
+                viajante: FULANO DE TAL
+                documentos:
+                  - documento_pcdp: '2026NE000123'
+                    valor: 3000.00
+                documentos_count: 5
+                documentos_valor_total: 15000.00
+                data_ultima_carga: '2026-09-15 03:00:00'
+        '204':
+          description: Sem dados para exibir.
+        '400':
+          description: hash e obrigatório.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/diarias/individual-detalhamento.json:
+    get:
+      summary: Detalhamento da consulta individual de diárias
+      description: Terceiro nível. Obrigatorios id (numérico > 0) e tipo (siafi ou scdp).
+      parameters:
+        - name: id
+          in: query
+          type: integer
+          required: true
+        - name: tipo
+          in: query
+          type: string
+          required: true
+          enum: [siafi, scdp]
+      responses:
+        '200':
+          description: Dados encontrados.
+          examples:
+            application/json:
+              status: 200
+              data:
+                id: 123
+                tipo: siafi
+                detalhamento:
+                  - campo: valor
+                    valor: 3000.00
+                data_ultima_carga: '2026-09-15 03:00:00'
+        '204':
+          description: Sem dados para exibir.
+        '400':
+          description: id valido e tipo (siafi/scdp) são obrigatórios.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/diarias/lista-periodo.json:
+    get:
+      summary: Lista de períodos (anos) de diárias
+      responses:
+        '200':
+          description: Dados encontrados.
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/diarias/lista-orgaos.json:
+    get:
+      summary: Lista de órgãos (diárias)
+      parameters:
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: id_orgao
+          in: query
+          type: integer
+          required: false
+        - name: id_destino
+          in: query
+          type: integer
+          required: false
+        - name: id_viajante
+          in: query
+          type: integer
+          required: false
+        - name: id_destino_tipo
+          in: query
+          type: integer
+          required: false
+        - name: ano
+          in: query
+          type: integer
+          required: false
+        - name: periodo_inicio
+          in: query
+          type: string
+          required: false
+        - name: periodo_fim
+          in: query
+          type: string
+          required: false
+        - name: tipo_sistema
+          in: query
+          type: string
+          required: false
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+      responses:
+        '200':
+          description: Dados encontrados.
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/diarias/lista-nome-viajante:
+    get:
+      summary: Lista de nomes de viajantes
+      parameters:
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+      responses:
+        '200':
+          description: Dados encontrados.
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/diarias/lista-destinos.json:
+    get:
+      summary: Lista de destinos
+      parameters:
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+      responses:
+        '200':
+          description: Dados encontrados.
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/diarias/lista-viajantes.json:
+    get:
+      summary: Lista de viajantes
+      parameters:
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+      responses:
+        '200':
+          description: Dados encontrados.
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/diarias/lista-tipos.json:
+    get:
+      summary: Lista de tipos de viajante
+      responses:
+        '200':
+          description: Dados encontrados.
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/diarias/gerar-csv:
+    get:
+      summary: Exporta diárias em CSV
+      description: >-
+        Gera um CSV das diárias no período. Retorna o arquivo (text/csv) como
+        download. Defaults: periodo_inicio=0101, periodo_fim=3112, ano=ano atual.
+        periodo_inicio e periodo_fim no formato ddmm.
+      produces:
+        - text/csv
+      parameters:
+        - name: ano
+          in: query
+          type: string
+          required: false
+        - name: periodo_inicio
+          in: query
+          type: string
+          required: false
+          description: Formato ddmm. Padrao 0101.
+        - name: periodo_fim
+          in: query
+          type: string
+          required: false
+          description: Formato ddmm. Padrao 3112.
+      responses:
+        '200':
+          description: Arquivo CSV gerado (download).
+        '400':
+          description: Parâmetros de período inválidos.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/receitas/visao-geral.json:
+    get:
+      summary: Visão geral das receitas agrupadas por órgão
+      description: Retorna totais, subtotais, órgãos e dados de dois gráficos.
+      parameters:
+        - name: ano
+          in: query
+          type: integer
+          required: false
+        - name: periodo_inicio
+          in: query
+          type: string
+          required: false
+          description: Més inicial (mm), usado com periodo_fim e ano.
+        - name: periodo_fim
+          in: query
+          type: string
+          required: false
+          description: Més final (mm), usado com periodo_inicio e ano.
+        - name: id_orgao
+          in: query
+          type: integer
+          required: false
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: order_by
+          in: query
+          type: string
+          required: false
+          default: nome
+          enum: [nome, id_orgao, previsto_inicial, previsto_atualizado, arrecadado, percentual_arrecadado]
+        - name: order_dir
+          in: query
+          type: string
+          required: false
+          enum: [ASC, DESC]
+        - name: limit
+          in: query
+          type: integer
+          required: false
+          maximum: 500
+        - name: page
+          in: query
+          type: integer
+          required: false
+        - name: export
+          in: query
+          type: boolean
+          required: false
+          default: false
+      responses:
+        '200':
+          description: Dados encontrados.
+          examples:
+            application/json:
+              status: 200
+              data:
+                data_ultima_carga: '2026-09-15 03:00:00'
+                total_previsto_inicial: 15000000.00
+                total_previsto_atualizado: 16200000.00
+                total_arrecadado: 9800000.00
+                total_percentual_arrecadado: 60.49
+                subtotal_previsto_inicial: 4200000.00
+                subtotal_previsto_atualizado: 4500000.00
+                subtotal_arrecadado: 3100000.00
+                subtotal_percentual_arrecadado: 68.89
+                qt_orgaos: 42
+                orgaos:
+                  - id_orgao: 1234
+                    nome: SECRETARIA DE ESTADO DE FAZENDA
+                    previsto_inicial: 4200000.00
+                    previsto_atualizado: 4500000.00
+                    arrecadado: 3100000.00
+                    percentual_arrecadado: 68.89
+                grafico1:
+                  titulo: Receitas por Categoria Economica
+                  dados:
+                    - ano: 2026
+                      categoria_economica: RECEITAS CORRENTES
+                      vr_contabilizado: 8700000.00
+                grafico2:
+                  titulo: Total de Receitas por Ano
+                  dados:
+                    - ano: 2026
+                      vr_total: 9800000.00
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/receitas/classificacao-orcamentaria.json:
+    get:
+      summary: Receitas por classificacao orcamentaria
+      description: Retorna receitas detalhadas pela classificacao orcamentaria.
+      parameters:
+        - name: ano
+          in: query
+          type: integer
+          required: false
+        - name: periodo_inicio
+          in: query
+          type: string
+          required: false
+        - name: periodo_fim
+          in: query
+          type: string
+          required: false
+        - name: id_orgao
+          in: query
+          type: integer
+          required: false
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: id_classificacao_receita
+          in: query
+          type: integer
+          required: false
+        - name: id_categoria_economica
+          in: query
+          type: integer
+          required: false
+        - name: id_origem
+          in: query
+          type: integer
+          required: false
+        - name: id_especie
+          in: query
+          type: integer
+          required: false
+        - name: id_desdobramento_1
+          in: query
+          type: integer
+          required: false
+        - name: id_desdobramento_2
+          in: query
+          type: integer
+          required: false
+        - name: id_desdobramento_3
+          in: query
+          type: integer
+          required: false
+        - name: id_tipo_receita
+          in: query
+          type: integer
+          required: false
+        - name: id_item_receita
+          in: query
+          type: integer
+          required: false
+        - name: id_subitem_receita
+          in: query
+          type: integer
+          required: false
+        - name: order_by
+          in: query
+          type: string
+          required: false
+          default: classificacao_receita
+        - name: order_dir
+          in: query
+          type: string
+          required: false
+          default: ASC
+          enum: [ASC, DESC]
+        - name: limit
+          in: query
+          type: integer
+          required: false
+          maximum: 500
+        - name: page
+          in: query
+          type: integer
+          required: false
+        - name: export
+          in: query
+          type: boolean
+          required: false
+          default: false
+      responses:
+        '200':
+          description: Dados encontrados.
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/receitas/lista-orgaos.json:
+    get:
+      summary: Lista de órgãos (receitas)
+      parameters:
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+      responses:
+        '200':
+          description: Dados encontrados.
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/receitas/lista-classificacao-receita.json:
+    get:
+      summary: Lista de classificacoes de receita
+      parameters:
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+      responses:
+        '200':
+          description: Dados encontrados.
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/receitas/lista-categoria-economica.json:
+    get:
+      summary: Lista de categorias econômicas (receitas)
+      parameters:
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+      responses:
+        '200':
+          description: Dados encontrados.
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/receitas/lista-periodo.json:
+    get:
+      summary: Lista de períodos (receitas)
+      responses:
+        '200':
+          description: Dados encontrados.
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/receitas/lista-origem.json:
+    get:
+      summary: Lista de origens de receita
+      parameters:
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+      responses:
+        '200':
+          description: Dados encontrados.
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/receitas/lista-especie.json:
+    get:
+      summary: Lista de especies de receita
+      parameters:
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+      responses:
+        '200':
+          description: Dados encontrados.
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/receitas/lista-desdobramento-1.json:
+    get:
+      summary: Lista de desdobramento 1
+      parameters:
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+      responses:
+        '200':
+          description: Dados encontrados.
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/receitas/lista-desdobramento-2.json:
+    get:
+      summary: Lista de desdobramento 2
+      parameters:
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+      responses:
+        '200':
+          description: Dados encontrados.
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/receitas/lista-desdobramento-3.json:
+    get:
+      summary: Lista de desdobramento 3
+      parameters:
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+      responses:
+        '200':
+          description: Dados encontrados.
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/receitas/lista-tipo-receita.json:
+    get:
+      summary: Lista de tipos de receita
+      parameters:
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+      responses:
+        '200':
+          description: Dados encontrados.
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/receitas/lista-item-receita.json:
+    get:
+      summary: Lista de itens de receita
+      parameters:
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+      responses:
+        '200':
+          description: Dados encontrados.
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/receitas/lista-subitem-receita.json:
+    get:
+      summary: Lista de subitens de receita
+      parameters:
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+      responses:
+        '200':
+          description: Dados encontrados.
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/receitas/lista-fonte-recurso.json:
+    get:
+      summary: Lista de fontes de recurso
+      parameters:
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+      responses:
+        '200':
+          description: Dados encontrados.
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/receitas/lista-fonte-recurso-stn.json:
+    get:
+      summary: Lista de fontes de recurso (STN)
+      parameters:
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+      responses:
+        '200':
+          description: Dados encontrados.
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/receitas/gerar-csv:
+    get:
+      summary: Exporta receitas em CSV
+      description: Gera um CSV das receitas conforme filtros aplicados.
+      produces:
+        - text/csv
+      parameters:
+        - name: ano
+          in: query
+          type: integer
+          required: false
+        - name: periodo_inicio
+          in: query
+          type: string
+          required: false
+        - name: periodo_fim
+          in: query
+          type: string
+          required: false
+        - name: id_orgao
+          in: query
+          type: integer
+          required: false
+        - name: termo
+          in: query
+          type: string
+          required: false
+      responses:
+        '200':
+          description: Arquivo CSV gerado (download).
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/visao-geral.json:
+    get:
+      summary: Visão geral das despesas agrupadas por órgão
+      description: Retorna totais, subtotais, órgãos e dados de dois gráficos.
+      parameters:
+        - name: ano
+          in: query
+          type: integer
+          required: false
+        - name: periodo_inicio
+          in: query
+          type: string
+          required: false
+        - name: periodo_fim
+          in: query
+          type: string
+          required: false
+        - name: id_orgao
+          in: query
+          type: integer
+          required: false
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: order_by
+          in: query
+          type: string
+          required: false
+          default: nome
+        - name: order_dir
+          in: query
+          type: string
+          required: false
+          default: ASC
+          enum: [ASC, DESC]
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+        - name: export
+          in: query
+          type: boolean
+          required: false
+          default: false
+      responses:
+        '200':
+          description: Dados encontrados.
+          examples:
+            application/json:
+              status: 200
+              data:
+                total_empenhado: 50000000.00
+                total_liquidado: 42000000.00
+                total_pago: 40000000.00
+                total_liquidado_restos_a_pagar: 1000000.00
+                total_pago_restos_a_pagar: 900000.00
+                subtotal_empenhado: 12000000.00
+                subtotal_liquidado: 10000000.00
+                subtotal_pago: 9500000.00
+                subtotal_liquidado_restos_a_pagar: 200000.00
+                subtotal_pago_restos_a_pagar: 180000.00
+                qt_orgaos: 30
+                orgaos:
+                  - id_orgao: 1234
+                    nome: SECRETARIA DE ESTADO DE FAZENDA
+                    empenhado: 12000000.00
+                grafico1:
+                  titulo: Despesa por Categoria Economica
+                  dados:
+                    - categoria_economica: DESPESAS CORRENTES
+                      valor: 30000000.00
+                grafico2:
+                  titulo: Serie Historica da Despesa
+                  dados:
+                    - ano: 2026
+                      valor: 40000000.00
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/pesquisa-avancada.json:
+    post:
+      summary: Pesquisa avancada de despesas
+      description: >-
+        Consulta de despesas com filtros combinados. Corpo em application/json,
+        objeto com campos "filtros" (objeto), "nível" (1 ou 2), "limit", "page",
+        "order_by" e "order_dir". Aceita filtros por listas (valor, CSV ou array).
+        ATENCAO: nao publicado no gateway MGapi (retorna 404 com e sem .json).
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: false
+          schema:
+            type: object
+            properties:
+              nivel:
+                type: integer
+                enum: [1, 2]
+                description: 1 agrupa por órgão; 2 detalha por empenho.
+              limit:
+                type: integer
+                default: 100
+              page:
+                type: integer
+                default: 1
+              order_by:
+                type: string
+                description: Padrao órgão (nível 1) ou data_registro_empenho (nível 2).
+              order_dir:
+                type: string
+                enum: [ASC, DESC]
+                default: DESC
+              filtros:
+                type: object
+                description: >-
+                  Chaves possíveis: ano, periodo_inicio, periodo_fim, id_orgao,
+                  id_unidade, id_funcao, id_subfuncao, id_programa, id_acao,
+                  id_categoria_economica, id_grupo_despesa, id_modalidade_aplicacao,
+                  id_elemento_despesa, id_item_despesa, id_ipu, id_upg,
+                  id_fonte_recurso, id_fonte_recurso_stn, id_favorecido, id_empenho,
+                  id_processo, id_contrato, id_convenio, favorecido, cpf_cnpj,
+                  numero_documento_pagamento, numero_processo_compra,
+                  procedimento_contratacao, objeto_processo,
+                  numero_contrato_convenio, objeto_contrato, titulo_convenio.
+      responses:
+        '200':
+          description: Resultados atualizados.
+          examples:
+            application/json:
+              status: 200
+              message: Os resultados da consulta foram atualizados.
+              data:
+                nivel: 1
+                total: 120
+                page: 1
+                limit: 100
+                total_paginas: 2
+                order_by: orgao
+                order_dir: DESC
+                periodo: '01/2026 a 12/2026'
+                quantidade_filtros_aplicados: 3
+                filtros_aplicados:
+                  ano: [2026]
+                  id_orgao: [1234]
+                totais:
+                  empenhado: 50000000.00
+                subtotais:
+                  empenhado: 12000000.00
+                registros:
+                  - orgao: SECRETARIA DE ESTADO DE FAZENDA
+                    empenhado: 12000000.00
+        '422':
+          description: Parâmetros inválidos para consultar as despesas.
+        '500':
+          description: Nfoi poss atualizar os resultados da consulta.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/favorecidos.json:
+    get:
+      description: >-
+        Obrigatorio informar id_orgao ou ao menos 3 caracteres em favorecido
+        (caso contrario retorna 500).
+      summary: Despesas por favorecido
+      description: >-
+        Lista favorecidos e valores. termo e favorecido exigem pelo menos 3
+        caracteres quando informados. Suporta selecao de colunas.
+      parameters:
+        - name: ano
+          in: query
+          type: integer
+          required: false
+        - name: periodo_inicio
+          in: query
+          type: string
+          required: false
+        - name: periodo_fim
+          in: query
+          type: string
+          required: false
+        - name: id_orgao
+          in: query
+          type: integer
+          required: false
+        - name: favorecido
+          in: query
+          type: string
+          required: false
+          description: Minimo de 3 caracteres.
+        - name: termo
+          in: query
+          type: string
+          required: false
+          description: Minimo de 3 caracteres.
+        - name: colunas
+          in: query
+          type: string
+          required: false
+          description: Lista de colunas (CSV) a exibir.
+        - name: order_by
+          in: query
+          type: string
+          required: false
+          default: favorecido
+        - name: order_dir
+          in: query
+          type: string
+          required: false
+          default: ASC
+          enum: [ASC, DESC]
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+        - name: export
+          in: query
+          type: boolean
+          required: false
+          default: false
+      responses:
+        '200':
+          description: Dados encontrados.
+          examples:
+            application/json:
+              status: 200
+              data:
+                colunas_disponiveis: [favorecido, cpf_cnpj, empenhado, liquidado, pago]
+                colunas_exibidas: [favorecido, empenhado, pago]
+                qt_registros: 250
+                registros:
+                  - favorecido: EMPRESA XPTO LTDA
+                    empenhado: 500000.00
+                    pago: 480000.00
+                subtotais:
+                  empenhado: 500000.00
+                totais:
+                  empenhado: 50000000.00
+        '422':
+          description: Termo/favorecido com menos de 3 caracteres.
+        '500':
+          description: Erro interno.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/empenhos.json:
+    get:
+      summary: Despesas por empenho
+      description: >-
+        Obrigatorio informar id_orgao, id_unidade ou ao menos 3 caracteres em
+        favorecido (caso contrario retorna 500).
+      parameters:
+        - name: ano
+          in: query
+          type: integer
+          required: false
+        - name: periodo_inicio
+          in: query
+          type: string
+          required: false
+        - name: periodo_fim
+          in: query
+          type: string
+          required: false
+        - name: id_empenho
+          in: query
+          type: integer
+          required: false
+        - name: favorecido
+          in: query
+          type: string
+          required: false
+        - name: id_orgao
+          in: query
+          type: integer
+          required: false
+        - name: id_unidade
+          in: query
+          type: integer
+          required: false
+          description: >-
+            Id da unidade executora (campo id_orgao retornado por lista-unidades).
+            A interface envia unidade_executora, mas o gateway ignora esse nome.
+        - name: id_item_despesa
+          in: query
+          type: integer
+          required: false
+        - name: id_elemento_despesa
+          in: query
+          type: integer
+          required: false
+        - name: id_programa
+          in: query
+          type: integer
+          required: false
+        - name: id_acao
+          in: query
+          type: integer
+          required: false
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: colunas
+          in: query
+          type: string
+          required: false
+        - name: order_by
+          in: query
+          type: string
+          required: false
+          default: nome
+        - name: order_dir
+          in: query
+          type: string
+          required: false
+          default: ASC
+          enum: [ASC, DESC]
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+        - name: export
+          in: query
+          type: boolean
+          required: false
+          default: false
+      responses:
+        '200':
+          description: Dados encontrados.
+          examples:
+            application/json:
+              status: 200
+              data:
+                total_empenhado: 50000000.00
+                total_liquidado: 42000000.00
+                total_pago: 40000000.00
+                subtotal_empenhado: 12000000.00
+                qt_empenhos: 800
+                empenhos:
+                  - documento_empenho: '2026NE000123'
+                    empenhado: 100000.00
+                colunas_disponiveis: []
+                colunas_exibidas: []
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/empenhos/detalhamento.json:
+    get:
+      summary: Detalhamento de empenhos
+      description: Retorna o detalhamento de um empenho. Aceita os mesmos filtros de despesas.
+      parameters:
+        - name: id_empenho
+          in: query
+          type: integer
+          required: false
+        - name: ano
+          in: query
+          type: integer
+          required: false
+        - name: id_orgao
+          in: query
+          type: integer
+          required: false
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: order_by
+          in: query
+          type: string
+          required: false
+        - name: order_dir
+          in: query
+          type: string
+          required: false
+          enum: [ASC, DESC]
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+      responses:
+        '200':
+          description: Dados encontrados.
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/empenhos/detalhamento/download:
+    get:
+      summary: Download do detalhamento de empenhos
+      produces:
+        - text/csv
+      parameters:
+        - name: id_empenho
+          in: query
+          type: integer
+          required: false
+        - name: ano
+          in: query
+          type: integer
+          required: false
+      responses:
+        '200':
+          description: Arquivo gerado (download).
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/itens-despesa.json:
+    get:
+      description: >-
+        Combinar id_empenho com periodo_inicio/periodo_fim estoura o limite de 30 s
+        do backend (500). Para itens de um empenho, prefira empenhos/detalhamento.
+      summary: Despesas por item de despesa
+      parameters:
+        - name: ano
+          in: query
+          type: integer
+          required: false
+        - name: periodo_inicio
+          in: query
+          type: string
+          required: false
+        - name: periodo_fim
+          in: query
+          type: string
+          required: false
+        - name: id_item_despesa
+          in: query
+          type: integer
+          required: false
+        - name: id_elemento_despesa
+          in: query
+          type: integer
+          required: false
+        - name: id_orgao
+          in: query
+          type: integer
+          required: false
+        - name: id_empenho
+          in: query
+          type: integer
+          required: false
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: colunas
+          in: query
+          type: string
+          required: false
+        - name: order_by
+          in: query
+          type: string
+          required: false
+          default: nome
+        - name: order_dir
+          in: query
+          type: string
+          required: false
+          default: ASC
+          enum: [ASC, DESC]
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+        - name: export
+          in: query
+          type: boolean
+          required: false
+          default: false
+      responses:
+        '200':
+          description: Dados encontrados.
+          examples:
+            application/json:
+              status: 200
+              data:
+                total_empenhado: 50000000.00
+                qt_itens_despesa: 300
+                itens_despesa:
+                  - nome: MATERIAL DE CONSUMO
+                    empenhado: 200000.00
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/programas.json:
+    get:
+      summary: Despesas por programa
+      parameters:
+        - name: ano
+          in: query
+          type: integer
+          required: false
+        - name: periodo_inicio
+          in: query
+          type: string
+          required: false
+        - name: periodo_fim
+          in: query
+          type: string
+          required: false
+        - name: id_programa
+          in: query
+          type: integer
+          required: false
+        - name: id_acao
+          in: query
+          type: integer
+          required: false
+        - name: id_orgao
+          in: query
+          type: integer
+          required: false
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: colunas
+          in: query
+          type: string
+          required: false
+        - name: order_by
+          in: query
+          type: string
+          required: false
+          default: nome
+        - name: order_dir
+          in: query
+          type: string
+          required: false
+          default: ASC
+          enum: [ASC, DESC]
+        - name: limit
+          in: query
+          type: integer
+          required: false
+        - name: page
+          in: query
+          type: integer
+          required: false
+        - name: export
+          in: query
+          type: boolean
+          required: false
+          default: false
+      responses:
+        '200':
+          description: Dados encontrados.
+          examples:
+            application/json:
+              status: 200
+              data:
+                total_empenhado: 50000000.00
+                qt_programas: 40
+                programas:
+                  - nome: SAUDE
+                    empenhado: 10000000.00
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/gerar-csv:
+    get:
+      summary: Exporta despesas em CSV (aba downloads)
+      description: O intervalo periodo_inicio..periodo_fim deve ter no maximo 31 dias (senao 500).
+      produces:
+        - text/csv
+      parameters:
+        - name: ano
+          in: query
+          type: integer
+          required: false
+        - name: periodo_inicio
+          in: query
+          type: string
+          required: false
+        - name: periodo_fim
+          in: query
+          type: string
+          required: false
+        - name: id_orgao
+          in: query
+          type: integer
+          required: false
+        - name: termo
+          in: query
+          type: string
+          required: false
+        - name: limit
+          in: query
+          type: integer
+          required: false
+          description: Limite de linhas do CSV. A interface usa valor alto (ex. 4000000), indicando que o export nao pagina.
+        - name: nome_arquivo
+          in: query
+          type: string
+          required: false
+          description: Nome sugerido para o arquivo baixado (ex. DESPESAS_DOWNLOADS_2026_0109_1809).
+      responses:
+        '200':
+          description: Arquivo CSV gerado (download).
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/lista-periodo.json:
+    get:
+      summary: Lista de períodos (despesas)
+      responses:
+        '200':
+          description: Dados encontrados.
+        '204':
+          description: Sem dados para exibir.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/lista-favorecidos.json:
+    post:
+      summary: Lista de favorecidos (filtro)
+      description: >-
+        Endpoint auxiliar de filtro. Aceita corpo JSON com termo e demais
+        filtros de despesas (ano, período, ids). Suporta paginação (limit/page).
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: false
+          schema:
+            type: object
+            properties:
+              ano:
+                type: integer
+                description: Ano de exercicio da despesa (ex. 2026).
+              periodo_inicio:
+                type: string
+                description: Inicio do periodo no formato DDMM (ex. '0101' = 01/jan).
+              periodo_fim:
+                type: string
+                description: Fim do periodo no formato DDMM (ex. '3108' = 31/ago).
+              termo:
+                type: string
+              limit:
+                type: integer
+              page:
+                type: integer
+      responses:
+        '200':
+          description: Dados encontrados.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/lista-orgaos.json:
+    post:
+      summary: Lista de órgãos (despesas)
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: false
+          schema:
+            type: object
+            properties:
+              ano:
+                type: integer
+                description: Ano de exercicio da despesa (ex. 2026).
+              periodo_inicio:
+                type: string
+                description: Inicio do periodo no formato DDMM (ex. '0101' = 01/jan).
+              periodo_fim:
+                type: string
+                description: Fim do periodo no formato DDMM (ex. '3108' = 31/ago).
+              termo:
+                type: string
+              limit:
+                type: integer
+              page:
+                type: integer
+      responses:
+        '200':
+          description: Dados encontrados.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/lista-unidades.json:
+    post:
+      summary: Lista de unidades executoras
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: false
+          schema:
+            type: object
+            properties:
+              ano:
+                type: integer
+                description: Ano de exercicio da despesa (ex. 2026).
+              periodo_inicio:
+                type: string
+                description: Inicio do periodo no formato DDMM (ex. '0101' = 01/jan).
+              periodo_fim:
+                type: string
+                description: Fim do periodo no formato DDMM (ex. '3108' = 31/ago).
+              termo:
+                type: string
+              limit:
+                type: integer
+              page:
+                type: integer
+      responses:
+        '200':
+          description: Dados encontrados.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/lista-elementos-despesa.json:
+    post:
+      summary: Lista de elementos de despesa
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: false
+          schema:
+            type: object
+            properties:
+              ano:
+                type: integer
+                description: Ano de exercicio da despesa (ex. 2026).
+              periodo_inicio:
+                type: string
+                description: Inicio do periodo no formato DDMM (ex. '0101' = 01/jan).
+              periodo_fim:
+                type: string
+                description: Fim do periodo no formato DDMM (ex. '3108' = 31/ago).
+              termo:
+                type: string
+              limit:
+                type: integer
+              page:
+                type: integer
+      responses:
+        '200':
+          description: Dados encontrados.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/lista-itens-despesa.json:
+    post:
+      summary: Lista de itens de despesa
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: false
+          schema:
+            type: object
+            properties:
+              ano:
+                type: integer
+                description: Ano de exercicio da despesa (ex. 2026).
+              periodo_inicio:
+                type: string
+                description: Inicio do periodo no formato DDMM (ex. '0101' = 01/jan).
+              periodo_fim:
+                type: string
+                description: Fim do periodo no formato DDMM (ex. '3108' = 31/ago).
+              termo:
+                type: string
+              limit:
+                type: integer
+              page:
+                type: integer
+      responses:
+        '200':
+          description: Dados encontrados.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/lista-programas.json:
+    post:
+      summary: Lista de programas
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: false
+          schema:
+            type: object
+            properties:
+              ano:
+                type: integer
+                description: Ano de exercicio da despesa (ex. 2026).
+              periodo_inicio:
+                type: string
+                description: Inicio do periodo no formato DDMM (ex. '0101' = 01/jan).
+              periodo_fim:
+                type: string
+                description: Fim do periodo no formato DDMM (ex. '3108' = 31/ago).
+              termo:
+                type: string
+              limit:
+                type: integer
+              page:
+                type: integer
+      responses:
+        '200':
+          description: Dados encontrados.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/lista-acoes.json:
+    post:
+      summary: Lista de ações (projeto/atividade)
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: false
+          schema:
+            type: object
+            properties:
+              ano:
+                type: integer
+                description: Ano de exercicio da despesa (ex. 2026).
+              periodo_inicio:
+                type: string
+                description: Inicio do periodo no formato DDMM (ex. '0101' = 01/jan).
+              periodo_fim:
+                type: string
+                description: Fim do periodo no formato DDMM (ex. '3108' = 31/ago).
+              termo:
+                type: string
+              limit:
+                type: integer
+              page:
+                type: integer
+      responses:
+        '200':
+          description: Dados encontrados.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/lista-funcoes.json:
+    post:
+      summary: Lista de funções
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: false
+          schema:
+            type: object
+            properties:
+              ano:
+                type: integer
+                description: Ano de exercicio da despesa (ex. 2026).
+              periodo_inicio:
+                type: string
+                description: Inicio do periodo no formato DDMM (ex. '0101' = 01/jan).
+              periodo_fim:
+                type: string
+                description: Fim do periodo no formato DDMM (ex. '3108' = 31/ago).
+              page:
+                type: integer
+              limit:
+                type: integer
+              termo:
+                type: string
+      responses:
+        '200':
+          description: Dados encontrados.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/lista-subfuncoes.json:
+    post:
+      summary: Lista de subfunções
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: false
+          schema:
+            type: object
+            properties:
+              ano:
+                type: integer
+                description: Ano de exercicio da despesa (ex. 2026).
+              periodo_inicio:
+                type: string
+                description: Inicio do periodo no formato DDMM (ex. '0101' = 01/jan).
+              periodo_fim:
+                type: string
+                description: Fim do periodo no formato DDMM (ex. '3108' = 31/ago).
+              page:
+                type: integer
+              limit:
+                type: integer
+              termo:
+                type: string
+      responses:
+        '200':
+          description: Dados encontrados.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/lista-categorias-economicas.json:
+    post:
+      summary: Lista de categorias econômicas (despesas)
+      description: Endpoint auxiliar de filtro. Aceita corpo JSON com termo e filtros de despesas.
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: false
+          schema:
+            type: object
+            properties:
+              ano:
+                type: integer
+                description: Ano de exercicio da despesa (ex. 2026).
+              periodo_inicio:
+                type: string
+                description: Inicio do periodo no formato DDMM (ex. '0101' = 01/jan).
+              periodo_fim:
+                type: string
+                description: Fim do periodo no formato DDMM (ex. '3108' = 31/ago).
+              termo:
+                type: string
+              limit:
+                type: integer
+              page:
+                type: integer
+      responses:
+        '200':
+          description: Dados encontrados.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/lista-grupos-despesa.json:
+    post:
+      summary: Lista de grupos de despesa
+      description: Endpoint auxiliar de filtro. Aceita corpo JSON com termo e filtros de despesas.
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: false
+          schema:
+            type: object
+            properties:
+              ano:
+                type: integer
+                description: Ano de exercicio da despesa (ex. 2026).
+              periodo_inicio:
+                type: string
+                description: Inicio do periodo no formato DDMM (ex. '0101' = 01/jan).
+              periodo_fim:
+                type: string
+                description: Fim do periodo no formato DDMM (ex. '3108' = 31/ago).
+              termo:
+                type: string
+              limit:
+                type: integer
+              page:
+                type: integer
+      responses:
+        '200':
+          description: Dados encontrados.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/lista-modalidades-aplicacao.json:
+    post:
+      summary: Lista de modalidades de aplicação
+      description: Endpoint auxiliar de filtro. Aceita corpo JSON com termo e filtros de despesas.
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: false
+          schema:
+            type: object
+            properties:
+              ano:
+                type: integer
+                description: Ano de exercicio da despesa (ex. 2026).
+              periodo_inicio:
+                type: string
+                description: Inicio do periodo no formato DDMM (ex. '0101' = 01/jan).
+              periodo_fim:
+                type: string
+                description: Fim do periodo no formato DDMM (ex. '3108' = 31/ago).
+              termo:
+                type: string
+              limit:
+                type: integer
+              page:
+                type: integer
+      responses:
+        '200':
+          description: Dados encontrados.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/lista-ipu.json:
+    post:
+      summary: Lista de IPU (procedência)
+      description: Endpoint auxiliar de filtro. Aceita corpo JSON com termo e filtros de despesas.
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: false
+          schema:
+            type: object
+            properties:
+              ano:
+                type: integer
+                description: Ano de exercicio da despesa (ex. 2026).
+              periodo_inicio:
+                type: string
+                description: Inicio do periodo no formato DDMM (ex. '0101' = 01/jan).
+              periodo_fim:
+                type: string
+                description: Fim do periodo no formato DDMM (ex. '3108' = 31/ago).
+              termo:
+                type: string
+              limit:
+                type: integer
+              page:
+                type: integer
+      responses:
+        '200':
+          description: Dados encontrados.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/lista-upg.json:
+    post:
+      summary: Lista de UPG (unidade de programação de gastos)
+      description: Endpoint auxiliar de filtro. Aceita corpo JSON com termo e filtros de despesas.
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: false
+          schema:
+            type: object
+            properties:
+              ano:
+                type: integer
+                description: Ano de exercicio da despesa (ex. 2026).
+              periodo_inicio:
+                type: string
+                description: Inicio do periodo no formato DDMM (ex. '0101' = 01/jan).
+              periodo_fim:
+                type: string
+                description: Fim do periodo no formato DDMM (ex. '3108' = 31/ago).
+              termo:
+                type: string
+              limit:
+                type: integer
+              page:
+                type: integer
+      responses:
+        '200':
+          description: Dados encontrados.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/lista-fontes-recurso.json:
+    post:
+      summary: Lista de fontes de recurso
+      description: Endpoint auxiliar de filtro. Aceita corpo JSON com termo e filtros de despesas.
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: false
+          schema:
+            type: object
+            properties:
+              ano:
+                type: integer
+                description: Ano de exercicio da despesa (ex. 2026).
+              periodo_inicio:
+                type: string
+                description: Inicio do periodo no formato DDMM (ex. '0101' = 01/jan).
+              periodo_fim:
+                type: string
+                description: Fim do periodo no formato DDMM (ex. '3108' = 31/ago).
+              termo:
+                type: string
+              limit:
+                type: integer
+              page:
+                type: integer
+      responses:
+        '200':
+          description: Dados encontrados.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/lista-fontes-recurso-stn.json:
+    post:
+      summary: Lista de fontes de recurso (STN)
+      description: Endpoint auxiliar de filtro. Aceita corpo JSON com termo e filtros de despesas.
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: false
+          schema:
+            type: object
+            properties:
+              ano:
+                type: integer
+                description: Ano de exercicio da despesa (ex. 2026).
+              periodo_inicio:
+                type: string
+                description: Inicio do periodo no formato DDMM (ex. '0101' = 01/jan).
+              periodo_fim:
+                type: string
+                description: Fim do periodo no formato DDMM (ex. '3108' = 31/ago).
+              termo:
+                type: string
+              limit:
+                type: integer
+              page:
+                type: integer
+      responses:
+        '200':
+          description: Dados encontrados.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/lista-empenhos.json:
+    post:
+      summary: Lista de empenhos
+      description: Endpoint auxiliar de filtro. Aceita corpo JSON com termo e filtros de despesas.
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            required: [ano, id_orgao]
+            properties:
+              ano:
+                type: integer
+                description: Ano de exercicio da despesa (ex. 2026).
+              periodo_inicio:
+                type: string
+                description: Inicio do periodo no formato DDMM (ex. '0101' = 01/jan).
+              periodo_fim:
+                type: string
+                description: Fim do periodo no formato DDMM (ex. '3108' = 31/ago).
+              id_orgao:
+                type: integer
+                description: Id do orgao (obrigatorio para este filtro).
+              termo:
+                type: string
+              limit:
+                type: integer
+              page:
+                type: integer
+      responses:
+        '200':
+          description: Dados encontrados.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/lista-documentos-pagamento.json:
+    post:
+      summary: Lista de documentos de pagamento
+      description: Endpoint auxiliar de filtro. Aceita corpo JSON com termo e filtros de despesas.
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            required: [ano, id_orgao]
+            properties:
+              ano:
+                type: integer
+                description: Ano de exercicio da despesa (ex. 2026).
+              periodo_inicio:
+                type: string
+                description: Inicio do periodo no formato DDMM (ex. '0101' = 01/jan).
+              periodo_fim:
+                type: string
+                description: Fim do periodo no formato DDMM (ex. '3108' = 31/ago).
+              id_orgao:
+                type: integer
+                description: Id do orgao (obrigatorio para este filtro).
+              termo:
+                type: string
+              limit:
+                type: integer
+              page:
+                type: integer
+      responses:
+        '200':
+          description: Dados encontrados.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/lista-processos-compra.json:
+    post:
+      summary: Lista de processos de compra
+      description: Endpoint auxiliar de filtro. Aceita corpo JSON com termo e filtros de despesas.
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: false
+          schema:
+            type: object
+            properties:
+              ano:
+                type: integer
+                description: Ano de exercicio da despesa (ex. 2026).
+              periodo_inicio:
+                type: string
+                description: Inicio do periodo no formato DDMM (ex. '0101' = 01/jan).
+              periodo_fim:
+                type: string
+                description: Fim do periodo no formato DDMM (ex. '3108' = 31/ago).
+              termo:
+                type: string
+              limit:
+                type: integer
+              page:
+                type: integer
+      responses:
+        '200':
+          description: Dados encontrados.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/lista-procedimentos-contratacao.json:
+    post:
+      summary: Lista de procedimentos de contratação
+      description: Endpoint auxiliar de filtro. Aceita corpo JSON com termo e filtros de despesas.
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: false
+          schema:
+            type: object
+            properties:
+              ano:
+                type: integer
+                description: Ano de exercicio da despesa (ex. 2026).
+              periodo_inicio:
+                type: string
+                description: Inicio do periodo no formato DDMM (ex. '0101' = 01/jan).
+              periodo_fim:
+                type: string
+                description: Fim do periodo no formato DDMM (ex. '3108' = 31/ago).
+              termo:
+                type: string
+              limit:
+                type: integer
+              page:
+                type: integer
+      responses:
+        '200':
+          description: Dados encontrados.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/lista-objetos-processo.json:
+    post:
+      summary: Lista de objetos de processo
+      description: Endpoint auxiliar de filtro. Aceita corpo JSON com termo e filtros de despesas.
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            required: [ano]
+            properties:
+              ano:
+                type: integer
+                description: Ano de exercicio da despesa (ex. 2026).
+              periodo_inicio:
+                type: string
+                description: Inicio do periodo no formato DDMM (ex. '0101' = 01/jan).
+              periodo_fim:
+                type: string
+                description: Fim do periodo no formato DDMM (ex. '3108' = 31/ago).
+              termo:
+                type: string
+              limit:
+                type: integer
+              page:
+                type: integer
+      responses:
+        '200':
+          description: Dados encontrados.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/lista-contratos-convenios.json:
+    post:
+      summary: Lista de contratos e convênios
+      description: Endpoint auxiliar de filtro. Aceita corpo JSON com termo e filtros de despesas.
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: false
+          schema:
+            type: object
+            properties:
+              ano:
+                type: integer
+                description: Ano de exercicio da despesa (ex. 2026).
+              periodo_inicio:
+                type: string
+                description: Inicio do periodo no formato DDMM (ex. '0101' = 01/jan).
+              periodo_fim:
+                type: string
+                description: Fim do periodo no formato DDMM (ex. '3108' = 31/ago).
+              termo:
+                type: string
+              limit:
+                type: integer
+              page:
+                type: integer
+      responses:
+        '200':
+          description: Dados encontrados.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/lista-objetos-contrato.json:
+    post:
+      summary: Lista de objetos de contrato
+      description: Endpoint auxiliar de filtro. Aceita corpo JSON com termo e filtros de despesas.
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            required: [ano]
+            properties:
+              ano:
+                type: integer
+                description: Ano de exercicio da despesa (ex. 2026).
+              periodo_inicio:
+                type: string
+                description: Inicio do periodo no formato DDMM (ex. '0101' = 01/jan).
+              periodo_fim:
+                type: string
+                description: Fim do periodo no formato DDMM (ex. '3108' = 31/ago).
+              termo:
+                type: string
+              limit:
+                type: integer
+              page:
+                type: integer
+      responses:
+        '200':
+          description: Dados encontrados.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+  /consultas/despesas/lista-titulos-convenio.json:
+    post:
+      summary: Lista de títulos de convênio
+      description: Endpoint auxiliar de filtro. Aceita corpo JSON com termo e filtros de despesas.
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            required: [ano]
+            properties:
+              ano:
+                type: integer
+                description: Ano de exercicio da despesa (ex. 2026).
+              periodo_inicio:
+                type: string
+                description: Inicio do periodo no formato DDMM (ex. '0101' = 01/jan).
+              periodo_fim:
+                type: string
+                description: Fim do periodo no formato DDMM (ex. '3108' = 31/ago).
+              termo:
+                type: string
+              limit:
+                type: integer
+              page:
+                type: integer
+      responses:
+        '200':
+          description: Dados encontrados.
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+
+securityDefinitions:
+  default:
+    type: oauth2
+    authorizationUrl: https://desenvolvimento.apigateway.prodemge.gov.br/authorize
+    flow: implicit
+    scopes: {}
