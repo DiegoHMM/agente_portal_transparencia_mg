@@ -12,6 +12,8 @@ TOKEN_URL = os.getenv("PT_MG_TOKEN_URL",
     "https://homologacao.manager.mgapi.prodemge.gov.br/oauth2/token")
 USER_AGENT = "mcp-portal-transparencia/0.1"
 
+PESQUISA = "/consultas/despesas/pesquisa-avancada.json"
+
 class ErroAPI(Exception):
     def __init__(self, status, mensagem, endpoint):
         super().__init__(f"{endpoint}: HTTP {status}: {mensagem}")
@@ -146,9 +148,6 @@ def detalhar_empenho(id_empenho: int, ano: int) -> dict:
 def anos_disponiveis() -> list[int]:
     return _requisitar("GET", "/consultas/despesas/lista-periodo.json")["data"][0]
 
-
-PESQUISA = "/consultas/despesas/pesquisa-avancada.json"
-
 def pesquisa_avancada(filtros: dict, colunas: str | None = None, max_paginas=20) -> dict:
     """Todas as páginas da pesquisa avançada (nível 1). ano e período devem ser escalares."""
     corpo = {"nivel": 1, "filtros": filtros, "limit": 100, "page": 1}
@@ -161,8 +160,6 @@ def pesquisa_avancada(filtros: dict, colunas: str | None = None, max_paginas=20)
         registros += _requisitar("POST", PESQUISA, corpo=corpo)["data"]["registros"]
     return {"totais": data["totais"], "registros": registros,
             "truncado": data["total_paginas"] > max_paginas}
-
-
 
 _token = {"valor": None, "expira": 0.0}
 
