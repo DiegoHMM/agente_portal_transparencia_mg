@@ -1,4 +1,5 @@
-httpx
-python-dotenv
+-r mcp_portal_transparencia/requirements.txt
+openai
+requests
 pyyaml
 pytest
