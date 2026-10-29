@@ -1,0 +1,4 @@
+command: ['python', 'server.py']
+env:
+  - name: PT_MG_BASIC_AUTH
+    valueFrom: pt-mg-basic-auth

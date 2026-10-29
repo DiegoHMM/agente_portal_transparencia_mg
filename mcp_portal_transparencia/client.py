@@ -58,7 +58,12 @@ def _requisitar(metodo, path, params=None, corpo=None, tentativas=3):
             continue
         if r.status_code != 200:
             raise ErroAPI(r.status_code, _mensagem_de_erro(r), path)
-        return r.json()
+        try:
+            return r.json()
+        except ValueError:
+            if tentativa == tentativas - 1:
+                raise ErroAPI(200, "resposta vazia ou inválida da API", path)
+            time.sleep(2 ** tentativa)
 
 def _mensagem_de_erro(r):
     if r.status_code == 403:  # firewall do gateway responde com pagina HTML
@@ -117,7 +122,7 @@ LISTAS_PEQUENAS = {"orgaos", "unidades", "programas", "acoes", "funcoes", "subfu
 
 @lru_cache(maxsize=128)
 def _lista_completa(tipo: str, ano: int) -> tuple:
-    corpo = {"ano": ano, "periodo_inicio": "0101", "periodo_fim": "3112", "limit": 100}
+    corpo = {"ano": ano, "limit": 100}
     itens, page = [], 1
     while True:
         data = _requisitar("POST", f"/consultas/despesas/lista-{tipo}.json",
@@ -136,8 +141,7 @@ def lista(tipo: str, ano: int, termo: str | None = None) -> list[dict]:
             return [dict(i) for i in itens]
         alvo = sem_acento(termo).upper()
         return [dict(i) for i in itens if alvo in sem_acento(i["nome"]).upper()]
-    corpo = {"ano": ano, "periodo_inicio": "0101", "periodo_fim": "3112",
-             "termo": sem_acento(termo or ""), "limit": 50, "page": 1}
+    corpo = {"ano": ano, "termo": sem_acento(termo or ""), "limit": 50, "page": 1}
     data = _requisitar("POST", f"/consultas/despesas/lista-{tipo}.json", corpo=corpo)["data"]
     return [_normalizar_item(r) for r in data["registros"]]
 
@@ -150,7 +154,8 @@ def anos_disponiveis() -> list[int]:
 
 def pesquisa_avancada(filtros: dict, colunas: str | None = None, max_paginas=20) -> dict:
     """Todas as páginas da pesquisa avançada (nível 1). ano e período devem ser escalares."""
-    corpo = {"nivel": 1, "filtros": filtros, "limit": 100, "page": 1}
+    corpo = {"nivel": 1, "filtros": filtros, "limit": 500, "page": 1,
+             "order_by": colunas.split(",")[0] if colunas else "orgao", "order_dir": "ASC"}
     if colunas:
         corpo["colunas"] = colunas
     data = _requisitar("POST", PESQUISA, corpo=corpo)["data"]
@@ -158,8 +163,10 @@ def pesquisa_avancada(filtros: dict, colunas: str | None = None, max_paginas=20)
     while corpo["page"] < min(data["total_paginas"], max_paginas):
         corpo["page"] += 1
         registros += _requisitar("POST", PESQUISA, corpo=corpo)["data"]["registros"]
+    soma = round(sum(r.get("valor_empenhado") or 0 for r in registros), 2)
     return {"totais": data["totais"], "registros": registros,
-            "truncado": data["total_paginas"] > max_paginas}
+            "truncado": data["total_paginas"] > max_paginas,
+            "linhas_conferem": soma == round(data["totais"].get("valor_empenhado") or 0, 2)}
 
 _token = {"valor": None, "expira": 0.0}
 

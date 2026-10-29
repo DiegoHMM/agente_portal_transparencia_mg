@@ -1,0 +1,16 @@
+# Credenciais
+.env
+.env.example
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Saidas locais do testar_endpoints.py
+resultado_testes_endpoints.json
+respostas/
+tests/
+avaliacao/
+agente/
+docs/
