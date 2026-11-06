@@ -2,8 +2,8 @@
 
 Referência dos endpoints identificados na API do Portal da Transparência de Minas Gerais (MGapi / WSO2, Prodemge).
 Fontes: [api_consultas_portal_transparencia.yaml](api_consultas_portal_transparencia.yaml) (swagger), as chamadas
-reais salvas em [respostas/](respostas/) (ano 2025, consulta de 25/09/2026) e os achados registrados em
-[../avaliacao/perguntas.yaml](../avaliacao/perguntas.yaml).
+reais salvas em [respostas/](respostas/) (ano 2025, consulta de 25/09/2026) e os testes feitos durante a construção
+do MCP (seção 7). Os valores de referência das perguntas de avaliação estão em [../avaliacao/eval.csv](../avaliacao/eval.csv).
 
 Legenda de status:
 
@@ -63,6 +63,7 @@ Despesas por órgão (unidade orçamentária).
 - **Contagem:** `qt_orgaos` (87 em 2025)
 - **Extras:** `grafico1` (por categoria econômica) e `grafico2` (série anual)
 - ⚠️ Ignora `id_elemento_despesa`, `id_funcao` e `id_subfuncao` **sem avisar**: devolve o total sem filtro.
+  Para função e subfunção, use `pesquisa-avancada.json`.
 - Exemplo: o total de 2025 tem empenhado 131.563.975.828,04, liquidado 127.112.592.180,39 e pago 125.459.430.296,87.
 
 ### `GET /consultas/despesas/programas.json` ✅ 🧩
@@ -131,9 +132,38 @@ Exportação em CSV.
 
 Anos disponíveis: `data = [[2021, 2022, 2023, 2024, 2025, 2026]]`.
 
-### `POST /consultas/despesas/pesquisa-avancada.json` ❌
+### `POST /consultas/despesas/pesquisa-avancada.json` ✅ ⚠️
 
-Está no swagger (corpo: `nivel, filtros, limit, page, order_by, order_dir`), mas o gateway responde **404** ("endpoint não existe").
+Consulta com filtros combinados. É o endpoint da página "Monte sua pesquisa" do portal
+(`/consultas-1/despesa-estado/despesa?task=estado_despesa.consultaLivre`). **Único endpoint que respeita
+`id_funcao` e `id_subfuncao`.** Testado em 20/10/2026 com a credencial do `.env`.
+
+- **Método e path:** só `POST` com `.json` no fim. Sem `.json` devolve 404, e `GET` devolve 405.
+  Por isso o teste de 25/09 deu 404.
+- **Corpo JSON:** `{"nivel", "filtros", "colunas", "limit", "page", "order_by", "order_dir"}`
+  - `nivel: 1` agrupa por órgão. `nivel: 2` detalha por empenho e exige `id_orgao` (sem ele, devolve 422).
+  - `filtros`: `ano`, `periodo_inicio`, `periodo_fim` (DDMM) e os ids da pesquisa (`id_orgao`, `id_funcao`,
+    `id_subfuncao`, `id_programa`, `id_acao`, `id_elemento_despesa`, `id_fonte_recurso`, `id_favorecido`,
+    `id_contrato` etc.; lista completa no swagger).
+  - ⚠️ `ano`, `periodo_inicio` e `periodo_fim` precisam ser **escalares**. Como lista (`[2025]`), devolve
+    **422** ("Informe um ano válido…"). Os ids aceitam valor ou lista (`"id_funcao": [4711, 4712]`).
+    A resposta mostra tudo como lista em `filtros_aplicados`, mas não é esse o formato de envio.
+  - `colunas` (CSV) escolhe as dimensões das linhas, sempre agrupadas também por órgão. Exemplo:
+    `"colunas": "funcao,subfuncao,valor_pago"` devolve uma linha por órgão × função × subfunção.
+- **Resposta:** `data = {nivel, total, page, limit, total_paginas, filtros_aplicados, colunas_disponiveis,
+  colunas_exibidas, totais, subtotais, registros}`. As chaves de valor são `valor_empenhado, valor_liquidado,
+  valor_pago, valor_liquidado_rp, valor_pago_rp`, diferentes dos outros endpoints (`empenhado`, `pago`…).
+  Erro de validação devolve **422** com `errors` por campo.
+- `totais` cobre o conjunto filtrado inteiro. Sem filtro, bate centavo por centavo com a `visao-geral`
+  (2025: empenhado 131.563.975.828,04, liquidado 127.112.592.180,39, pago 125.459.430.296,87).
+- ⚠️ Com `id_funcao` ou `id_subfuncao`, `valor_liquidado_rp` e `valor_pago_rp` vêm **0**, embora o Estado
+  tenha restos a pagar (2025 sem filtro: pago RP 4.431.039.657,47). Os restos não são atribuídos por função.
+- Exemplos (2025, ano inteiro):
+  - função 10 SAÚDE (`id_funcao` 4711): 11 órgãos; empenhado 19.613.707.887,59, liquidado 18.340.220.837,78,
+    pago 18.068.659.050,60.
+  - subfunção 306 ALIMENTAÇÃO E NUTRIÇÃO (`id_subfuncao` 5143): pago 707.774.420,44, sendo SEE 704.838.856,29
+    (= ações PEAE + PNAE), SEDESE 2.171.654,38 e Fundação Helena Antipoff 763.909,77.
+- Responde em cerca de 1 s, contra os ~25 min da alternativa via `gerar-csv` mês a mês.
 
 ---
 
@@ -142,6 +172,8 @@ Está no swagger (corpo: `nivel, filtros, limit, page, order_by, order_dir`), ma
 Servem para transformar um nome (ex. "educação") no `id` que os filtros das consultas exigem.
 
 - **Corpo JSON:** `{"ano", "periodo_inicio", "periodo_fim", "termo", "limit", "page"}`
+- ⚠️ Com `periodo_inicio`/`periodo_fim` no corpo, listas como `lista-funcoes` ficam lentas e chegam a devolver
+  HTTP 500 por timeout. O resultado sem período é o mesmo, então o `client.py` envia só `ano`.
 - **Resposta:** `data = {"total", "registros": [...]}`
 - O `termo` filtra no servidor, mas **precisa estar sem acento**.
 - 🧩 [client.py](../mcp_portal_transparencia/client.py) baixa as listas pequenas inteiras e faz a busca localmente, sem acento.
@@ -154,8 +186,8 @@ Servem para transformar um nome (ex. "educação") no `id` que os filtros das co
 | `lista-unidades.json` ✅ | — | 1116 | `id_orgao, nome` | unidades executoras |
 | `lista-programas.json` ✅ | — | 158 | `id_programa, codigo_programa, nome_programa, nome_programa_sem_id` | |
 | `lista-acoes.json` ✅ | — | 671 | `id_acao, codigo_acao, nome_acao, nome_acao_sem_id` | |
-| `lista-funcoes.json` ✅ | — | 26 | `id, codigo, descricao, nome` | ⚠️ `id_funcao` é ignorado pelas consultas |
-| `lista-subfuncoes.json` ✅ | — | 81 | `id, codigo, descricao, nome` | ⚠️ `id_subfuncao` é ignorado pelas consultas |
+| `lista-funcoes.json` ✅ | — | 26 | `id, codigo, descricao, nome` | ⚠️ `id_funcao` só funciona em `pesquisa-avancada` |
+| `lista-subfuncoes.json` ✅ | — | 81 | `id, codigo, descricao, nome` | ⚠️ `id_subfuncao` só funciona em `pesquisa-avancada` |
 | `lista-elementos-despesa.json` ✅ | — | 55 | `id_elemento_despesa, nome` | |
 | `lista-itens-despesa.json` ✅ | — | 440 | `id_item_despesa, nome` | |
 | `lista-categorias-economicas.json` ✅ | — | 2 | `id, codigo, descricao, nome` | |
@@ -165,7 +197,7 @@ Servem para transformar um nome (ex. "educação") no `id` que os filtros das co
 | `lista-fontes-recurso-stn.json` ✅ | — | 49 | `id, codigo, descricao, nome` | |
 | `lista-ipu.json` ✅ | — | 12 | `id, codigo, descricao, nome` | há `codigo = 0` válido |
 | `lista-upg.json` ✅ | — | 5303 | `id, codigo, descricao, nome` | |
-| `lista-favorecidos.json` ✅ | — | 23219 | `id_favorecido, nome, cnpj_cpf_favorecido, descricao` | grande: use `termo` |
+| `lista-favorecidos.json` ✅ ⚠️ | — | 23219 | `id_favorecido, nome, cnpj_cpf_favorecido, descricao` | grande e sujeita a timeout; prefira `favorecidos.json?favorecido=<nome parcial>` |
 | `lista-processos-compra.json` ✅ | — | 33649 | `id, codigo, descricao, nome` | |
 | `lista-procedimentos-contratacao.json` ✅ | — | 12 | `id, codigo, descricao, nome` | |
 | `lista-objetos-processo.json` ✅ | `ano` | 24391 | `id, codigo, descricao, nome` | |
@@ -234,6 +266,38 @@ Todos usam GET. Os parâmetros com `*` são obrigatórios.
 | Quanto o Estado gastou no ano? | `visao-geral.json?ano=…&periodo_inicio=0101&periodo_fim=3112&limit=1` e ler `total_*` |
 | Quanto o órgão X gastou? | `lista-orgaos` (termo sem acento) → `id_orgao` → `visao-geral.json?id_orgao=…&limit=1` |
 | Quanto foi gasto com a ação/política Y? | `lista-acoes` → um ou mais `id_acao` → `programas.json?id_acao=…&limit=1` para cada um, somando os totais |
+| Quanto foi gasto com a área W (saúde, educação…)? | `lista-funcoes` (ou `lista-subfuncoes`) → `id_funcao` → `POST pesquisa-avancada.json` com `{"nivel": 1, "filtros": {"ano": …, "periodo_inicio": "0101", "periodo_fim": "3112", "id_funcao": …}}` e ler `totais` |
 | Gasto do órgão X com o elemento Z | `lista-elementos-despesa` → `itens-despesa.json?id_orgao=…&id_elemento_despesa=…` (não use `visao-geral`, que ignora esse filtro) |
 | Maiores credores | `favorecidos.json` com `colunas` com valores e `order_by=valor_pago&order_dir=DESC` |
 | Detalhe de um empenho | `empenhos.json?id_orgao=…` → `id_empenho` → `empenhos/detalhamento.json` |
+
+---
+
+## 7. Achados dos testes (out/2026)
+
+Comportamentos encontrados ao construir e validar o MCP, que o swagger não documenta.
+
+### Pesquisa avançada
+- **`limit` vai até 500** (os outros endpoints aceitam até 100).
+- ⚠️ **Paginação instável sem `order_by`.** Sem ordenação explícita, páginas diferentes repetem e omitem linhas, e a soma
+  das linhas não bate com `totais` (em uma consulta por programa, o total ficou inflado em R$ 318 mi). O `client.py`
+  pede `limit=500`, ordena pela primeira coluna pedida e confere a soma de `valor_empenhado` das linhas contra o total.
+  Agrupando por item de despesa a soma ainda pode não fechar; nesse caso o MCP avisa.
+- ⚠️ **Sem resultado, `totais` vem com valores `null`**, e não 0.
+- Restos a pagar zerados com `id_funcao`/`id_subfuncao` (ver seção 3).
+
+### Favorecidos
+- `favorecidos.json` com `favorecido=<nome parcial>` é o caminho rápido para achar um credor; a resposta traz
+  `cpf_cnpj_favorecido` para distinguir homônimos.
+- ⚠️ O filtro por CPF/CNPJ na pesquisa avançada leva **70 a 90 s**. O MCP filtra pelo nome completo exato, obtido
+  antes com `favorecidos.json`.
+
+### Homologação
+- ⚠️ Durante a recarga de dados, a API devolve **HTTP 200 com corpo vazio** e os valores podem oscilar entre
+  consultas. O `client.py` repete a chamada com espera crescente; gabaritos devem ser gerados com a base estável.
+- ⚠️ **Bug do site de homologação:** na página "Monte sua pesquisa", escolher a função Saúde com ano 2025 envia o
+  `id_funcao` de 2026 (4794) em vez do de 2025 (4711) e mostra "Nenhum dado encontrado". A API está correta; o MCP
+  evita o problema convertendo o código da função no id do mesmo ano da consulta.
+- ⚠️ **Acesso por IP:** o endpoint de token da homologação devolveu **403** a uma chamada feita da AWS
+  (Lambda em `sa-east-1`), enquanto a mesma credencial funcionou a partir de uma rede local. Hospedar o MCP em nuvem
+  exige confirmar com a Prodemge a liberação do IP de saída.

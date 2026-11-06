@@ -1,4 +1,5 @@
 import os
+import sys
 from typing import Literal
 from mcp.server.mcpserver import MCPServer
 from mcp.server.mcpserver.exceptions import ToolError
@@ -220,9 +221,14 @@ def pesquisar_despesa(
     return resposta
 
 
+# Porta usada pelo agente local (agente/.../mcp_client/client.py aponta para http://localhost:8001/mcp)
+PORTA_HTTP_PADRAO = 8001
+
 if __name__ == "__main__":
-    if os.getenv("DATABRICKS_APP_PORT"):
-        mcp.run("streamable-http", host="0.0.0.0",
-                port=int(os.environ["DATABRICKS_APP_PORT"]), stateless_http=True)
+    # stdio continua sendo o padrão, pois é assim que o Claude Code inicia o servidor.
+    # HTTP: `python server.py --http` (porta 8001) ou com DATABRICKS_APP_PORT definida (Databricks Apps).
+    if "--http" in sys.argv or os.getenv("DATABRICKS_APP_PORT"):
+        porta = int(os.getenv("DATABRICKS_APP_PORT", PORTA_HTTP_PADRAO))
+        mcp.run("streamable-http", host="0.0.0.0", port=porta, stateless_http=True)
     else:
         mcp.run()
