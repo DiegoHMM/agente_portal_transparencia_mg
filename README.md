@@ -52,9 +52,3 @@ notebooks/endpoints.ipynb   exploração inicial da API
    ```bash
    python -m pytest mcp_portal_transparencia/tests
    ```
-
-## Observações
-
-- A API de homologação muda os valores a cada carga de dados; os gabaritos do `eval.csv` registram a data da consulta.
-- O endpoint de token da homologação recusa chamadas de IPs de nuvem não liberados. Veja a seção 7 do
-  [ENDPOINTS.md](docs/ENDPOINTS.md).
