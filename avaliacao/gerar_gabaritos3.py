@@ -4,6 +4,7 @@ Uso:
 """
 import csv
 import sys
+from datetime import date
 from pathlib import Path
 
 from gerar_gabaritos import COLUNAS, agrupar, brl, id_de, linha, nome_de, pesquisa, valores
@@ -115,6 +116,17 @@ def compostas():
                 "em 2024?", f"{p(v)} pagos pela SEE (1261) na função 12 - EDUCACAO em 2024.", "pago", v,
                 tools=BUSCA, observacao="Combina dois filtros diferentes (órgão E função).")
 
+    # Antiga A18: "gasto" é lido como pago e "ano passado" é resolvido pela data de hoje.
+    ano = date.today().year - 1
+    r = pesquisa(ano, colunas="orgao,valor_empenhado,valor_liquidado,valor_pago")
+    orgaos = sorted(agrupar(r["registros"], "orgao").items(), key=lambda x: x[1]["pago"], reverse=True)
+    nome, v = orgaos[0]
+    yield linha("C30", "composta", "Qual órgão mais gastou no ano passado?",
+                f"{nome}, com {p(v)} pagos em {ano}.", "pago", v,
+                tools="pesquisar_despesa (agrupar_por=orgao)",
+                observacao=f"Ex-A18. 'Ano passado' = {ano} (relativo à data da execução); 'gastou' lido como pago. "
+                           f"Segundo colocado: {orgaos[1][0]} ({p(orgaos[1][1])}).")
+
 
 def ambiguas():
     casos = [
@@ -128,8 +140,6 @@ def ambiguas():
          "de Saúde ou favorecidos hospitalares."),
         ("A17", "Quanto o Estado pagou à Cemig?",
          "Pedir o ano e identificar qual empresa do grupo CEMIG ou se o usuário quer todas elas."),
-        ("A18", "Qual órgão mais gastou no ano passado?",
-         "Confirmar o ano relativo e a métrica; 'gastou' pode significar empenhado, liquidado ou pago."),
         ("A19", "Quanto foi gasto com tecnologia em 2025?",
          "Esclarecer se o recorte é a subfunção Tecnologia da Informação, o elemento Serviços de TIC ou compras de "
          "empresas como Prodemge."),

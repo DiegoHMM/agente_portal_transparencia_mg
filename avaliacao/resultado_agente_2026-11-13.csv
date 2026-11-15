@@ -1,0 +1,2630 @@
+﻿id,arquivo,categoria,pergunta,comportamento_esperado,veredito,nota,tools_chamadas,segundos,resposta_agente
+A01,eval.csv,ambigua,Quanto o governo gastou com saúde?,pedir_esclarecimento,errado,Escolheu uma interpretação e respondeu sem pedir esclarecimento,buscar_classificacao > anos_disponiveis > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa,53.4,"Aqui está o panorama completo dos gastos do Governo de Minas Gerais com **Saúde (Função 10)** ao longo dos anos disponíveis:
+
+---
+
+## 🏥 Gastos com Saúde — Estado de Minas Gerais
+
+| Ano | Empenhado | Liquidado | Pago |
+|-----|----------:|----------:|-----:|
+| 2021 | R$ 14,96 bi | R$ 13,75 bi | R$ 13,46 bi |
+| 2022 | R$ 15,54 bi | R$ 14,39 bi | R$ 13,95 bi |
+| 2023 | R$ 17,10 bi | R$ 15,86 bi | R$ 15,48 bi |
+| 2024 | R$ 18,22 bi | R$ 17,31 bi | R$ 17,01 bi |
+| 2025 | R$ 19,61 bi | R$ 18,34 bi | R$ 18,07 bi |
+| 2026 ⚠️ | R$ 17,82 bi | R$ 16,30 bi | R$ 15,94 bi |
+
+> ⚠️ **2026 tem dados parciais** (até 13/11/2026) e tende a crescer até o fechamento do ano.
+
+---
+
+### 📌 Observações importantes
+
+- **Filtro utilizado:** Função **10 – SAÚDE** (abrange toda a despesa classificada como saúde no orçamento estadual).
+- **Empenhado** = valor comprometido no orçamento; **Liquidado** = serviço/bem confirmado como entregue; **Pago** = efetivamente desembolsado.
+- A diferença entre empenhado e pago nos anos fechados (2021–2025) representa valores inscritos em **restos a pagar**, liquidados ou pagos em exercícios posteriores.
+- A API não atribui restos a pagar quando se filtra por função, portanto os valores de restos a pagar não estão incluídos nos totais acima.
+- A tendência é de **crescimento consistente**: de R$ 13,5 bi pagos em 2021 para R$ 18,1 bi em 2025, um aumento de cerca de **34%** no período.
+
+Deseja detalhar por órgão, programa, ação ou algum ano específico?
+"
+A02,eval.csv,ambigua,Quanto a polícia gastou em 2025?,pedir_esclarecimento,parcial,"Não perguntou, mas mostrou as várias interpretações separadas",buscar_classificacao > buscar_classificacao > pesquisar_despesa > pesquisar_despesa,24.7,"Aqui está um resumo completo dos gastos da polícia em 2025, com dois recortes:
+
+---
+
+## 🚔 Gastos com Polícia em 2025 — Minas Gerais
+
+### Recorte 1 — Função Segurança Pública (código 6) — **mais amplo**
+Inclui todos os órgãos que classificaram despesas nessa função (Polícia Civil, Polícia Militar, Corpo de Bombeiros, Secretaria de Segurança Pública, entre outros).
+
+| Estágio | Valor |
+|---|---|
+| **Empenhado** | R$ 26.015.824.262,31 |
+| **Liquidado** | R$ 25.378.163.646,09 |
+| **Pago** | R$ 25.284.294.744,88 |
+
+> ⚠️ Atenção: com filtro por função, a API não atribui restos a pagar, podendo haver leve subestimação.
+
+---
+
+### Recorte 2 — Órgãos Polícia Civil (1511) + Polícia Militar (1251) — **mais estrito**
+Inclui apenas as despesas dos dois órgãos de polícia, independentemente da função classificada.
+
+| Estágio | Valor |
+|---|---|
+| **Empenhado** | R$ 20.322.909.274,60 |
+| **Liquidado** | R$ 19.989.495.355,64 |
+| **Pago** | R$ 19.937.336.862,60 |
+
+---
+
+### 📌 O que cada recorte captura ou deixa de fora:
+- **Recorte amplo (função 6)** inclui Corpo de Bombeiros, Secretaria de Segurança Pública e outros órgãos que gastam em segurança, mas **pode incluir despesas administrativas** de órgãos não policiais.
+- **Recorte estrito (órgãos)** foca exclusivamente na Polícia Civil e Polícia Militar, mas **pode deixar de fora** gastos de segurança feitos por outros órgãos (ex.: Bombeiros, SESP).
+- A diferença de ~R$ 5,7 bilhões entre os dois recortes reflete exatamente esses outros órgãos de segurança pública.
+"
+A03,eval.csv,ambigua,Quanto foi gasto com a merenda?,pedir_esclarecimento,parcial,"Não perguntou, mas mostrou as várias interpretações separadas",buscar_classificacao > buscar_classificacao > anos_disponiveis > buscar_classificacao > pesquisar_despesa > pesquisar_despesa,34.3,"Aqui está o resumo dos gastos com merenda escolar em **2025** (ano fechado):
+
+---
+
+## 🍽️ Gastos com Merenda Escolar — 2025
+
+### Recorte estrito: Ações de Alimentação Escolar (PEAE + PNAE)
+| Estágio | Valor |
+|---|---|
+| **Empenhado** | R$ 706.150.155,05 |
+| **Liquidado** | R$ 706.013.403,05 |
+| **Pago** | R$ 704.838.856,29 |
+
+Ações incluídas:
+- **2101 – Programa Estadual de Alimentação Escolar (PEAE)**
+- **2102 – Programa Nacional de Alimentação Escolar (PNAE)**
+
+---
+
+### Recorte amplo: Subfunção 306 – Alimentação e Nutrição
+| Estágio | Valor |
+|---|---|
+| **Empenhado** | R$ 710.430.717,93 |
+| **Liquidado** | R$ 708.958.653,35 |
+| **Pago** | R$ 707.774.420,44 |
+
+---
+
+### 📌 Observações
+- A diferença entre os dois recortes (~R$ 4,3 milhões) corresponde a outros gastos classificados na subfunção 306 que **não são** especificamente merenda escolar (ex.: ações de nutrição em saúde ou outras áreas).
+- O **recorte mais preciso para merenda escolar** são as ações PEAE e PNAE: **~R$ 704,8 milhões pagos em 2025**.
+- Ações como **""Alimentação Complementar na Primeira Infância"" (4364)** e **""Melhoria na Alimentação"" (2130)** foram deixadas de fora do recorte estrito por não se referirem diretamente à merenda escolar.
+
+Deseja detalhar por órgão, por programa ou comparar com anos anteriores?
+"
+A04,eval.csv,ambigua,Quanto a Fazenda gastou no ano passado?,pedir_esclarecimento,errado,Escolheu uma interpretação e respondeu sem pedir esclarecimento,buscar_classificacao > anos_disponiveis > pesquisar_despesa,12.2,"Aqui está o resumo dos gastos da **Secretaria de Estado de Fazenda de MG** em **2025** (ano fechado):
+
+| Estágio | Valor |
+|---|---|
+| 💼 **Empenhado** | R$ 3.098.048.534,24 |
+| ✅ **Liquidado** | R$ 2.920.181.940,39 |
+| 💰 **Pago** | R$ 2.895.213.060,23 |
+
+---
+
+**Detalhes da consulta:**
+- **Ano:** 2025
+- **Órgãos incluídos:**
+  - `1191` – Secretaria de Estado de Fazenda
+  - `1911` – EGE Sec. Fazenda – Encargos Diversos
+
+A diferença entre o **empenhado (R$ 3,1 bi)** e o **pago (R$ 2,9 bi)** — cerca de **R$ 202,8 milhões** — representa valores inscritos em **restos a pagar**, que podem ter sido liquidados e pagos em 2026.
+"
+A05,eval2.csv,ambigua,Quanto a Justiça gastou em 2024?,pedir_esclarecimento,errado,Usou só a função 03 (Essencial à Justiça); deixou de fora o TJ,buscar_classificacao > anos_disponiveis > pesquisar_despesa,16.4,"Aqui estão os gastos da função **Essencial à Justiça** em **2024**:
+
+| Estágio | Valor |
+|---|---|
+| **Empenhado** | R$ 4.208.363.117,72 |
+| **Liquidado** | R$ 4.038.855.820,67 |
+| **Pago** | R$ 3.991.168.974,56 |
+
+---
+
+**Observações importantes:**
+
+- **Classificação utilizada:** Função **03 – Essencial à Justiça**, que é a única função relacionada à Justiça na estrutura orçamentária do Estado de MG. Ela abrange órgãos como o Ministério Público, Defensoria Pública e Procuradoria-Geral do Estado.
+- **Atenção:** A função **Judiciária (código 02)**, que corresponde ao Poder Judiciário (Tribunal de Justiça, por exemplo), **não apareceu** na busca. Isso pode ocorrer porque o Poder Judiciário, por ser um poder autônomo, pode ter sua contabilidade registrada separadamente ou não estar incluída nesta base de dados do Executivo estadual.
+- Como 2024 é um **ano fechado**, a diferença entre o empenhado (R$ 4,21 bi) e o pago (R$ 3,99 bi) representa valores inscritos em **restos a pagar**, a serem liquidados/pagos em exercícios seguintes.
+
+Deseja detalhar por órgão ou por outro recorte?
+"
+A06,eval2.csv,ambigua,Quanto o Estado gasta com aposentados?,pedir_esclarecimento,errado,Escolheu uma interpretação e respondeu sem pedir esclarecimento,buscar_classificacao > buscar_classificacao > pesquisar_despesa > pesquisar_despesa > anos_disponiveis > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa,22.8,"Aqui está um panorama completo dos gastos do Estado de Minas Gerais com aposentados:
+
+---
+
+## 💰 Gastos com Aposentadorias, Reserva Remunerada e Reformas
+
+**Filtro utilizado:** Elemento de Despesa **01 – Aposentadorias, Reserva Remunerada e Reformas**
+
+> Este elemento cobre os proventos pagos a servidores civis aposentados, militares na reserva remunerada e reformados. **Não inclui** pensões por morte (elemento 03) nem contribuições patronais ao regime previdenciário.
+
+| Ano | Empenhado/Liquidado | **Pago** |
+|-----|-------------------|---------|
+| 2021 | R$ 20,63 bi | R$ 20,63 bi |
+| 2022 | R$ 23,25 bi | R$ 23,25 bi |
+| 2023 | R$ 24,95 bi | R$ 24,96 bi |
+| 2024 | R$ 26,43 bi | R$ 26,48 bi |
+| 2025 | R$ 27,52 bi | R$ 27,52 bi |
+| **2026** *(parcial até 13/11)* | **R$ 22,40 bi** | **R$ 22,40 bi** |
+
+---
+
+### 📌 Destaques
+
+- **Crescimento consistente:** de 2021 a 2025, o gasto cresceu cerca de **33%**, saindo de R$ 20,6 bi para R$ 27,5 bi.
+- **2025** foi o ano com maior gasto registrado: **R$ 27,5 bilhões pagos**.
+- **2026** já acumula R$ 22,4 bi até novembro, com tendência de superar 2025 ao final do ano.
+- Nos anos fechados (2021–2025), empenhado e pago são praticamente iguais, o que é esperado para despesas de pessoal (folha mensal).
+
+---
+
+### ⚠️ O que pode estar fora dessa conta
+Se quiser uma visão **ainda mais ampla** dos gastos com inativos, poderíamos somar também:
+- **Elemento 03 – Pensões** (beneficiários de servidores falecidos)
+- **Elemento 04 – Contratação por Tempo Determinado** (não se aplica)
+- Contribuições ao **IPSEMG/FUNPEMG**
+
+Deseja que eu inclua esses elementos para uma visão consolidada do custo previdenciário total?
+"
+A07,eval2.csv,ambigua,Quanto foi pago de dívida pública em 2025?,pedir_esclarecimento,correto,,buscar_classificacao > buscar_classificacao > buscar_classificacao > pesquisar_despesa,11.0,"Aqui está o resultado completo para **dívida pública em 2025** (ano fechado):
+
+---
+
+## 💰 Dívida Pública — Estado de Minas Gerais (2025)
+
+| Grupo de Despesa | Empenhado | Liquidado | **Pago** |
+|---|---|---|---|
+| Juros e Encargos da Dívida | R$ 3.420.656.597,48 | R$ 3.420.656.597,48 | **R$ 3.362.975.087,75** |
+| Amortização da Dívida | R$ 3.150.065.033,58 | R$ 3.150.065.033,58 | **R$ 3.134.821.993,95** |
+| **Total** | **R$ 6.570.721.631,06** | **R$ 6.570.721.631,06** | **R$ 6.497.797.081,70** |
+
+---
+
+### 📌 Observações
+- **Filtros usados:** Ano 2025 | Grupos de despesa **2 – Juros e Encargos da Dívida** e **6 – Amortização da Dívida**.
+- A diferença entre o **empenhado (R$ 6,57 bi)** e o **pago (R$ 6,50 bi)** — cerca de **R$ 72,9 milhões** — corresponde a valores inscritos em **restos a pagar**, que podem ter sido quitados em 2026.
+- A busca por **função** com o termo ""dívida"" não retornou resultados; a dívida pública em MG é classificada pela função **28 – Encargos Especiais**, mas o recorte pelos grupos 2 e 6 já captura toda a despesa com juros, encargos e amortização da dívida, independentemente da função.
+"
+A08,eval2.csv,ambigua,Quanto o Ministério Público gastou em 2025?,pedir_esclarecimento,parcial,"Não perguntou, mas mostrou as várias interpretações separadas",buscar_classificacao > anos_disponiveis > buscar_classificacao > buscar_classificacao > pesquisar_despesa > pesquisar_despesa,14.0,"Aqui está o resumo completo dos gastos do **Ministério Público de Minas Gerais** em 2025:
+
+---
+
+## 💼 Gastos do Ministério Público de MG — 2025
+
+### Órgãos considerados:
+| Código | Nome |
+|--------|------|
+| **1091** | Procuradoria Geral de Justiça (órgão principal do MP) |
+| **4441** | Fundo Especial do Ministério Público do Estado de MG |
+
+---
+
+### 📊 Procuradoria Geral de Justiça (1091)
+| Estágio | Valor |
+|---------|-------|
+| **Empenhado** | R$ 4.236.732.028,37 |
+| **Liquidado** | R$ 4.141.114.287,80 |
+| **Pago** | R$ 4.100.009.275,29 |
+
+### 📊 Fundo Especial do MP (4441)
+| Estágio | Valor |
+|---------|-------|
+| **Empenhado** | R$ 39.626.206,59 |
+| **Liquidado** | R$ 16.926.860,87 |
+| **Pago** | R$ 14.755.140,25 |
+
+---
+
+### 🔢 TOTAL CONSOLIDADO
+| Estágio | Valor |
+|---------|-------|
+| **Empenhado** | R$ 4.276.358.234,96 |
+| **Liquidado** | R$ 4.158.041.148,67 |
+| **Pago** | R$ 4.114.764.415,54 |
+
+---
+
+> ⚠️ **Nota:** Como 2025 é um ano fechado, a diferença entre o **empenhado** e o **pago** (~R$ 161,6 milhões) representa valores inscritos em **restos a pagar**, que podem ter sido pagos (ou não) em 2026. Os dados referem-se ao período de 01/01/2025 a 31/12/2025.
+"
+A09,eval2.csv,ambigua,Quanto o Planejamento gastou em 2025?,pedir_esclarecimento,errado,Somou 1501+1941 e descreveu a EGE como 'Escola de Governo' (é encargos gerais),buscar_classificacao > pesquisar_despesa,8.6,"Em 2025, a **Secretaria de Estado de Planejamento e Gestão (SEPLAG)** gastou o seguinte, considerando os dois órgãos encontrados:
+
+| Órgão | Código |
+|---|---|
+| Secretaria de Estado de Planejamento e Gestão | 1501 |
+| EGE - Secretaria de Estado de Planejamento e Gestão | 1941 |
+
+| Estágio | Valor |
+|---|---|
+| 💰 **Empenhado** | R$ 1.135.307.005,72 |
+| ✅ **Liquidado** | R$ 1.033.439.772,60 |
+| 💵 **Pago** | R$ 972.668.143,96 |
+
+> **Observações:**
+> - Os dados referem-se ao ano de **2025** (ano fechado).
+> - Foram somados os dois órgãos vinculados ao Planejamento: a **SEPLAG (1501)** e a **EGE-SEPLAG (1941)**, que é a Escola de Governo vinculada à secretaria.
+> - A diferença entre o valor empenhado (R$ 1,13 bi) e o pago (R$ 972,7 mi) representa o montante inscrito em **restos a pagar**, que pode ter sido quitado em 2026.
+"
+A10,eval2.csv,ambigua,Quanto a Defensoria Pública gastou no último trimestre?,pedir_esclarecimento,errado,Escolheu o 3º tri de 2026 sem perguntar,buscar_classificacao > anos_disponiveis > pesquisar_despesa,10.1,"Aqui estão os dados de despesa da **Defensoria Pública do Estado de Minas Gerais** no **3º trimestre de 2026** (1º de julho a 30 de setembro):
+
+| Estágio | Valor |
+|---|---|
+| 💼 **Empenhado** | R$ 312.504.733,44 |
+| ✅ **Liquidado** | R$ 311.573.963,89 |
+| 💰 **Pago** | R$ 308.374.330,67 |
+
+**Filtros utilizados:**
+- **Órgão:** 1441 – Defensoria Pública do Estado de Minas Gerais
+- **Período:** 01/07/2026 a 30/09/2026
+- **Ano:** 2026 (dados parciais)
+
+> ⚠️ Como hoje é 13/11/2026, o **4º trimestre (outubro–dezembro)** ainda está em andamento e não foi considerado como ""último trimestre completo"". Caso queira os dados do período de outubro até hoje, é só pedir!
+"
+A11,eval2.csv,ambigua,Quanto os fundos de previdência pagaram em 2024?,pedir_esclarecimento,errado,Escolheu uma interpretação e respondeu sem pedir esclarecimento,buscar_classificacao > anos_disponiveis > pesquisar_despesa,44.8,"Aqui está o resumo dos pagamentos realizados pelos fundos e institutos de previdência do Estado de Minas Gerais em **2024**:
+
+---
+
+### 💰 Total Pago em 2024: **R$ 22.055.657.649,60**
+
+| Órgão | Empenhado | Liquidado | **Pago** |
+|---|---|---|---|
+| Fundo Financeiro de Previdência do Estado de MG (FUNFIP) | R$ 17.508.957.839,76 | R$ 17.468.843.822,73 | **R$ 17.473.304.282,39** |
+| Instituto de Previdência dos Servidores Militares (IPSM) | R$ 3.010.650.321,59 | R$ 2.990.182.081,12 | **R$ 2.961.013.745,75** |
+| Instituto de Previdência dos Servidores do Estado (IPSEMG) | R$ 1.725.474.955,80 | R$ 1.598.962.422,88 | **R$ 1.555.299.505,74** |
+| Instituto de Previdência do Legislativo (IPSLE) | R$ 66.040.115,72 | R$ 66.040.115,72 | **R$ 66.040.115,72** |
+| **TOTAL** | **R$ 22.311.123.232,87** | **R$ 22.124.028.442,45** | **R$ 22.055.657.649,60** |
+
+---
+
+### Observações:
+- **Ano 2024** está fechado; a diferença entre empenhado e pago representa valores inscritos em **restos a pagar**.
+- Os 4 órgãos encontrados foram: **FUNFIP**, **IPSM**, **IPSEMG** e **IPSLE**. A busca pelo termo ""previdencia"" retornou exatamente esses resultados — não há indícios de outros fundos previdenciários fora dessa lista.
+- O **FUNFIP** é responsável pela maior fatia, com cerca de **79%** do total pago.
+"
+A12,eval2.csv,ambigua,Quanto o Estado gastou com precatórios?,pedir_esclarecimento,errado,Escolheu uma interpretação e respondeu sem pedir esclarecimento,buscar_classificacao > anos_disponiveis > buscar_classificacao > buscar_classificacao > buscar_classificacao > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa,66.2,"Aqui está um resumo completo dos gastos do Estado de Minas Gerais com **precatórios e sentenças judiciárias**, por ano:
+
+---
+
+### 📋 Classificações utilizadas
+Foram encontradas e somadas **duas ações**:
+- **7004 – Precatórios e Sentenças Judiciárias**
+- **7803 – Precatórios e Sentenças Judiciárias da Administração Direta do Poder Executivo**
+
+---
+
+### 💰 Gastos por ano (R$)
+
+| Ano | Empenhado | Liquidado | Pago |
+|-----|----------:|----------:|-----:|
+| 2021 | R$ 421,4 mi | R$ 421,1 mi | R$ 379,1 mi |
+| 2022 | R$ 1,207 bi | R$ 1,184 bi | R$ 944,9 mi |
+| 2023 | R$ 1,071 bi | R$ 1,070 bi | R$ 878,1 mi |
+| 2024 | R$ 1,299 bi | R$ 1,295 bi | R$ 1,203 bi |
+| 2025 | R$ 1,034 bi | R$ 1,030 bi | R$ 757,7 mi |
+| **2026** *(parcial)* | R$ 1,081 bi | R$ 1,043 bi | R$ 932,3 mi |
+
+---
+
+### 📌 Observações
+- **2021** apresenta valor significativamente menor, possivelmente por ser o primeiro ano da série ou por mudanças na estrutura orçamentária.
+- Nos **anos fechados (2021–2025)**, a diferença entre o empenhado e o pago representa valores inscritos em **restos a pagar**, liquidados no exercício seguinte.
+- **2026** tem dados **parciais** (até 13/11/2026).
+- Não foram encontrados resultados para ""precatório"" nas classificações de **elemento de despesa**, **subfunção** ou **programa** — o recorte foi feito exclusivamente pelas ações orçamentárias acima. Caso existam despesas com precatórios classificadas em outras ações, elas não estão incluídas nesta soma.
+"
+A13,eval2.csv,ambigua,Quanto o governo gastou com administração em 2023?,pedir_esclarecimento,errado,Escolheu uma interpretação e respondeu sem pedir esclarecimento,buscar_classificacao > pesquisar_despesa,11.3,"Aqui estão os dados de despesa do Governo de Minas Gerais com a função **Administração** em **2023**:
+
+| Estágio | Valor |
+|---|---|
+| 💰 **Empenhado** | R$ 5.183.011.792,21 |
+| ✅ **Liquidado** | R$ 3.893.316.735,73 |
+| 💵 **Pago** | R$ 3.806.863.299,69 |
+
+---
+
+**Filtros utilizados:**
+- **Ano:** 2023
+- **Função:** `04 - ADMINISTRAÇÃO`
+
+**Observações importantes:**
+- Como 2023 é um ano **fechado**, a diferença entre o valor **empenhado** (~R$ 5,18 bi) e o **pago** (~R$ 3,81 bi) — cerca de **R$ 1,37 bilhão** — representa valores inscritos em **restos a pagar**, que podem ter sido liquidados e pagos em 2024.
+- A API informa que, com filtro por função, os **restos a pagar** não são atribuídos diretamente, o que pode causar alguma subestimação no valor pago.
+"
+A14,eval3.csv,ambigua,Quanto o Estado gastou com transporte?,pedir_esclarecimento,errado,Escolheu uma interpretação e respondeu sem pedir esclarecimento,buscar_classificacao > anos_disponiveis > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa,96.7,"Aqui está o resumo completo dos gastos do Estado de Minas Gerais com **Transporte (Função 26)** em todos os anos disponíveis:
+
+---
+
+### 🚗 Gastos com Transporte — Função 26
+
+| Ano | Empenhado | Liquidado | Pago |
+|-----|----------:|----------:|-----:|
+| 2021 | R$ 1,24 bi | R$ 596,5 mi | R$ 589,7 mi |
+| 2022 | R$ 2,05 bi | R$ 1,23 bi | R$ 1,22 bi |
+| 2023 | R$ 2,46 bi | R$ 1,45 bi | R$ 1,40 bi |
+| 2024 | R$ 2,26 bi | R$ 1,56 bi | R$ 1,54 bi |
+| 2025 | R$ 2,25 bi | R$ 1,73 bi | R$ 1,69 bi |
+| 2026* | R$ 2,52 bi | R$ 1,52 bi | R$ 1,48 bi |
+
+*\*2026: dados parciais até 13/11/2026.*
+
+---
+
+### 📌 Observações
+- **Filtro utilizado:** Função **26 – Transporte** (única função encontrada com esse nome).
+- **Empenhado vs. Pago:** A diferença em anos fechados (2021–2025) representa valores inscritos em **restos a pagar**, liquidados e pagos em exercícios seguintes.
+- Os dados **não incluem gastos com transporte classificados em outras funções** (ex.: transporte escolar pode aparecer na função Educação).
+- ⚠️ A API informa que, com filtro de função, os restos a pagar não são atribuídos corretamente, portanto os valores de **pago podem estar ligeiramente subestimados**.
+
+Deseja detalhar por órgão, subfunção ou algum ano específico?
+"
+A15,eval3.csv,ambigua,Quanto a Educação gastou em 2024?,pedir_esclarecimento,errado,Escolheu uma interpretação e respondeu sem pedir esclarecimento,buscar_classificacao > anos_disponiveis > pesquisar_despesa,13.8,"Aqui está o resumo dos gastos da **função Educação (código 12)** em **2024**:
+
+| Estágio | Valor |
+|---|---|
+| 💰 **Empenhado** | R$ 20.736.838.900,87 |
+| ✅ **Liquidado** | R$ 20.211.593.076,96 |
+| 💵 **Pago** | R$ 20.099.493.108,32 |
+
+### Observações:
+- **Filtro utilizado:** Função ""12 – EDUCAÇÃO"", ano 2024 (janeiro a dezembro).
+- O valor **empenhado** representa o total comprometido pelo Estado; o **liquidado** é o que foi reconhecido como devido; e o **pago** é o efetivamente desembolsado.
+- A diferença entre empenhado (~R$ 20,7 bi) e pago (~R$ 20,1 bi) — cerca de **R$ 637 milhões** — foi inscrita em **restos a pagar** e pode ter sido quitada em 2025.
+- ⚠️ A API não atribui restos a pagar quando se filtra por função, portanto os valores de restos a pagar não estão incluídos nesta consulta.
+
+Deseja detalhar por órgão, subfunção ou outro recorte?
+"
+A16,eval3.csv,ambigua,Quanto foi gasto com hospitais?,pedir_esclarecimento,correto,,buscar_classificacao > anos_disponiveis,5.9,"Encontrei a subfunção **302 – Assistência Hospitalar e Ambulatorial**. Os dados vão de 2021 a 2026 (este último parcial). Para qual ano você gostaria de consultar? 
+
+Enquanto isso, posso já buscar os dados de **2025** (ano fechado mais recente) — deseja que eu faça isso, ou prefere um ano específico?
+"
+A17,eval3.csv,ambigua,Quanto o Estado pagou à Cemig?,pedir_esclarecimento,errado,Escolheu uma interpretação e respondeu sem pedir esclarecimento,buscar_favorecido > anos_disponiveis > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa,105.7,"Aqui está o consolidado de todos os pagamentos do Estado de Minas Gerais ao grupo CEMIG:
+
+---
+
+## 💡 Pagamentos do Estado de MG ao grupo CEMIG
+
+O filtro **""CEMIG""** abrange todas as entidades cujo nome contém esse trecho:
+
+| Entidade | CNPJ |
+|---|---|
+| CEMIG DISTRIBUICAO S.A. | 06.981.180/0001-16 |
+| COMPANHIA ENERGETICA DE MINAS GERAIS - CEMIG | 17.155.730/0001-64 |
+| CEMIG GERACAO E TRANSMISSAO S.A. | 06.981.176/0001-58 |
+| CONSORCIO CEMIG SIM GD III | 45.955.633/0001-91 |
+| CEMIG SOLUCOES INTELIGENTES EM ENERGIA S.A. - CEMIG SIM | 04.881.791/0001-67 |
+
+> ⚠️ **Ficou de fora:** ""ASSOCIACAO DOS MORADORES DO B.STA CRUZ,V.JATAI E V.CEMIG"" — contém ""CEMIG"" no nome, mas não é empresa do grupo. Seu valor em 2025 foi de apenas R$ 50.200,00, impacto mínimo.
+
+---
+
+### Valores por ano (R$)
+
+| Ano | Empenhado | Liquidado | **Pago** |
+|---|---|---|---|
+| 2021 | 174.133.811,04 | 138.867.730,91 | **135.702.485,02** |
+| 2022 | 220.187.975,85 | 195.524.960,21 | **195.052.038,40** |
+| 2023 | 212.316.360,58 | 180.994.479,17 | **177.931.901,46** |
+| 2024 | 256.389.954,35 | 224.188.757,23 | **220.815.188,77** |
+| 2025 | 273.440.041,73 | 237.234.041,11 | **231.675.304,41** |
+| 2026 *(parcial)* | 253.112.670,49 | 210.829.476,43 | **206.721.475,49** |
+| **Total** | **1.389.580.814,04** | **1.187.639.445,06** | **1.167.898.393,55** |
+
+---
+
+### Destaques
+- 📈 Os pagamentos cresceram consistentemente de 2021 a 2025, saindo de **R$ 135,7 milhões** para **R$ 231,7 milhões** — um aumento de **+71%** no período.
+- 📅 Em **2026** os dados são **parciais** (até 13/11/2026), mas já somam R$ 206,7 milhões pagos.
+- 💰 O total pago no período é de aproximadamente **R$ 1,17 bilhão**.
+
+Deseja detalhar por órgão, por tipo de despesa ou para algum ano específico?
+"
+A18,eval3.csv,ambigua,Qual órgão mais gastou no ano passado?,pedir_esclarecimento,errado,Respondeu direto (consistente com a C24),anos_disponiveis > pesquisar_despesa,36.4,"2025 está disponível e é o ano passado (hoje é 13/11/2026). Aqui está o ranking dos **5 órgãos que mais gastaram em 2025**:
+
+| # | Órgão | Empenhado | Pago |
+|---|-------|-----------|------|
+| 🥇 | **Secretaria de Estado de Educação (SEE)** | R$ 20,02 bilhões | R$ 19,58 bilhões |
+| 🥈 | Fundo Financeiro de Previdência (FUNFIP) | R$ 18,26 bilhões | R$ 18,26 bilhões |
+| 🥉 | Polícia Militar de MG (PMMG) | R$ 17,18 bilhões | R$ 16,88 bilhões |
+| 4º | Fundo Estadual de Saúde | R$ 12,68 bilhões | R$ 11,94 bilhões |
+| 5º | Tribunal de Justiça de MG (TJMG) | R$ 10,95 bilhões | R$ 10,95 bilhões |
+
+**O órgão que mais gastou em 2025 foi a Secretaria de Estado de Educação (SEE)**, com **R$ 20,02 bilhões empenhados** e **R$ 19,58 bilhões pagos**.
+
+O total geral do Estado em 2025 foi de **R$ 131,56 bilhões empenhados** e **R$ 125,46 bilhões pagos**. Como 2025 é um ano fechado, a diferença entre empenhado e pago representa valores inscritos em restos a pagar.
+"
+A19,eval3.csv,ambigua,Quanto foi gasto com tecnologia em 2025?,pedir_esclarecimento,parcial,"Não perguntou, mas mostrou as várias interpretações separadas",buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > pesquisar_despesa > pesquisar_despesa,88.2,"Aqui está um panorama completo dos gastos com tecnologia em 2025 pelo Estado de Minas Gerais:
+
+---
+
+## 💻 Gastos com Tecnologia em 2025 — Estado de Minas Gerais
+
+> ⚠️ **Atenção:** 2025 é um ano fechado, mas os dados podem não incluir restos a pagar quando filtrado por função/subfunção (aviso da API).
+
+---
+
+### 1️⃣ Função: Ciência e Tecnologia (código 19)
+Abrange toda a função orçamentária dedicada a ciência e tecnologia.
+
+| Estágio | Valor |
+|---|---|
+| **Empenhado** | R$ 620.869.915,02 |
+| **Liquidado** | R$ 615.851.561,21 |
+| **Pago** | R$ 609.998.396,05 |
+
+---
+
+### 2️⃣ Subfunção: Tecnologia da Informação (código 126)
+Abrange despesas com TI classificadas em qualquer função (ex.: saúde, educação, administração etc.).
+
+| Estágio | Valor |
+|---|---|
+| **Empenhado** | R$ 212.600.324,27 |
+| **Liquidado** | R$ 142.314.276,36 |
+| **Pago** | R$ 127.502.381,58 |
+
+---
+
+### 📌 Observações sobre o recorte
+
+| Classificação | Incluída? | Motivo |
+|---|---|---|
+| Função **Ciência e Tecnologia (19)** | ✅ Sim | Recorte estrito de ""tecnologia"" como área de política pública |
+| Subfunção **Tecnologia da Informação (126)** | ✅ Sim | Gastos com TI distribuídos em várias funções |
+| Programas com ""tecnologia"" (ex.: MG Tech, cód. 143) | ⚠️ Parcialmente | Já estão contidos na função 19 ou na subfunção 126 |
+| Ações específicas de TIC (ex.: cód. 2023, 4483, 4113) | ⚠️ Parcialmente | Podem estar contidas nos recortes acima |
+| **Transferência de Tecnologia Agropecuária** | ❌ Não incluída separadamente | Faz parte de outra função (Agricultura), não de ""tecnologia"" stricto sensu |
+
+---
+
+### 🔎 Resumo
+- **Recorte estrito (Ciência e Tecnologia):** ~**R$ 610 milhões pagos**
+- **Recorte amplo (+ TI em outras funções):** pode haver sobreposição parcial entre os dois grupos; somados sem sobreposição, o total pago pode chegar a **~R$ 737 milhões**.
+
+Deseja detalhar por órgão, programa ou alguma área específica?
+"
+A20,eval3.csv,ambigua,Quanto a segurança gastou no primeiro trimestre?,pedir_esclarecimento,errado,Escolheu uma interpretação e respondeu sem pedir esclarecimento,buscar_classificacao > anos_disponiveis > pesquisar_despesa,16.1,"Aqui estão os dados de gastos da **Segurança Pública** no **1º trimestre de 2026** (01/01 a 31/03):
+
+| Estágio | Valor |
+|---|---|
+| 💼 **Empenhado** | R$ 6.432.233.679,89 |
+| ✅ **Liquidado** | R$ 5.982.977.650,11 |
+| 💰 **Pago** | R$ 5.941.423.177,36 |
+
+---
+
+**Detalhes da consulta:**
+- **Ano:** 2026 (dados parciais, pois o ano ainda está em curso)
+- **Função:** Segurança Pública (código 6)
+- **Período:** 01/01/2026 a 31/03/2026
+
+> ⚠️ **Aviso:** Com filtro por função, a API não atribui restos a pagar, portanto os valores de restos a pagar aparecem como zero e **não estão incluídos** nos totais acima.
+
+Caso queira detalhar por órgão, ação ou outro recorte, é só pedir!
+"
+A21,eval3.csv,ambigua,Quanto foi gasto com pessoal da saúde em 2024?,pedir_esclarecimento,errado,Escolheu uma interpretação e respondeu sem pedir esclarecimento,buscar_classificacao > buscar_classificacao > pesquisar_despesa,13.7,"Aqui está o resumo dos gastos com **Pessoal e Encargos Sociais na função Saúde em 2024**:
+
+| Estágio | Valor |
+|---|---|
+| **Empenhado** | R$ 2.634.198.921,17 |
+| **Liquidado** | R$ 2.633.356.215,19 |
+| **Pago** | R$ 2.633.374.038,99 |
+
+---
+
+**Filtros utilizados:**
+- 📅 **Ano:** 2024 (ano fechado)
+- 🏥 **Função:** `10 – SAÚDE`
+- 👥 **Grupo de Despesa:** `1 – PESSOAL E ENCARGOS SOCIAIS`
+
+**Observações:**
+- Os valores de empenhado e pago são muito próximos (~R$ 825 mil de diferença), indicando que praticamente tudo que foi empenhado também foi pago no ano.
+- A API sinalizou que, com filtro de função, os **restos a pagar** não são atribuídos corretamente, portanto o valor pago pode estar ligeiramente subestimado.
+"
+A22,eval4.csv,ambigua,Qual é o maior gasto em média dentre todos os servidores?,pedir_esclarecimento,parcial,"Não perguntou, mas mostrou as várias interpretações separadas",anos_disponiveis > buscar_classificacao > buscar_classificacao > pesquisar_despesa,78.7,"Preciso esclarecer melhor sua pergunta, pois ela pode ser interpretada de duas formas. Vou apresentar o que os dados mostram:
+
+---
+
+## 💰 Maior gasto por elemento de despesa com Pessoal — 2025
+
+A pergunta ""maior gasto em média dentre todos os servidores"" pode significar **qual rubrica de pagamento tem o maior volume total** dentro do grupo **Pessoal e Encargos Sociais**. Veja o ranking pelo valor **pago** em 2025:
+
+| # | Elemento de Despesa | Pago (R$) |
+|---|---|---|
+| 🥇 | Aposentadorias, Reserva Remunerada e Reformas | R$ 27,48 bilhões |
+| 🥈 | Vencimentos e Vantagens Fixas – Pessoal Civil | R$ 26,04 bilhões |
+| 🥉 | Obrigações Patronais | R$ 11,56 bilhões |
+| 4º | Vencimentos e Vantagens Fixas – Pessoal Militar | R$ 5,56 bilhões |
+| 5º | Pensões | R$ 5,23 bilhões |
+
+**Total geral pago com Pessoal e Encargos em 2025: R$ 82,82 bilhões**
+
+---
+
+### ⚠️ Observação importante
+
+Os dados do Portal da Transparência mostram **totais por categoria**, não o salário individual de cada servidor. Por isso, **não é possível calcular uma média por servidor diretamente** por aqui.
+
+Se quiser, posso:
+- 📊 Detalhar os gastos por **órgão** (ex.: Educação, Saúde, Segurança);
+- 🔍 Filtrar por **tipo de servidor** (civil ou militar);
+- 📅 Comparar com **anos anteriores**.
+
+É isso que você queria saber, ou tinha outra análise em mente?
+"
+A23,eval4.csv,ambigua,Quais são os tipos de gastos?,pedir_esclarecimento,errado,Escolheu uma interpretação e respondeu sem pedir esclarecimento,buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao,14.3,"Aqui está um panorama completo das classificações de gastos do Estado de Minas Gerais! As despesas são organizadas em **diferentes níveis hierárquicos**:
+
+---
+
+## 🏛️ 1. Categorias Econômicas (nível mais amplo)
+
+| Código | Nome |
+|--------|------|
+| **3** | Despesas Correntes |
+| **4** | Despesas de Capital |
+
+- **Despesas Correntes**: gastos de manutenção e funcionamento do Estado (salários, serviços, transferências).
+- **Despesas de Capital**: gastos que geram patrimônio ou amortizam dívidas (obras, equipamentos, pagamento de dívidas).
+
+---
+
+## 📂 2. Grupos de Despesa (subdivisão das categorias)
+
+| Código | Nome | Categoria |
+|--------|------|-----------|
+| **1** | Pessoal e Encargos Sociais | Corrente |
+| **2** | Juros e Encargos da Dívida | Corrente |
+| **3** | Outras Despesas Correntes | Corrente |
+| **4** | Investimentos | Capital |
+| **6** | Amortização da Dívida | Capital |
+
+---
+
+## 🎯 3. Funções (por área de política pública)
+
+As funções indicam **para qual área** o gasto é destinado. Exemplos:
+
+| Código | Nome |
+|--------|------|
+| **10** | Saúde |
+| **12** | Educação |
+| E muitas outras... | Segurança, Transporte, Assistência Social, etc. |
+
+---
+
+## 🔍 Como se combinam?
+
+Cada despesa tem **todos esses atributos ao mesmo tempo**. Por exemplo:
+> *""Pagamento de professores da rede estadual""* → Categoria **3** (Corrente) + Grupo **1** (Pessoal) + Função **12** (Educação)
+
+---
+
+Se quiser, posso detalhar **quanto foi gasto em cada categoria, grupo ou função** em um ano específico! Basta perguntar. 😊
+"
+A24,eval4.csv,ambigua,Quanto o Zema gastou?,pedir_esclarecimento,errado,Escolheu uma interpretação e respondeu sem pedir esclarecimento,anos_disponiveis > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa,32.6,"Aqui está um resumo das despesas do Estado de Minas Gerais nos anos com dados disponíveis (todos sob o governo Zema):
+
+---
+
+### 💰 Despesas do Estado de MG — Governo Zema (dados disponíveis: 2021–2026)
+
+| Ano | Empenhado | Liquidado | Pago |
+|-----|-----------|-----------|------|
+| 2021 | R$ 128,9 bi | R$ 121,9 bi | R$ 109,6 bi |
+| 2022 | R$ 116,5 bi | R$ 111,0 bi | R$ 108,9 bi |
+| 2023 | R$ 110,4 bi | R$ 104,8 bi | R$ 102,6 bi |
+| 2024 | R$ 118,4 bi | R$ 114,4 bi | R$ 113,1 bi |
+| 2025 | R$ 131,6 bi | R$ 127,1 bi | R$ 125,5 bi |
+| 2026* | R$ 114,1 bi | R$ 108,1 bi | R$ 106,6 bi |
+| **TOTAL** | **R$ 719,9 bi** | **R$ 687,3 bi** | **R$ 666,4 bi** |
+
+*2026 tem dados parciais (até 13/11/2026).*
+
+---
+
+### Observações importantes:
+- Os dados disponíveis começam em **2021**; o primeiro mandato de Zema iniciou em **2019**, portanto os anos de 2019 e 2020 **não estão incluídos**.
+- Os valores de **anos fechados (2021–2025)**: a diferença entre empenhado e pago representa valores inscritos em **restos a pagar**, liquidados em anos subsequentes.
+- **2026** ainda está em curso, com dados até hoje (13/11/2026).
+"
+A25,eval4.csv,ambigua,Quanto os deputados gastaram em 2025?,pedir_esclarecimento,parcial,"Não perguntou, mas mostrou as várias interpretações separadas",buscar_classificacao > pesquisar_despesa,9.0,"Aqui estão os gastos da Assembleia Legislativa de Minas Gerais em **2025**:
+
+---
+
+### 🏛️ Assembleia Legislativa de MG — Despesas em 2025
+
+| Órgão | Empenhado | Liquidado | Pago |
+|---|---|---|---|
+| Assembleia Legislativa (1011) | R$ 2.149.209.573,30 | R$ 2.108.068.512,69 | R$ 2.091.020.383,51 |
+| Fundo Especial da ALMG (4121) | R$ 7.461.545,44 | R$ 5.846.301,44 | R$ 5.378.597,30 |
+| **Total** | **R$ 2.156.671.118,74** | **R$ 2.113.914.814,13** | **R$ 2.096.398.980,81** |
+
+---
+
+### 📌 Observações importantes:
+- **Ano de 2025 está fechado**, portanto a diferença entre o **empenhado** (R$ 2,16 bi) e o **pago** (R$ 2,10 bi) representa valores inscritos em **restos a pagar**, que podem ter sido pagos em 2026.
+- Os dados incluem **toda a despesa da ALMG**, que abrange não só os deputados, mas também a estrutura administrativa, servidores, contratos e demais despesas do Poder Legislativo estadual.
+- Não há, nos dados disponíveis, uma separação exclusiva dos gastos dos **deputados individualmente** — o orçamento é consolidado por órgão.
+
+Se quiser, posso detalhar por **função, grupo de despesa ou elemento** para entender melhor a composição desses gastos!
+"
+A26,eval4.csv,ambigua,Quanto o governo gastou com obras em 2024?,pedir_esclarecimento,errado,Escolheu uma interpretação e respondeu sem pedir esclarecimento,buscar_classificacao > buscar_classificacao > pesquisar_despesa,9.0,"Aqui está o resumo dos gastos do Governo de Minas Gerais com **obras e instalações em 2024**:
+
+---
+
+### 🏗️ Obras e Instalações — Elemento 51 (2024)
+
+| Estágio | Valor |
+|---|---|
+| **Empenhado** | R$ 2.402.414.010,29 |
+| **Liquidado** | R$ 1.603.391.135,01 |
+| **Pago** | R$ 1.566.649.015,75 |
+
+---
+
+**Filtros utilizados:**
+- **Ano:** 2024
+- **Elemento de despesa:** `51 – Obras e Instalações`
+
+**Observações importantes:**
+- O valor **empenhado** (R$ 2,4 bi) representa o total comprometido pelo Estado.
+- O valor **pago** (R$ 1,57 bi) é o que efetivamente saiu do caixa em 2024.
+- A diferença entre empenhado e pago (~R$ 836 milhões) foi inscrita em **restos a pagar**, ou seja, compromissos que ficaram para ser pagos em 2025.
+
+> ⚠️ **Recorte utilizado:** apenas o elemento ""Obras e Instalações"" (51). A busca por grupos de despesa com o termo ""obras"" não retornou resultados, pois obras se enquadram no **Grupo 4 – Investimentos**, que é mais amplo e inclui outros tipos de despesa além de obras. Se desejar ver o total de investimentos, posso consultar também!
+"
+A27,eval4.csv,ambigua,Quanto foi gasto com a universidade em 2025?,pedir_esclarecimento,parcial,"Não perguntou, mas mostrou as várias interpretações separadas",buscar_classificacao > buscar_classificacao > pesquisar_despesa > pesquisar_despesa,19.7,"Aqui está um resumo completo dos gastos com universidades estaduais em 2025:
+
+---
+
+## 🎓 Gastos com Universidades Estaduais em 2025
+
+### Órgãos encontrados:
+| Órgão | Empenhado | Liquidado | Pago |
+|---|---|---|---|
+| **UEMG** (Universidade do Estado de MG – cód. 2351) | R$ 431.560.939,48 | R$ 399.364.373,03 | R$ 391.027.226,76 |
+| **UNIMONTES** (Universidade Estadual de Montes Claros – cód. 2311) | R$ 533.150.763,61 | R$ 503.448.723,24 | R$ 492.058.770,59 |
+| **TOTAL** | **R$ 964.711.703,09** | **R$ 902.813.096,27** | **R$ 883.085.997,35** |
+
+---
+
+### 📌 Observações importantes:
+- **Recorte utilizado:** apenas os dois órgãos estaduais com ""universidade"" no nome oficial — **UEMG** e **UNIMONTES**.
+- A ação **""Fornecimento de Refeições na Universidade"" (cód. 4550)** foi identificada, mas não somada separadamente, pois já está contabilizada dentro dos órgãos acima.
+- **Não estão incluídas** eventuais transferências a universidades federais (UFMG, UFV, etc.), pois estas são entidades federais e não aparecem como órgãos do Estado de MG.
+- Como 2025 é um **ano fechado**, a diferença entre empenhado e pago representa valores inscritos em **restos a pagar**, que podem ter sido quitados em 2026.
+"
+A28,eval4.csv,ambigua,Quanto o Estado gastou com meio ambiente em 2025?,pedir_esclarecimento,errado,Escolheu uma interpretação e respondeu sem pedir esclarecimento,buscar_classificacao > anos_disponiveis > buscar_classificacao > buscar_classificacao > pesquisar_despesa,15.6,"Aqui está o resumo dos gastos do Estado de Minas Gerais com **meio ambiente (Gestão Ambiental)** em **2025**:
+
+| Estágio | Valor |
+|---|---|
+| 💰 **Empenhado** | R$ 665.910.931,09 |
+| ✅ **Liquidado** | R$ 632.158.270,36 |
+| 💵 **Pago** | R$ 620.191.285,00 |
+
+---
+
+**Detalhes da consulta:**
+- **Ano:** 2025 (ano fechado)
+- **Filtro utilizado:** Função **18 – Gestão Ambiental**, que é a classificação orçamentária oficial para despesas com meio ambiente no orçamento público.
+- **Atenção:** A diferença entre o valor empenhado e o pago (~R$ 45,7 milhões) representa recursos inscritos em **restos a pagar**, que podem ser liquidados/pagos em exercícios seguintes.
+- ⚠️ A API informa que, com filtro de função, os **restos a pagar** não são atribuídos, portanto os valores de pagamento podem estar levemente subestimados.
+"
+A29,eval4.csv,ambigua,Quanto o governo gastou no ano da eleição?,pedir_esclarecimento,correto,,anos_disponiveis,4.9,"Os anos eleitorais disponíveis são **2022** (eleições estaduais e federais) e **2024** (eleições municipais). Qual deles você gostaria de consultar?
+
+- 🗳️ **2022** – Eleições para Governador, Senado, Câmara Federal e Assembleia Legislativa
+- 🗳️ **2024** – Eleições Municipais (Prefeitos e Câmaras)
+"
+A30,eval4.csv,ambigua,Qual foi o maior gasto do Estado?,pedir_esclarecimento,errado,Escolheu uma interpretação e respondeu sem pedir esclarecimento,anos_disponiveis > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa,36.5,"Aqui está um panorama completo dos **maiores gastos do Estado de Minas Gerais por função**, de 2021 a 2026 (2026 com dados parciais até 13/11/2026):
+
+---
+
+## 🏆 Maiores Gastos por Função — MG (2021–2026)
+
+### Por ano, a função com **maior valor empenhado** foi:
+
+| Ano | Função nº 1 | Empenhado | Pago |
+|-----|-------------|-----------|------|
+| **2021** | Encargos Especiais | R$ 41,4 bilhões | R$ 30,9 bilhões |
+| **2022** | Previdência Social | R$ 20,9 bilhões | R$ 20,2 bilhões |
+| **2023** | Previdência Social | R$ 22,8 bilhões | R$ 22,3 bilhões |
+| **2024** | Previdência Social | R$ 24,3 bilhões | R$ 24,3 bilhões |
+| **2025** | Segurança Pública | R$ 26,0 bilhões | R$ 25,3 bilhões |
+| **2026**⚠️ | Segurança Pública | R$ 22,3 bilhões | R$ 21,6 bilhões |
+
+---
+
+### 🥇 O maior gasto de toda a série histórica disponível:
+**Encargos Especiais em 2021**, com **R$ 41,4 bilhões empenhados** (R$ 30,9 bilhões pagos). Esse valor atípico provavelmente reflete operações financeiras, refinanciamentos de dívida e transferências extraordinárias daquele ano.
+
+---
+
+### 📌 Tendências gerais:
+- **Previdência Social** dominou de 2022 a 2024, com crescimento contínuo.
+- **Segurança Pública** assumiu a liderança em 2025 e 2026 (parcial).
+- **Educação** e **Saúde** figuram consistentemente entre os 5 maiores gastos em todos os anos.
+
+Deseja detalhar algum ano ou função específica? 😊
+"
+C01,eval.csv,composta,Quanto foi gasto com alimentação escolar em 2025?,responder,correto,,buscar_classificacao > buscar_classificacao > pesquisar_despesa > pesquisar_despesa,20.2,"Aqui está o resumo dos gastos com **alimentação escolar em 2025** (ano fechado):
+
+---
+
+## 🍽️ Alimentação Escolar – Minas Gerais (2025)
+
+### Recorte Estrito — Ações específicas de alimentação escolar
+| Ação | Nome |
+|------|------|
+| 2101 | Programa Estadual de Alimentação Escolar (PEAE) |
+| 2102 | Programa Nacional de Alimentação Escolar (PNAE) |
+
+| Estágio | Valor |
+|---------|-------|
+| **Empenhado** | R$ 706.150.155,05 |
+| **Liquidado** | R$ 706.013.403,05 |
+| **Pago** | R$ 704.838.856,29 |
+
+---
+
+### Recorte Amplo — Subfunção 306 (Alimentação e Nutrição)
+Inclui tudo classificado como ""Alimentação e Nutrição"", não só educação escolar.
+
+| Estágio | Valor |
+|---------|-------|
+| **Empenhado** | R$ 710.430.717,93 |
+| **Liquidado** | R$ 708.958.653,35 |
+| **Pago** | R$ 707.774.420,44 |
+
+---
+
+### 📌 Interpretação
+- O **recorte estrito** (ações 2101 + 2102) captura com precisão os dois programas de alimentação escolar e é o mais adequado para a pergunta: **~R$ 704,8 milhões pagos**.
+- A diferença de ~R$ 3 milhões para o recorte amplo (subfunção 306) representa outras despesas de alimentação e nutrição fora do contexto escolar.
+- Como 2025 é um **ano fechado**, a diferença entre empenhado e pago (~R$ 1,3 milhão) corresponde a valores inscritos em **restos a pagar** para liquidação/pagamento em anos seguintes.
+"
+C02,eval.csv,composta,Quanto a Secretaria de Saúde empenhou em material de consumo em 2025?,responder,correto,,buscar_classificacao > buscar_classificacao > pesquisar_despesa,12.9,"Aqui está o resultado completo! 🏥
+
+---
+
+## Secretaria de Saúde — Material de Consumo (Elemento 30) — 2025
+
+| Órgão | Empenhado | Liquidado | Pago |
+|---|---|---|---|
+| **Fundo Estadual de Saúde** (4291) | R$ 905.580.847,74 | R$ 676.777.421,54 | R$ 644.278.655,85 |
+| **Escola de Saúde Pública de MG** (1541) | R$ 36.637,51 | R$ 36.231,51 | R$ 36.062,24 |
+| **Total** | **R$ 905.617.485,25** | **R$ 676.813.653,05** | **R$ 644.314.718,09** |
+
+---
+
+### Observações
+- **Ano:** 2025 (ano fechado).
+- **Elemento de despesa:** 30 – Material de Consumo.
+- **Órgãos incluídos:** A busca por ""saude"" retornou dois órgãos:
+  - **Fundo Estadual de Saúde (4291)** — principal executor das despesas de saúde do Estado, responsável por praticamente a totalidade do valor.
+  - **Escola de Saúde Pública do Estado de MG (1541)** — valor residual de R$ 36 mil.
+- **Órgãos que podem ter ficado de fora:** A Secretaria de Estado de Saúde propriamente dita pode estar registrada com outro nome no sistema (ex: ""SES"" ou ""SECRETARIA DE ESTADO DE SAUDE""). A busca por ""saude"" retornou apenas esses dois órgãos, mas o Fundo Estadual de Saúde é tipicamente o órgão que concentra os gastos da área da saúde em MG. Caso queira confirmar, posso fazer uma busca adicional.
+"
+C03,eval.csv,composta,Quanto a Secretaria de Educação pagou à CEMIG Distribuição em 2025?,responder,correto,,buscar_classificacao > buscar_favorecido > pesquisar_despesa,29.1,"Aqui está o resultado:
+
+---
+
+### 💡 Pagamentos da Secretaria de Estado de Educação à CEMIG Distribuição em 2025
+
+| Etapa | Valor |
+|---|---|
+| **Empenhado** | R$ 85.165.780,86 |
+| **Liquidado** | R$ 77.825.783,12 |
+| **Pago** | **R$ 76.883.934,10** |
+
+---
+
+**Filtros utilizados:**
+- **Órgão:** 1261 – Secretaria de Estado de Educação (SEE)
+- **Favorecido:** CEMIG DISTRIBUICAO S.A. (CNPJ 06.981.180/0001-16)
+- **Ano:** 2025 (janeiro a dezembro)
+
+> ⚠️ **Nota:** Como 2025 é um ano fechado, a diferença entre o valor empenhado (R$ 85,2 mi) e o valor pago (R$ 76,9 mi) representa recursos inscritos em **restos a pagar**, que poderão ser pagos em 2026.
+"
+C04,eval.csv,composta,Qual programa de governo teve o maior valor empenhado em 2025?,responder,correto,,pesquisar_despesa,17.8,"O programa de governo com o **maior valor empenhado em 2025** foi:
+
+---
+
+### 🏆 Apoio às Políticas Públicas
+
+| Estágio | Valor |
+|---|---|
+| **Empenhado** | **R$ 59.736.500.919,06** |
+| Liquidado | R$ 59.491.039.608,02 |
+| Pago | R$ 59.055.933.385,42 |
+
+---
+
+**Contexto geral (todos os programas em 2025):**
+- Total empenhado: R$ 131,56 bilhões
+- O programa **""Apoio às Políticas Públicas""** sozinho representa aproximadamente **45,4%** de todo o valor empenhado pelo Estado de Minas Gerais em 2025.
+
+> 📌 **Filtros utilizados:** Ano = 2025 | Agrupamento por programa | Top 1
+
+Esse programa geralmente concentra despesas de suporte transversal às políticas públicas estaduais, como pagamento de pessoal e encargos, que tendem a ser os maiores gastos do Estado. Deseja detalhar mais algum aspecto desse programa?
+"
+C05,eval.csv,composta,Quais pagamentos foram feitos no maior empenho da AGE em 2025?,responder,sem_tool,Disse corretamente que não consegue listar empenhos; o gabarito exige resposta,buscar_classificacao > anos_disponiveis > pesquisar_despesa > maiores_favorecidos > pesquisar_despesa > pesquisar_despesa > buscar_classificacao > buscar_classificacao > pesquisar_despesa > pesquisar_despesa,72.0,"A API retorna apenas totais agregados, sem listar empenhos individuais com seus IDs. Infelizmente, **não tenho como identificar o ID do maior empenho individual da AGE em 2025** apenas com as ferramentas disponíveis, pois a função `pesquisar_despesa` agrega os valores e não lista empenhos individuais com seus identificadores.
+
+---
+
+## O que foi possível apurar sobre a AGE em 2025
+
+| Filtro | Valor Empenhado | Valor Pago |
+|---|---|---|
+| **Total AGE** | R$ 1.023.743.951,58 | R$ 759.567.117,27 |
+| **Maior favorecido agregado** | Precatórios e Sentenças Judiciárias (ação 7803) | R$ 609.416.169,49 empenhado / R$ 360.784.090,02 pago |
+| **2º maior favorecido** | Folha de Pagamento de Pessoal | R$ 270.177.688,93 empenhado e pago |
+
+### Por que não consigo chegar ao maior empenho individual?
+A ferramenta `pesquisar_despesa` **agrega** os valores por classificação (órgão, ação, elemento, favorecido etc.) e não lista empenhos individuais com seus IDs. Para detalhar um empenho específico com `detalhar_empenho`, seria necessário já conhecer o **ID do empenho**.
+
+### Como obter essa informação?
+Você pode consultar diretamente o [Portal da Transparência de MG](https://www.transparencia.mg.gov.br/) → **Despesa** → filtrar por órgão **AGE (1081)** → ordenar por valor empenhado decrescente para obter o número do empenho. Com esse número, posso detalhar os pagamentos para você aqui! 😊
+"
+C06,eval.csv,composta,O gasto com saúde cresceu de 2024 para 2025?,responder,correto,,pesquisar_despesa > pesquisar_despesa,31.7,"Sim, o gasto com saúde cresceu de 2024 para 2025! Veja o comparativo completo:
+
+---
+
+### 🏥 Função Saúde (Função 10) — Estado de Minas Gerais
+
+| Estágio | 2024 | 2025 | Variação (R$) | Variação (%) |
+|---|---|---|---|---|
+| **Empenhado** | R$ 18,22 bilhões | R$ 19,61 bilhões | +R$ 1,40 bilhão | **+7,7%** |
+| **Liquidado** | R$ 17,31 bilhões | R$ 18,34 bilhões | +R$ 1,03 bilhão | **+6,0%** |
+| **Pago** | R$ 17,01 bilhões | R$ 18,07 bilhões | +R$ 1,06 bilhão | **+6,2%** |
+
+---
+
+### 📌 Observações
+
+- **Filtro utilizado:** Função **10 – Saúde**, anos 2024 e 2025 (janeiro a dezembro, período completo).
+- Ambos os anos estão **fechados**, portanto os valores são definitivos.
+- O crescimento foi consistente em todos os estágios da despesa, com destaque para o **empenhado (+7,7%)**, indicando que o Estado comprometeu mais recursos com saúde em 2025.
+- A diferença entre empenhado e pago em cada ano representa valores inscritos em **restos a pagar**, a serem liquidados/pagos em exercícios seguintes.
+"
+C07,eval.csv,composta,Quanto o Estado gastou com diárias de viagem no 1º trimestre de 2025?,responder,correto,,buscar_classificacao > pesquisar_despesa,14.7,"Aqui está o resumo dos gastos do Estado de Minas Gerais com **diárias de viagem no 1º trimestre de 2025** (01/01 a 31/03/2025):
+
+---
+
+### 🧳 Diárias de Viagem — 1º Trimestre de 2025
+
+| Elemento | Empenhado | Liquidado | Pago |
+|---|---|---|---|
+| Diárias - Civil (14) | R$ 56.207.166,82 | R$ 26.027.578,14 | R$ 25.041.353,39 |
+| Diárias - Militar (15) | R$ 10.666.546,08 | R$ 9.181.434,25 | R$ 9.040.378,21 |
+| **Total** | **R$ 66.873.712,90** | **R$ 35.209.012,39** | **R$ 34.081.731,60** |
+
+---
+
+### 📌 Observações
+- **Classificações incluídas:** Diárias Civil (elemento 14) e Diárias Militar (elemento 15) — ambas as categorias de diárias existentes na classificação orçamentária.
+- O valor **empenhado** (R$ 66,9 mi) é bem superior ao **pago** (R$ 34,1 mi), o que indica que parte significativa dos empenhos ainda estava em processo de liquidação/pagamento ao final do trimestre.
+- Como 2025 é um ano fechado, a diferença entre empenhado e pago representa valores inscritos em **restos a pagar**, a serem liquidados/pagos posteriormente.
+"
+C08,eval.csv,composta,Quais os 3 órgãos que mais pagaram na área de saúde em 2025?,responder,correto,,buscar_classificacao > pesquisar_despesa,18.2,"Aqui estão os **3 órgãos que mais pagaram na área de Saúde (Função 10) em 2025**:
+
+| # | Órgão | Empenhado | Liquidado | **Pago** |
+|---|-------|----------:|----------:|---------:|
+| 1 | **Fundo Estadual de Saúde (FES)** | R$ 12,68 bi | R$ 12,07 bi | **R$ 11,94 bi** |
+| 2 | **Fundação Hospitalar do Estado de MG (FHEMIG)** | R$ 2,44 bi | R$ 2,31 bi | **R$ 2,26 bi** |
+| 3 | **Instituto de Previdência dos Servidores do Estado de MG (IPSEMG)** | R$ 1,87 bi | R$ 1,62 bi | **R$ 1,58 bi** |
+
+---
+
+**Observações:**
+- **Filtro utilizado:** Função **10 – Saúde**, ano **2025** (janeiro a dezembro), agrupado por órgão.
+- O **FES** domina amplamente, respondendo por cerca de **66%** do total pago na função Saúde (R$ 18,07 bi no total).
+- A API sinalizou que, com filtro de função, os **restos a pagar** não são atribuídos, portanto os valores podem estar ligeiramente subestimados em relação ao total consolidado.
+- Como 2025 é um ano **fechado**, a diferença entre empenhado e pago representa valores inscritos em **restos a pagar**, que podem ter sido quitados em 2026.
+"
+C09,eval.csv,composta,Quanto a Secretaria de Educação pagou em despesas de capital em 2025?,responder,correto,,buscar_classificacao > buscar_classificacao > pesquisar_despesa,15.1,"Aqui está o resultado:
+
+---
+
+### 💰 Despesas de Capital — Secretaria de Estado de Educação (SEE) — 2025
+
+| Estágio | Valor |
+|---|---|
+| **Empenhado** | R$ 1.568.149.423,63 |
+| **Liquidado** | R$ 1.536.696.727,89 |
+| **Pago** | **R$ 1.345.007.769,62** |
+
+---
+
+**Filtros utilizados:**
+- **Órgão:** `1261 – Secretaria de Estado de Educação`
+- **Categoria Econômica:** `4 – Despesas de Capital`
+- **Ano:** 2025 (ano fechado)
+- **Período:** 01/01 a 31/12/2025
+
+> ⚠️ **Observação:** A diferença entre o valor empenhado (R$ 1,57 bi) e o valor pago (R$ 1,35 bi) — cerca de **R$ 223 milhões** — representa recursos inscritos em **restos a pagar**, que podem ter sido pagos (ou não) em 2026.
+
+> A busca considerou apenas a **Secretaria de Estado de Educação (1261)**. A **Fundação de Educação para o Trabalho de MG (2281)** é um órgão distinto e **não foi incluída** nesta soma.
+"
+C10,eval.csv,composta,Quanto a Advocacia-Geral do Estado pagou com pessoal em 2025?,responder,correto,,buscar_classificacao > buscar_classificacao > pesquisar_despesa,13.0,"Aqui estão os resultados:
+
+---
+
+### 💼 Advocacia-Geral do Estado — Pessoal e Encargos Sociais (2025)
+
+| Estágio | Valor |
+|---|---|
+| **Empenhado** | R$ 737.789.744,39 |
+| **Liquidado** | R$ 737.789.744,39 |
+| **Pago** | R$ 531.162.994,92 |
+
+---
+
+**Filtros utilizados:**
+- **Órgão:** `1081 – Advocacia-Geral do Estado`
+- **Grupo de Despesa:** `1 – Pessoal e Encargos Sociais`
+- **Período:** 01/01/2025 a 31/12/2025
+
+> ⚠️ **Atenção:** 2025 é um ano fechado. A diferença entre o valor **liquidado** (R$ 737,8 mi) e o **pago** (R$ 531,2 mi) — cerca de **R$ 206,6 milhões** — corresponde a valores inscritos em **restos a pagar**, que podem ter sido pagos (ou não) em 2026.
+"
+C11,eval2.csv,composta,Qual ação do Tribunal de Justiça teve o maior valor pago em 2025?,responder,correto,,buscar_classificacao > pesquisar_despesa > pesquisar_despesa,14.5,"Aqui está o resultado! Considerando os dois tribunais de justiça do Estado de Minas Gerais em 2025:
+
+---
+
+## 🏛️ Tribunal de Justiça do Estado de MG (TJMG – órgão 1031)
+
+| Ação | Valor Pago |
+|---|---|
+| **Remuneração de Servidores da Ativa e Encargos Sociais** | **R$ 6.275.602.132,89** |
+| Proventos de Inativos Civis e Pensionistas | R$ 2.954.510.352,50 |
+| Remuneração de Magistrados da Ativa e Encargos Sociais | R$ 1.716.115.779,83 |
+
+---
+
+## ⚖️ Tribunal de Justiça Militar do Estado de MG (TJMMG – órgão 1051)
+
+| Ação | Valor Pago |
+|---|---|
+| **Remuneração de Servidores da Ativa e Encargos Sociais** | **R$ 62.406.340,00** |
+| Proventos de Inativos Civis e Pensionistas | R$ 38.313.816,48 |
+| Remuneração de Magistrados da Ativa e Encargos Sociais | R$ 28.905.208,00 |
+
+---
+
+### 🏆 Conclusão
+
+A ação com **maior valor pago em 2025** foi a **""Remuneração de Servidores da Ativa e Encargos Sociais""** do **TJMG**, com **R$ 6.275.602.132,89** — representando mais da metade de todo o gasto pago pelo tribunal no ano (total de R$ 10.946.228.265,22).
+
+> ⚠️ **Atenção:** 2025 é um ano fechado, mas o valor pago pode ser ligeiramente superior ao empenhado porque inclui pagamentos de **restos a pagar** inscritos em anos anteriores.
+"
+C12,eval2.csv,composta,Como evoluiu o pagamento de juros da dívida de 2021 a 2025?,responder,correto,,buscar_classificacao > anos_disponiveis > buscar_classificacao > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa > buscar_classificacao > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa,44.4,"Aqui está a análise completa da evolução do pagamento de juros da dívida do Estado de Minas Gerais de 2021 a 2025.
+
+---
+
+## 💰 Juros e Encargos da Dívida – Grupo 2 (2021–2025)
+
+**Filtro utilizado:** Grupo de Despesa **2 – Juros e Encargos da Dívida**
+*(inclui os elementos: Juros sobre a Dívida por Contrato e Outros Encargos sobre a Dívida por Contrato)*
+
+### Tabela de Evolução
+
+| Ano | Empenhado (R$) | Liquidado (R$) | **Pago (R$)** | Var. Pago (ano a ano) |
+|------|----------------|----------------|----------------|------------------------|
+| 2021 | 7,10 bi | 7,10 bi | **55,6 milhões** | — |
+| 2022 | 2,82 bi | 2,70 bi | **2,64 bilhões** | +4.644% |
+| 2023 | 1,72 bi | 1,72 bi | **1,57 bilhão** | -41% |
+| 2024 | 1,92 bi | 1,92 bi | **1,66 bilhão** | +6% |
+| 2025 | 3,42 bi | 3,42 bi | **3,36 bilhões** | +103% |
+
+---
+
+### 📌 Destaques e Interpretações
+
+**2021 – Anomalia histórica (pago ≠ empenhado)**
+O Estado empenhou e liquidou **R$ 7,1 bilhões**, mas pagou apenas **R$ 55,6 milhões** no próprio ano. Isso indica que a quase totalidade foi **inscrita em restos a pagar** — provavelmente reflexo de disputas judiciais com a União sobre o contrato da dívida com a STN (Secretaria do Tesouro Nacional), que esteve suspensa por liminares.
+
+**2022 – Normalização e pagamento em recuperação**
+O pagamento saltou para **R$ 2,64 bilhões**, incluindo possivelmente parte dos restos a pagar de 2021. O empenhado cai para R$ 2,8 bi, sugerindo regularização do fluxo.
+
+**2023 – Queda expressiva**
+O pago recua para **R$ 1,57 bilhão** (-41%). Pode refletir renegociações ou novas suspensões judiciais do contrato com a União.
+
+**2024 – Estabilidade relativa**
+Pago de **R$ 1,66 bilhão**, praticamente estável em relação a 2023 (+6%).
+
+**2025 – Forte alta**
+O pago dobra para **R$ 3,36 bilhões** (+103%), o maior valor desde 2022. Quase tudo concentrado em **Juros sobre a Dívida por Contrato** (R$ 3,36 bi), com encargos adicionais de R$ 2,7 milhões. Esse salto pode estar associado ao acordo firmado entre MG e a União em 2024/2025 para regularização da dívida estadual.
+
+---
+
+### ⚠️ Ressalvas sobre o recorte
+- A busca encontrou **apenas um elemento** de juros (`21 – Juros sobre a Dívida por Contrato`), que é o dominante. Não há elementos como ""juros sobre títulos"" nesta base, o que sugere que a dívida mobiliária (títulos) pode estar classificada de outra forma ou não constar neste recorte.
+- Os dados de 2021 a 2025 estão **fechados** (anos encerrados); a diferença entre empenhado e pago representa valores inscritos em restos a pagar.
+"
+C13,eval2.csv,composta,Que percentual do total pago pelo Estado em 2025 foi para previdência social?,responder,correto,,buscar_classificacao > pesquisar_despesa > pesquisar_despesa,27.4,"Aqui está o resultado:
+
+---
+
+## 💰 Previdência Social no Total Pago pelo Estado de MG — 2025
+
+| | Valor (R$) |
+|---|---|
+| **Total pago pelo Estado** | R$ 125.459.430.296,87 |
+| **Pago para Previdência Social** | R$ 25.802.391.100,56 |
+| **Percentual** | **20,57%** |
+
+---
+
+### Detalhes
+- **Função utilizada:** `9 – PREVIDÊNCIA SOCIAL`
+- **Ano:** 2025 (dados fechados)
+- **Período:** 01/01 a 31/12/2025
+
+### ⚠️ Observação importante
+A API informa que, **com filtro de função, os restos a pagar não são atribuídos** ao resultado da Previdência Social. Isso significa que o valor de R$ 25,8 bi pode estar **ligeiramente subestimado**, pois eventuais pagamentos de restos a pagar classificados nessa função não são computados. O total geral (R$ 125,4 bi), por sua vez, **inclui** os restos a pagar, o que pode tornar o percentual real da previdência um pouco maior do que os **20,57%** calculados.
+"
+C14,eval2.csv,composta,Quanto a Secretaria de Planejamento e Gestão pagou em serviços de tecnologia da informação no 1º semestre de 2025?,responder,correto,,buscar_classificacao > buscar_classificacao > buscar_classificacao > pesquisar_despesa,11.5,"Aqui está o resultado completo da consulta:
+
+---
+
+## 💻 Serviços de Tecnologia da Informação e Comunicação — SEPLAG
+**Período:** 1º semestre de 2025 (01/01 a 30/06)
+**Elemento de despesa:** `40 – Serviços de Tecnologia da Informação e Comunicação – Pessoa Jurídica`
+
+| Estágio | Valor |
+|---|---|
+| **Empenhado** | R$ 71.061.838,72 |
+| **Liquidado** | R$ 46.994.510,90 |
+| **Pago** | R$ 34.853.803,73 |
+
+---
+
+### Observações importantes:
+
+- **Órgãos consultados:** foram incluídos tanto a **SEPLAG (cód. 1501)** quanto a **EGE-SEPLAG (cód. 1941 – Escola de Governo)**. Os dados retornados aparecem consolidados sob a SEPLAG, pois a EGE não registrou despesas nesse elemento no período.
+- **Recorte utilizado:** apenas o elemento `40`, que é o código oficial para *Serviços de TIC – Pessoa Jurídica*. Contratos com pessoas físicas (ex.: consultores autônomos de TI) ou despesas classificadas em outros elementos (como equipamentos de informática) **não estão incluídos** neste total.
+- A diferença entre o **empenhado (R$ 71 mi)** e o **pago (R$ 34,8 mi)** indica que parte dos compromissos assumidos ainda estava em processo de liquidação ou pagamento ao final do semestre.
+"
+C15,eval2.csv,composta,"Quanto o Estado pagou com a dívida pública em 2025, somando juros e amortização?",responder,correto,,buscar_classificacao > buscar_classificacao > pesquisar_despesa,9.6,"Aqui está o resumo completo dos gastos do Estado de Minas Gerais com a **dívida pública em 2025**:
+
+---
+
+### 💰 Dívida Pública – 2025 (ano fechado)
+
+| Grupo | Empenhado | Liquidado | **Pago** |
+|---|---|---|---|
+| Juros e Encargos da Dívida (Grupo 2) | R$ 3,42 bi | R$ 3,42 bi | **R$ 3,36 bi** |
+| Amortização da Dívida (Grupo 6) | R$ 3,15 bi | R$ 3,15 bi | **R$ 3,13 bi** |
+| **Total** | **R$ 6,57 bi** | **R$ 6,57 bi** | **R$ 6,50 bi** |
+
+---
+
+### 📌 Destaques:
+- O Estado **pagou R$ 6,50 bilhões** com a dívida pública em 2025, sendo:
+  - **R$ 3,36 bilhões** em juros e encargos;
+  - **R$ 3,13 bilhões** em amortização (abatimento do principal).
+- A diferença entre o **empenhado (R$ 6,57 bi) e o pago (R$ 6,50 bi)** — cerca de **R$ 73 milhões** — foi inscrita em restos a pagar e poderá ser quitada em 2026.
+- Os valores de empenhado e liquidado são idênticos, o que é típico de despesas financeiras com dívida, onde o reconhecimento da obrigação e a liquidação ocorrem simultaneamente.
+"
+C16,eval2.csv,composta,Quanto a Secretaria de Fazenda pagou à Prodemge em 2025?,responder,errado,"Armadilha da Prodemge: buscou 'PRODEMGE', achou zero e parou",buscar_classificacao > buscar_favorecido > buscar_favorecido > pesquisar_despesa,13.9,"O resultado da Secretaria de Estado de Fazenda (código **1191**) com o favorecido ""PRODEMGE"" em 2025 foi **zero** — nenhum valor empenhado, liquidado ou pago.
+
+Alguns pontos importantes:
+
+- **Órgão utilizado:** `1191 - SECRETARIA DE ESTADO DE FAZENDA`
+- **Favorecido:** trecho ""PRODEMGE"" (abrange qualquer nome que contenha esse termo)
+- **Período:** janeiro a dezembro de 2025 (ano fechado)
+
+Há também o órgão `1911 - EGE SEC.FAZENDA - ENCARGOS DIVERSOS`, que é uma unidade de encargos vinculada à Fazenda. Deseja que eu verifique também os pagamentos feitos por esse órgão à Prodemge? Ou prefere ampliar a busca para **todos os órgãos do Estado**?
+"
+C17,eval3.csv,composta,Que percentual do total pago pelo Estado em 2024 foi destinado à educação?,responder,correto,,buscar_classificacao > pesquisar_despesa > pesquisar_despesa,20.5,"Aqui está o resultado:
+
+---
+
+## 📊 Participação da Educação no Total Pago pelo Estado de MG em 2024
+
+| | Valor (R$) |
+|---|---|
+| **Total geral pago pelo Estado** | R$ 113.142.078.077,14 |
+| **Total pago para Educação (função 12)** | R$ 20.099.493.108,32 |
+| **Percentual** | **17,77%** |
+
+---
+
+### Detalhes:
+- **Ano:** 2024 (ano fechado)
+- **Filtro de educação:** Função **12 – EDUCAÇÃO**
+- **Percentual calculado:** R$ 20,1 bi ÷ R$ 113,1 bi = **≈ 17,8%**
+
+> ⚠️ **Atenção:** A API informa que, ao filtrar por função, os **restos a pagar não são atribuídos** ao resultado da Educação. Isso significa que o valor de R$ 20,1 bi pode estar **ligeiramente subestimado**, e o percentual real pode ser um pouco maior. O total geral (R$ 113,1 bi) inclui restos a pagar e, portanto, é mais completo.
+
+Em resumo, aproximadamente **1 em cada 6 reais** pagos pelo Estado de Minas Gerais em 2024 foi destinado à Educação.
+"
+C18,eval3.csv,composta,O pagamento na área de cultura aumentou de 2023 para 2024?,responder,correto,,buscar_classificacao > pesquisar_despesa > pesquisar_despesa,16.4,"Sim, houve um aumento expressivo! Veja a comparação:
+
+---
+
+## 💰 Despesas na Função Cultura (Código 13) — MG
+
+| Estágio | 2023 | 2024 | Variação |
+|---|---|---|---|
+| **Empenhado** | R$ 137.212.775,24 | R$ 351.965.108,19 | **+156,5%** |
+| **Liquidado** | R$ 132.578.120,86 | R$ 346.370.482,28 | **+161,2%** |
+| **Pago** | R$ 127.847.604,06 | R$ 338.543.601,00 | **+164,8%** |
+
+---
+
+### 📌 Destaques:
+- O **valor pago** saltou de **R$ 127,8 milhões** em 2023 para **R$ 338,5 milhões** em 2024, um aumento de aproximadamente **R$ 210,7 milhões (+164,8%)**.
+- O crescimento foi consistente em todos os estágios da despesa (empenho, liquidação e pagamento), indicando que não se trata apenas de comprometimento orçamentário, mas de execução efetiva.
+
+> ⚠️ **Observação técnica:** Como ambos os anos estão fechados, a diferença entre empenhado e pago representa valores inscritos em **restos a pagar**, que podem ter sido pagos em anos subsequentes. Além disso, a API não atribui restos a pagar quando o filtro de função é aplicado, então os valores de pagamento podem estar ligeiramente subestimados.
+"
+C19,eval3.csv,composta,Quanto o Estado pagou em material de consumo e serviços de terceiros pessoa jurídica em 2025?,responder,parcial,Incluiu o elemento 40 (TIC); o valor certo (30+39) só dá para obter somando as linhas,buscar_classificacao > buscar_classificacao > buscar_classificacao > pesquisar_despesa > buscar_classificacao > buscar_classificacao > pesquisar_despesa > pesquisar_despesa,22.4,"Aqui está o resumo completo dos valores pagos pelo Estado de Minas Gerais em 2025 para os elementos solicitados:
+
+---
+
+## 💰 Despesas em 2025 — Material de Consumo e Serviços de Terceiros PJ
+
+### 1. Material de Consumo (Elemento 30)
+| Estágio | Valor |
+|---|---|
+| Empenhado | R$ 1.882.967.288,23 |
+| Liquidado | R$ 1.396.537.281,59 |
+| **Pago** | **R$ 1.343.581.561,52** |
+
+---
+
+### 2. Serviços de Terceiros — Pessoa Jurídica
+
+A busca retornou **dois elementos** com essa natureza:
+
+| Elemento | Empenhado | Liquidado | **Pago** |
+|---|---|---|---|
+| **39 – Outros Serviços de Terceiros – PJ** | R$ 7.375.804.703,45 | R$ 6.193.518.912,60 | **R$ 5.996.971.961,87** |
+| **40 – Serviços de TIC – PJ** | R$ 1.386.180.687,31 | R$ 1.074.491.183,31 | **R$ 998.366.276,83** |
+| **Subtotal Serviços de Terceiros PJ** | R$ 8.761.985.390,76 | R$ 7.268.010.095,91 | **R$ 6.995.338.238,70** |
+
+---
+
+### 📊 Total Geral (Material de Consumo + Serviços de Terceiros PJ)
+
+| Estágio | Valor |
+|---|---|
+| Empenhado | R$ 10.644.952.678,99 |
+| Liquidado | R$ 8.664.547.377,50 |
+| **Pago** | **R$ 8.338.919.800,22** |
+
+---
+
+**Observações importantes:**
+- **Ano 2025 está fechado**, portanto a diferença entre empenhado e pago representa valores inscritos em **restos a pagar**, que podem ter sido pagos em 2026.
+- Para ""Serviços de Terceiros PJ"", incluí tanto o elemento **39** (serviços gerais) quanto o **40** (TIC/tecnologia), pois ambos se enquadram na categoria. Se desejar apenas o elemento 39 (interpretação mais estrita), o valor pago seria **R$ 5.996.971.961,87**.
+"
+C20,eval3.csv,composta,Qual função orçamentária recebeu o maior valor pago em 2024?,responder,correto,,pesquisar_despesa,18.4,"A função orçamentária que recebeu o **maior valor pago em 2024** foi **Previdência Social**, com destaque para o seguinte ranking do Top 5:
+
+| # | Função | Valor Pago (R$) |
+|---|--------|----------------|
+| 🥇 | **Previdência Social** | **R$ 24.253.498.558,00** |
+| 🥈 | Segurança Pública | R$ 21.735.121.486,89 |
+| 🥉 | Educação | R$ 20.099.493.108,32 |
+| 4º | Saúde | R$ 17.007.210.049,57 |
+| 5º | Judiciária | R$ 8.652.401.710,80 |
+
+---
+
+**Destaques:**
+- **Previdência Social** liderou com **R$ 24,25 bilhões pagos**, representando cerca de **21,4%** do total pago pelo Estado em 2024 (R$ 113,14 bilhões).
+- O valor pago em Previdência Social foi ligeiramente **superior ao empenhado** (R$ 24,26 bi empenhado vs. R$ 24,25 bi pago), o que pode indicar pagamento de restos a pagar de anos anteriores.
+- As cinco maiores funções juntas somaram **R$ 91,75 bilhões**, ou seja, **81% de todo o gasto pago** do Estado em 2024.
+"
+C21,eval3.csv,composta,Qual elemento de despesa teve o maior valor pago pela Secretaria de Educação em 2024?,responder,correto,,buscar_classificacao > pesquisar_despesa,18.0,"Aqui está o resultado! 🎓
+
+## Elemento de Despesa com Maior Valor Pago — SEE (2024)
+
+**Filtros utilizados:** Órgão: Secretaria de Estado de Educação (código `1261`) | Ano: 2024
+
+O elemento com o **maior valor pago** foi:
+
+| # | Elemento de Despesa | Empenhado | Liquidado | **Pago** |
+|---|---|---|---|---|
+| 🥇 | **Vencimentos e Vantagens Fixas – Pessoal Civil** | R$ 9,10 bi | R$ 9,10 bi | **R$ 9,10 bi** |
+| 2º | Obrigações Patronais | R$ 2,84 bi | R$ 2,84 bi | R$ 2,84 bi |
+| 3º | Subvenções Sociais | R$ 2,18 bi | R$ 2,17 bi | R$ 2,17 bi |
+| 4º | Contratação por Tempo Determinado | R$ 1,33 bi | R$ 1,33 bi | R$ 1,33 bi |
+| 5º | Auxílios | R$ 1,14 bi | R$ 927 mi | R$ 886 mi |
+
+### 🏆 Destaque
+**Vencimentos e Vantagens Fixas – Pessoal Civil** liderou com folga, com **R$ 9,10 bilhões pagos** em 2024 — o que representa cerca de **48,6% do total pago** pela SEE no ano (R$ 18,71 bilhões). Isso reflete o peso da folha de pagamento dos servidores da educação estadual, que é a maior rede de ensino público de Minas Gerais.
+"
+C22,eval3.csv,composta,Em qual semestre de 2025 o Estado pagou mais na função Saúde?,responder,correto,,buscar_classificacao > pesquisar_despesa > pesquisar_despesa,15.3,"Aqui está o comparativo dos dois semestres de 2025 na função **Saúde (10)**:
+
+| Semestre | Empenhado | Liquidado | **Pago** |
+|---|---|---|---|
+| 1º (jan–jun) | R$ 10,73 bi | R$ 8,18 bi | R$ 7,61 bi |
+| 2º (jul–dez) | R$ 8,88 bi | R$ 10,17 bi | **R$ 10,46 bi** |
+| **Total** | **R$ 19,61 bi** | **R$ 18,34 bi** | **R$ 18,07 bi** |
+
+### 🏆 O **2º semestre** foi o que o Estado mais pagou na função Saúde em 2025.
+
+- **2º semestre:** R$ 10,46 bilhões pagos
+- **1º semestre:** R$ 7,61 bilhões pagos
+- **Diferença:** R$ 2,84 bilhões a mais no 2º semestre (+37,3%)
+
+Vale notar que o padrão inverso aparece no **empenhado**: o 1º semestre teve mais empenhos (R$ 10,73 bi vs R$ 8,88 bi), o que é comum — os empenhos são feitos no início do ano e os pagamentos se concentram na segunda metade.
+
+> ⚠️ *Aviso da API: com filtro de função, os restos a pagar não são atribuídos, portanto os valores podem estar ligeiramente subestimados.*
+"
+C23,eval3.csv,composta,Quanto a Secretaria de Educação pagou especificamente na função Educação em 2024?,responder,correto,,buscar_classificacao > buscar_classificacao > pesquisar_despesa,25.6,"Aqui estão os resultados para **2024**:
+
+---
+
+### 💰 Secretaria de Estado de Educação (SEE) — Função Educação
+
+| Estágio | Valor |
+|---|---|
+| **Empenhado** | R$ 19.265.871.510,98 |
+| **Liquidado** | R$ 18.803.285.393,11 |
+| **Pago** | R$ 18.714.498.875,10 |
+
+---
+
+**Filtros utilizados:**
+- 📅 **Ano:** 2024 (ano fechado)
+- 🏛️ **Órgão:** `1261 – Secretaria de Estado de Educação`
+- 📚 **Função:** `12 – Educação`
+
+**Observações importantes:**
+- A diferença entre o **empenhado** (~R$ 19,3 bi) e o **pago** (~R$ 18,7 bi) — cerca de **R$ 551 milhões** — representa valores inscritos em **restos a pagar**, que podem ter sido quitados em 2025.
+- ⚠️ A API informa que, com filtro de função, os **restos a pagar não são atribuídos**, portanto o valor pago pode estar ligeiramente subestimado.
+- A busca retornou também a **Fundação de Educação para o Trabalho de MG (código 2281)**, que **não foi incluída** nesta consulta, pois a pergunta se refere especificamente à Secretaria de Educação.
+"
+C24,eval4.csv,composta,Qual órgão teve maior gasto em 2025?,responder,correto,,pesquisar_despesa,12.8,"Em 2025, o órgão com **maior gasto** foi a **Secretaria de Estado de Educação (SEE)**, com os seguintes valores:
+
+| Estágio | Valor |
+|---|---|
+| 💰 **Empenhado** | R$ 20.024.070.516,28 |
+| ✅ **Liquidado** | R$ 19.817.333.122,00 |
+| 💵 **Pago** | R$ 19.583.419.698,99 |
+
+---
+
+### 🏆 Top 5 órgãos por valor empenhado em 2025:
+
+| # | Órgão | Empenhado |
+|---|---|---|
+| 1º | Secretaria de Estado de Educação | R$ 20,0 bi |
+| 2º | Fundo Financeiro de Previdência (FUNPEMG) | R$ 18,3 bi |
+| 3º | Polícia Militar de MG | R$ 17,2 bi |
+| 4º | Fundo Estadual de Saúde | R$ 12,7 bi |
+| 5º | Tribunal de Justiça de MG | R$ 10,9 bi |
+
+> 📌 **Ano:** 2025 (ano fechado) | **Período:** 01/01 a 31/12/2025. O total geral empenhado pelo Estado foi de **R$ 131,6 bilhões**.
+"
+C25,eval4.csv,composta,Qual órgão teve maior gasto em 22?,responder,correto,,pesquisar_despesa,12.6,"Em 2022, o órgão com **maior gasto** foi a **Secretaria de Estado de Educação (SEE)**, com os seguintes valores:
+
+| Estágio | Valor |
+|---|---|
+| 💰 **Empenhado** | R$ 16,63 bilhões |
+| ✅ **Liquidado** | R$ 16,08 bilhões |
+| 💵 **Pago** | R$ 15,84 bilhões |
+
+Logo atrás vieram:
+1. 🥈 **Fundo de Previdência (FUNFIP)** — R$ 15,33 bi pagos
+2. 🥉 **Polícia Militar (PMMG)** — R$ 12,73 bi pagos
+3. **EGE/Secretaria da Fazenda – Encargos Diversos** — R$ 11,48 bi pagos
+4. **Fundo Estadual de Saúde** — R$ 9,23 bi pagos
+
+> 📌 **Filtros utilizados:** Ano = 2022, todos os órgãos, período completo (01/01 a 31/12). Valores totais do Estado somaram **R$ 108,88 bilhões pagos**.
+"
+C26,eval4.csv,composta,Quais são os grupos de despesa e quanto o Estado pagou em cada um em 2025?,responder,correto,,pesquisar_despesa,14.3,"Aqui está o detalhamento dos **grupos de despesa** do Estado de Minas Gerais em **2025**, com os valores **pagos** (e também empenhados e liquidados para referência):
+
+---
+
+### 💰 Despesas por Grupo — Minas Gerais (2025)
+
+| Grupo de Despesa | Empenhado (R$) | Liquidado (R$) | **Pago (R$)** |
+|---|---:|---:|---:|
+| 🧑‍💼 Pessoal e Encargos Sociais | 83.055.102.287,38 | 83.049.571.390,88 | **82.824.873.761,94** |
+| 📋 Outras Despesas Correntes | 32.890.040.778,70 | 30.276.266.509,38 | **29.359.288.002,21** |
+| 🏗️ Investimentos | 8.342.695.185,89 | 6.563.089.695,22 | **6.215.563.211,17** |
+| 📉 Juros e Encargos da Dívida | 3.420.656.597,48 | 3.420.656.597,48 | **3.362.975.087,75** |
+| 💳 Amortização da Dívida | 3.150.065.033,58 | 3.150.065.033,58 | **3.134.821.993,95** |
+| 🔄 Inversões Financeiras | 705.415.945,01 | 652.942.953,85 | **561.908.239,85** |
+| **TOTAL** | **131.563.975.828,04** | **127.112.592.180,39** | **125.459.430.296,87** |
+
+---
+
+### 📌 Destaques:
+- **Pessoal e Encargos Sociais** é, de longe, o maior grupo, representando cerca de **66%** do total pago (~R$ 82,8 bilhões). Inclui salários, aposentadorias e encargos dos servidores estaduais.
+- **Outras Despesas Correntes** vem em segundo lugar, com ~R$ 29,4 bilhões pagos (≈23% do total).
+- **Investimentos** somaram ~R$ 6,2 bilhões pagos, mas com diferença relevante em relação ao empenhado (~R$ 8,3 bi), indicando valores que foram empenhados mas ainda não pagos (inscritos em restos a pagar).
+- **Inversões Financeiras** (participações societárias, concessão de empréstimos etc.) tiveram o menor volume, com ~R$ 562 milhões pagos.
+
+> ⚠️ **Atenção:** 2025 é um ano **fechado**, portanto a diferença entre empenhado e pago representa valores inscritos em **restos a pagar**, que poderão ser pagos em 2026.
+"
+C27,eval4.csv,composta,Qual unidade da Polícia Militar teve o maior valor pago em 2025?,responder,correto,,buscar_classificacao > anos_disponiveis > pesquisar_despesa,15.8,"Com base nos dados de 2025, a unidade da Polícia Militar com o **maior valor pago** foi:
+
+---
+
+### 🏆 C.ADM. PESSOAL CAP PMMG
+**(Centro de Administração de Pessoal da PMMG)**
+
+| Estágio | Valor |
+|---|---|
+| **Empenhado** | R$ 16.553.493.545,94 |
+| **Liquidado** | R$ 16.550.980.763,26 |
+| **Pago** | **R$ 16.550.765.730,44** |
+
+---
+
+### Ranking das 10 maiores unidades por valor pago (2025):
+
+| # | Unidade | Pago |
+|---|---|---|
+| 1 | C.ADM. PESSOAL CAP PMMG | R$ 16.550.765.730,44 |
+| 2 | CMI CENTRO MOTOMEC E INTE | R$ 124.619.035,18 |
+| 3 | CSC-SAUDE | R$ 65.227.286,98 |
+| 4 | CSA-TIC/DTS PMMG | R$ 33.100.351,58 |
+| 5 | CSC-PM | R$ 18.174.645,00 |
+| 6 | CENTRO MAT. BELICO PMMG | R$ 16.208.878,33 |
+| 7 | COMAVE PMMG | R$ 13.658.482,10 |
+| 8 | CPE PMMG | R$ 6.806.580,18 |
+| 9 | CME PMMG | R$ 5.585.620,14 |
+| 10 | COL. TIRADENTES PMMG | R$ 4.538.398,91 |
+
+---
+
+A **C.ADM. PESSOAL CAP PMMG** se destaca de forma absoluta, concentrando cerca de **98% de todo o valor pago** da Polícia Militar em 2025 (R$ 16,55 bi de um total de R$ 16,88 bi). Isso é esperado, pois essa unidade é responsável pela **folha de pagamento de pessoal** de toda a corporação.
+
+> **Filtros utilizados:** Ano 2025 | Órgão: 1251 – Polícia Militar do Estado de Minas Gerais | Agrupamento por unidade.
+"
+C28,eval4.csv,composta,Quanto o Estado pagou em transferências a municípios em 2025?,responder,correto,,anos_disponiveis > buscar_classificacao > pesquisar_despesa,15.0,"Em 2025, o Estado de Minas Gerais pagou **R$ 8.885.868.071,88** em transferências a municípios. Veja o detalhamento:
+
+| Estágio | Valor |
+|---|---|
+| **Empenhado** | R$ 9.092.420.505,50 |
+| **Liquidado** | R$ 8.998.674.975,87 |
+| **Pago** | R$ 8.885.868.071,88 |
+
+---
+
+**Filtros utilizados:**
+- **Ano:** 2025
+- **Modalidades de aplicação** (todas as três modalidades de transferência a municípios foram somadas):
+  - `40 – Transferências a Municípios`
+  - `41 – Transferência a Municípios – Fundo a Fundo`
+  - `45 – Transferências Fundo a Fundo aos Municípios – Art. 24 LC 141/2012`
+
+> ⚠️ **Atenção:** 2025 é um ano fechado. A diferença entre o valor empenhado (~R$ 9,09 bi) e o pago (~R$ 8,89 bi) representa recursos inscritos em **restos a pagar**, que podem ter sido pagos (ou não) em 2026.
+"
+C29,eval4.csv,composta,Quanto a Assembleia Legislativa pagou com diárias e passagens em 2025?,responder,correto,,buscar_classificacao > buscar_classificacao > buscar_classificacao > pesquisar_despesa,10.1,"Aqui está o resumo dos gastos da **Assembleia Legislativa do Estado de Minas Gerais** com diárias e passagens em **2025**:
+
+---
+
+### 🏛️ Assembleia Legislativa de MG — Diárias e Passagens (2025)
+
+| Elemento de Despesa | Empenhado | Liquidado | Pago |
+|---|---|---|---|
+| **Diárias – Civil** (elem. 14) | R$ 12.136.715,21 | R$ 12.136.715,21 | R$ 8.939.530,23 |
+| **Passagens e Despesas com Locomoção** (elem. 33) | R$ 3.874.231,10 | R$ 3.770.243,53 | R$ 3.648.451,47 |
+| **TOTAL** | **R$ 16.010.946,31** | **R$ 15.906.958,74** | **R$ 12.587.981,70** |
+
+---
+
+### 📌 Observações
+
+- **Órgão consultado:** Assembleia Legislativa do Estado de MG (código `1011`). O Fundo Especial da ALMG (código `4121`) **não foi incluído** — caso queira, posso consultar separadamente.
+- **Diárias – Militar** (elem. 15): não apareceu nos resultados, o que é esperado, pois a ALMG não costuma ter despesas militares.
+- Como 2025 é um **ano fechado**, a diferença entre o empenhado (R$ 16,0 mi) e o pago (R$ 12,6 mi) representa valores inscritos em **restos a pagar**, que podem ter sido pagos em 2026.
+"
+D01,eval.csv,direta,Quanto o Estado de Minas Gerais empenhou em 2025?,responder,correto,,pesquisar_despesa,13.0,"Em **2025**, o Estado de Minas Gerais apresentou os seguintes totais de despesa:
+
+| Estágio | Valor |
+|---|---|
+| 💰 **Empenhado** | R$ 131.563.975.828,04 |
+| ✅ **Liquidado** | R$ 127.112.592.180,39 |
+| 💳 **Pago** | R$ 125.459.430.296,87 |
+
+> **Filtros utilizados:** Ano 2025, período completo (01/01 a 31/12), sem filtros adicionais — abrange **toda a despesa do Estado de MG**.
+
+Vale destacar que 2025 é um **ano fechado**, portanto a diferença entre o valor empenhado (~R$ 131,6 bi) e o valor pago (~R$ 125,5 bi) — cerca de **R$ 6,1 bilhões** — representa o que foi inscrito em **restos a pagar**, a ser liquidado/pago em exercícios seguintes.
+"
+D02,eval.csv,direta,Quanto a Advocacia-Geral do Estado pagou em 2025?,responder,correto,,buscar_classificacao > pesquisar_despesa,9.7,"Em 2025, a **Advocacia-Geral do Estado (AGE)** — código `1081` — apresentou os seguintes valores:
+
+| Estágio | Valor |
+|---|---|
+| **Empenhado** | R$ 1.023.743.951,58 |
+| **Liquidado** | R$ 1.014.541.849,87 |
+| **Pago** | R$ 759.567.117,27 |
+
+> ⚠️ **Atenção:** 2025 é um ano fechado. A diferença entre o valor liquidado (R$ 1,01 bi) e o valor pago (R$ 759,6 mi) — cerca de R$ 255 milhões — representa despesas inscritas em **restos a pagar**, que podem ter sido pagas (ou não) em 2026.
+
+**Filtros utilizados:** Ano 2025 | Órgão: `1081 - ADVOCACIA GERAL DO ESTADO` | Período: 01/01 a 31/12.
+"
+D03,eval.csv,direta,Qual foi o total liquidado pelo Tribunal de Justiça no 1º semestre de 2026?,responder,correto,"Valor bate com a API hoje (5.017.600.995,92); gabarito desatualizado",buscar_classificacao > pesquisar_despesa > pesquisar_despesa,12.4,"Aqui estão os resultados para o **1º semestre de 2026** (01/01 a 30/06):
+
+---
+
+### 🏛️ Tribunal de Justiça do Estado de Minas Gerais (TJMG) — código 1031
+
+| Estágio | Valor |
+|---|---|
+| Empenhado | R$ 5.017.600.995,92 |
+| **Liquidado** | **R$ 5.017.600.995,92** |
+| Pago | R$ 5.017.602.909,99 |
+
+---
+
+### ⚖️ Tribunal de Justiça Militar do Estado de MG (TJMMG) — código 1051
+
+| Estágio | Valor |
+|---|---|
+| Empenhado | R$ 71.815.644,01 |
+| **Liquidado** | **R$ 70.345.728,79** |
+| Pago | R$ 69.815.868,59 |
+
+---
+
+### 📊 Total Consolidado (ambos os tribunais)
+
+| Estágio | Valor |
+|---|---|
+| Empenhado | R$ 5.089.416.639,93 |
+| **Liquidado** | **R$ 5.087.946.724,71** |
+| Pago | R$ 5.087.418.778,58 |
+
+---
+
+**Observações:**
+- A busca por ""Tribunal de Justiça"" retornou **dois órgãos**. Se a pergunta se referia apenas ao **TJMG**, o liquidado é de **R$ 5,02 bilhões**. Se incluir também o **TJMMG**, o total sobe para **R$ 5,09 bilhões**.
+- Os dados de 2026 são **parciais**, pois o ano ainda está em curso.
+"
+D04,eval.csv,direta,Até que data os dados de despesas estão atualizados?,responder,errado,Inventou 'dados até hoje (13/11/2026)'; não há tool com a data da carga,anos_disponiveis,5.7,"Os dados de despesas do Estado de Minas Gerais estão disponíveis de **2021 a 2026**. Veja como funciona a atualização:
+
+- **2021 a 2025**: Anos **fechados**, com dados completos do exercício financeiro.
+- **2026**: Ano **em andamento**, com dados **parciais** atualizados até a data de hoje, **13/11/2026**.
+
+Posso te ajudar com alguma consulta específica sobre as despesas? 😊
+"
+D05,eval.csv,direta,Quais foram os 5 maiores favorecidos da Secretaria de Educação em 2025?,responder,correto,,buscar_classificacao > maiores_favorecidos > maiores_favorecidos,10.6,"Aqui estão os **5 maiores favorecidos da Secretaria de Estado de Educação (SEE – código 1261) em 2025**, ordenados pelo valor pago:
+
+| # | Favorecido | Valor Empenhado | Valor Pago |
+|---|---|---|---|
+| 1 | **Folha de Pagamento de Pessoal** | R$ 10.031.253.398,77 | R$ 10.031.253.398,77 |
+| 2 | **Fundo Financeiro de Previdência do Estado de MG (FUNFIP)** | R$ 2.086.590.723,13 | R$ 2.086.590.723,13 |
+| 3 | **Contratos Administrativos** | R$ 1.160.954.632,81 | R$ 1.160.954.632,81 |
+| 4 | **Instituto Nacional do Seguro Social (INSS)** | R$ 1.133.997.266,88 | R$ 1.133.872.507,83 |
+| 5 | **Instituto de Previdência dos Servidores do Estado de MG (IPSEMG)** | R$ 180.472.179,24 | R$ 180.472.179,24 |
+
+**Observações:**
+- **Ano:** 2025 (ano fechado — dados completos).
+- **Órgão:** Secretaria de Estado de Educação (código 1261).
+- Os três primeiros itens (""Folha de Pagamento de Pessoal"", ""Contratos Administrativos"" e ""FUNFIP"") são agrupamentos contábeis, não entidades individuais.
+- O **INSS** apresenta uma pequena diferença entre empenhado e pago (~R$ 124 mil), que pode ter sido inscrita em restos a pagar.
+- O domínio é amplamente de **despesas com pessoal e encargos previdenciários**, o que é esperado para a maior secretaria em número de servidores do Estado.
+"
+D06,eval.csv,direta,Quanto o Estado pagou com saúde em 2025?,responder,correto,,buscar_classificacao > pesquisar_despesa,11.8,"Aqui estão os dados de despesa com **Saúde (Função 10)** em **2025**:
+
+| Estágio | Valor |
+|---|---|
+| 💰 **Empenhado** | R$ 19.613.707.887,59 |
+| ✅ **Liquidado** | R$ 18.340.220.837,78 |
+| 💸 **Pago** | R$ 18.068.659.050,60 |
+
+---
+
+**Detalhes da consulta:**
+- **Ano:** 2025 (ano fechado)
+- **Filtro:** Função **10 – SAÚDE**
+- **Período:** 01/01 a 31/12/2025
+
+O Estado de Minas Gerais **pagou R$ 18,07 bilhões** com saúde em 2025. A diferença entre o valor empenhado (R$ 19,6 bi) e o pago (R$ 18,07 bi) — cerca de R$ 1,54 bilhão — corresponde ao que foi inscrito em **restos a pagar**, podendo ter sido quitado (ou não) em 2026.
+
+> ⚠️ **Atenção:** A API informa que, com filtro por função, os valores de restos a pagar não são atribuídos, portanto os totais podem estar ligeiramente subestimados.
+"
+D07,eval.csv,direta,Quanto o Estado pagou com educação em 2025?,responder,correto,,buscar_classificacao > pesquisar_despesa,11.9,"Aqui está o resumo dos gastos do Estado de Minas Gerais com **Educação em 2025**:
+
+| Estágio | Valor |
+|---|---|
+| 💰 **Empenhado** | R$ 21.581.085.818,23 |
+| 📋 **Liquidado** | R$ 21.301.878.691,66 |
+| ✅ **Pago** | R$ 21.045.388.645,66 |
+
+---
+
+**Filtros utilizados:**
+- **Ano:** 2025
+- **Função:** 12 – EDUCAÇÃO
+- **Período:** 01/01 a 31/12/2025
+
+> ⚠️ **Observação importante:** Como 2025 é um ano fechado, a diferença entre o valor **empenhado** (R$ 21,58 bi) e o **pago** (R$ 21,04 bi) — cerca de **R$ 535 milhões** — representa despesas inscritas em **restos a pagar**, que podem ter sido quitadas (ou não) em 2026. Além disso, a API não computa restos a pagar quando o filtro de função é aplicado, portanto o valor pago pode estar ligeiramente subestimado.
+"
+D08,eval.csv,direta,Quanto o Estado pagou com segurança pública em 2025?,responder,correto,,buscar_classificacao > pesquisar_despesa,11.2,"Aqui estão os dados de despesa com **Segurança Pública** em **2025** pelo Estado de Minas Gerais:
+
+| Estágio | Valor |
+|---|---|
+| **Empenhado** | R$ 26.015.824.262,31 |
+| **Liquidado** | R$ 25.378.163.646,09 |
+| **Pago** | R$ 25.284.294.744,88 |
+
+---
+
+**Filtros utilizados:**
+- **Ano:** 2025
+- **Função:** 6 – Segurança Pública
+
+**Observações importantes:**
+- O valor **pago** (R$ 25,28 bilhões) é o efetivamente desembolsado pelo Estado.
+- A diferença entre o **empenhado** e o **pago** (~R$ 731 milhões) corresponde ao que foi inscrito em **restos a pagar**, a ser liquidado/pago em exercícios seguintes.
+- ⚠️ A API informa que, com filtro por função, os **restos a pagar** não são atribuídos corretamente, podendo haver uma pequena subcontagem no total pago.
+"
+D09,eval.csv,direta,Quanto o Estado pagou com atenção básica em saúde em 2025?,responder,correto,,buscar_classificacao > buscar_classificacao > pesquisar_despesa,14.4,"Aqui está o resumo dos gastos do Estado de Minas Gerais com **Atenção Básica em Saúde em 2025**:
+
+| Estágio | Valor |
+|---|---|
+| **Empenhado** | R$ 1.152.351.890,81 |
+| **Liquidado** | R$ 1.135.095.301,57 |
+| **Pago** | R$ 1.131.908.105,44 |
+
+---
+
+**Filtros utilizados:**
+- **Função:** 10 – Saúde
+- **Subfunção:** 301 – Atenção Básica
+- **Período:** 01/01/2025 a 31/12/2025
+
+**Observação importante:** A API informa que, ao filtrar por função/subfunção, os valores de **restos a pagar** não são atribuídos (vêm zerados). Isso significa que o valor pago de **R$ 1,13 bilhão** refere-se apenas aos pagamentos realizados dentro do próprio exercício de 2025, podendo haver pagamentos adicionais de empenhos de 2025 liquidados como restos a pagar em 2026. O valor real total pode ser ligeiramente superior.
+"
+D10,eval.csv,direta,Quanto o Estado pagou com pessoal e encargos sociais em 2025?,responder,correto,,pesquisar_despesa,13.3,"Em **2025**, o Estado de Minas Gerais gastou com **Pessoal e Encargos Sociais (Grupo 1)** os seguintes valores:
+
+| Estágio | Valor |
+|---|---|
+| 💰 **Empenhado** | R$ 83.055.102.287,38 |
+| ✅ **Liquidado** | R$ 83.049.571.390,88 |
+| 💵 **Pago** | R$ 82.824.873.761,94 |
+
+### Observações:
+- **Filtro utilizado:** Grupo de Despesa **1 – Pessoal e Encargos Sociais**, ano **2025** (janeiro a dezembro).
+- O valor **pago** foi de aproximadamente **R$ 82,8 bilhões**, ligeiramente inferior ao liquidado (R$ 83,0 bilhões), o que indica que uma pequena parcela (~R$ 224,7 milhões) foi inscrita em **restos a pagar** para ser quitada posteriormente.
+- Como 2025 é um ano **fechado**, essa diferença entre liquidado e pago representa valores inscritos em restos a pagar, e não atrasos em processamento.
+"
+D11,eval.csv,direta,Quanto o governador gastou em viagens em 2025?,responder,errado,Somou diárias do Gabinete Militar e Casa Civil como se fossem do governador; devia dizer que não consegue,buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > pesquisar_despesa > buscar_classificacao > pesquisar_despesa > buscar_classificacao > pesquisar_despesa,26.3,"Aqui está um resumo completo das despesas com viagens (diárias e passagens/locomoção) em 2025, considerando os dois órgãos mais diretamente ligados ao Governador:
+
+---
+
+## 🗺️ Gastos com Viagens do Governador em 2025
+
+> **Ano:** 2025 | **Elementos:** Diárias Civil (14), Diárias Militar (15) e Passagens e Despesas com Locomoção (33)
+
+### 1️⃣ Gabinete Militar do Governador (órgão 1071)
+
+| Elemento | Empenhado | Liquidado | Pago |
+|---|---|---|---|
+| Diárias – Militar | R$ 3.941.686,84 | R$ 3.941.686,84 | R$ 4.076.147,12 |
+| Diárias – Civil | R$ 226.790,50 | R$ 226.790,50 | R$ 231.389,85 |
+| Passagens e Locomoção | R$ 782.267,63 | R$ 765.717,08 | R$ 735.470,09 |
+| **Subtotal** | **R$ 4.950.745,97** | **R$ 4.934.194,42** | **R$ 5.043.007,06** |
+
+### 2️⃣ Secretaria de Estado da Casa Civil (órgão 1721)
+
+| Elemento | Empenhado | Liquidado | Pago |
+|---|---|---|---|
+| Diárias – Civil | R$ 260.625,61 | R$ 260.625,61 | R$ 261.888,21 |
+| Passagens e Locomoção | R$ 263.392,46 | R$ 213.173,66 | R$ 209.454,78 |
+| **Subtotal** | **R$ 524.018,07** | **R$ 473.799,27** | **R$ 471.342,99** |
+
+---
+
+### 📊 Total Consolidado
+
+| | Empenhado | Liquidado | Pago |
+|---|---|---|---|
+| **Total Geral** | **R$ 5.474.764,04** | **R$ 5.407.993,69** | **R$ 5.514.350,05** |
+
+---
+
+### ⚠️ Observações importantes
+
+- **Recorte estrito (só Gabinete Militar):** R$ 4.950.745,97 empenhados / R$ 5.043.007,06 pagos.
+- **Recorte amplo (+ Casa Civil):** R$ 5.474.764,04 empenhados / R$ 5.514.350,05 pagos.
+- O **Gabinete Militar do Governador** concentra a maior parte dos gastos, especialmente em diárias militares (escolta, segurança e comitiva).
+- A **Casa Civil** inclui despesas administrativas do gabinete do governador, mas nem todos os gastos são exclusivamente do Governador — podem incluir servidores da secretaria.
+- Não foi encontrado um ""Gabinete Civil do Governador"" como órgão separado na estrutura orçamentária de 2025.
+- O valor **pago pode ser ligeiramente superior ao empenhado** no ano porque inclui pagamentos de restos a pagar de anos anteriores.
+"
+D12,eval2.csv,direta,Quanto o Tribunal de Justiça de Minas Gerais pagou em 2024?,responder,correto,,buscar_classificacao > pesquisar_despesa,28.5,"Em **2024**, o **Tribunal de Justiça do Estado de Minas Gerais (TJMG)** — órgão código **1031** — apresentou os seguintes valores:
+
+| Estágio | Valor |
+|---|---|
+| **Empenhado** | R$ 9.337.455.728,58 |
+| **Liquidado** | R$ 9.337.455.728,58 |
+| **Pago** | R$ 9.337.959.841,53 |
+
+💡 **Observações:**
+- O valor **pago** (R$ 9,34 bilhões) é ligeiramente superior ao empenhado/liquidado no ano. Isso ocorre porque 2024 é um ano fechado e parte dos pagamentos se refere a **restos a pagar** de anos anteriores, liquidados em 2024.
+- Não foi incluído o **Tribunal de Justiça Militar (código 1051)**, que é um órgão distinto. Caso queira os dados dele também, é só solicitar!
+"
+D13,eval2.csv,direta,Quanto a Secretaria de Estado de Fazenda empenhou em 2023?,responder,correto,,buscar_classificacao > pesquisar_despesa,20.4,"Aqui está o resumo das despesas empenhadas em **2023** pelos órgãos vinculados à Secretaria de Estado de Fazenda:
+
+| Órgão | Empenhado | Liquidado | Pago |
+|---|---|---|---|
+| **Secretaria de Estado de Fazenda** (1191) | R$ 1.549.832.807,14 | R$ 1.487.682.339,64 | R$ 1.468.478.278,25 |
+| **EGE SEF – Encargos Diversos** (1911) | R$ 854.860.168,33 | R$ 765.439.410,10 | R$ 765.416.129,62 |
+| **Total combinado** | **R$ 2.404.692.975,47** | **R$ 2.253.121.749,74** | **R$ 2.233.894.407,87** |
+
+### Observações:
+- **Recorte estrito** (apenas a SEF – código 1191): **R$ 1.549.832.807,14** empenhados.
+- **Recorte amplo** (SEF + EGE/Encargos Diversos – código 1911): **R$ 2.404.692.975,47** empenhados. O órgão ""EGE SEC.FAZENDA-ENCARGOS DIVERSOS"" é uma unidade de encargos gerenciada pela SEF, por isso foi incluído na soma ampla.
+- Como 2023 é um ano **fechado**, a diferença entre o empenhado e o pago (≈ R$ 170,8 milhões) representa valores inscritos em **restos a pagar**, que podem ter sido pagos em anos subsequentes.
+"
+D14,eval2.csv,direta,Quanto o Estado pagou em pensões em 2022?,responder,errado,Somou elemento 59 (pensões especiais) ao 03; não mostrou o valor do elemento 03 sozinho,buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > pesquisar_despesa,20.2,"Aqui está o resultado! Veja o detalhamento:
+
+---
+
+## 💰 Pensões — Estado de Minas Gerais — 2022
+
+| Estágio | Valor |
+|---|---|
+| **Empenhado** | R$ 4.810.797.335,34 |
+| **Liquidado** | R$ 4.794.718.963,44 |
+| **Pago** | R$ 4.146.901.152,24 |
+
+---
+
+### Elementos de despesa incluídos na soma:
+- **Elemento 03 – Pensões do RPPS e do Militar** (pensões do Regime Próprio de Previdência Social e pensionistas militares)
+- **Elemento 59 – Pensões Especiais** (pensões concedidas por legislação específica)
+
+### Observação sobre a diferença entre empenhado e pago:
+Como 2022 é um ano **fechado**, a diferença de ~R$ 663,9 milhões entre o empenhado (R$ 4,81 bi) e o pago (R$ 4,15 bi) representa valores inscritos em **restos a pagar**, que podem ter sido liquidados e pagos em 2023 ou posteriormente.
+
+---
+
+Caso queira detalhar por órgão, tipo de pensão ou outro recorte, é só pedir!
+"
+D15,eval2.csv,direta,Quanto o Estado pagou de juros e encargos da dívida em 2024?,responder,correto,,buscar_classificacao > buscar_classificacao > pesquisar_despesa,17.7,"Aqui está o resumo dos gastos do Estado de Minas Gerais com **Juros e Encargos da Dívida em 2024**:
+
+| Estágio | Valor |
+|---|---|
+| **Empenhado** | R$ 1.919.907.027,82 |
+| **Liquidado** | R$ 1.919.907.027,82 |
+| **Pago** | R$ 1.657.517.661,79 |
+
+### Destaques:
+- O Estado **pagou R$ 1,66 bilhão** em juros e encargos da dívida ao longo de 2024.
+- O valor empenhado e liquidado foi idêntico (R$ 1,92 bilhão), mas houve uma diferença de cerca de **R$ 262,4 milhões** entre o liquidado e o pago — valor que foi inscrito em **restos a pagar** e poderá ser quitado em exercícios seguintes.
+
+### Filtros utilizados:
+- **Ano:** 2024
+- **Grupo de Despesa:** `2 – Juros e Encargos da Dívida`
+
+> ℹ️ A busca por subfunções com o termo ""juros"" não retornou resultados, portanto o recorte foi feito exclusivamente pelo **grupo de despesa 2**, que é a classificação orçamentária oficial para esse tipo de gasto. Não há risco de exclusão de valores relevantes com esse filtro.
+"
+D16,eval2.csv,direta,Quanto a Secretaria de Planejamento e Gestão liquidou em 2022?,responder,correto,,buscar_classificacao > pesquisar_despesa > pesquisar_despesa,13.4,"Aqui estão os resultados para 2022, com os dois órgãos identificados:
+
+---
+
+### 💰 Liquidado em 2022 — Secretaria de Estado de Planejamento e Gestão
+
+| Órgão | Empenhado | **Liquidado** | Pago |
+|---|---|---|---|
+| **1501 – SEPLAG** | R$ 352.650.653,12 | **R$ 315.037.665,91** | R$ 301.346.762,92 |
+| **1941 – EGE-SEPLAG** (Escola de Governo) | R$ 201.288.736,28 | **R$ 201.288.736,28** | R$ 201.288.736,28 |
+| **Total combinado** | R$ 553.939.389,40 | **R$ 516.326.402,19** | R$ 502.635.499,20 |
+
+---
+
+### 📌 Observações:
+- Foram encontrados **dois órgãos** com o nome ""Secretaria de Estado de Planejamento e Gestão"":
+  - **1501 – SECRETARIA DE ESTADO DE PLANEJAMENTO E GESTAO**: órgão principal da SEPLAG.
+  - **1941 – EGE-SECRETARIA DE ESTADO DE PLANEJAMENTO E GESTAO**: vinculado à Escola de Governo (EGE).
+- Se a pergunta se refere apenas ao órgão principal (1501), o liquidado foi de **R$ 315.037.665,91**.
+- Considerando ambos os órgãos, o total liquidado foi de **R$ 516.326.402,19**.
+"
+D17,eval2.csv,direta,Quanto o Estado pagou à MGS em 2024?,responder,correto,,buscar_favorecido > pesquisar_despesa,14.8,"Aqui está o resumo do que o Estado de Minas Gerais pagou à **MGS – Minas Gerais Administração e Serviços S/A** em **2024**:
+
+| Estágio | Valor |
+|---|---|
+| **Empenhado** | R$ 1.057.732.852,11 |
+| **Liquidado** | R$ 991.914.188,25 |
+| **Pago** | **R$ 816.591.575,73** |
+
+### Detalhes sobre os favorecidos encontrados
+
+A busca retornou **quatro registros** com ""MGS"" no nome. Veja o que foi considerado:
+
+| Nome | CNPJ | Pago | Incluído? |
+|---|---|---|---|
+| MGS Minas Gerais Administração e Serviços S/A | 33.224.254/**0001**-42 | R$ 813.111.381,25 | ✅ Sim |
+| MGS Minas Gerais Administração e Serviços S/A | 33.224.254/**0011**-14 | R$ 3.480.194,48 | ✅ Sim (filial) |
+| AMGS Comércio e Representações Ltda | 20.858.411/0001-20 | R$ 3.944.285,37 | ❌ Não (empresa diferente) |
+| MGS Brasil Distribuidora Ltda | 25.329.901/0001-52 | R$ 11.107,15 | ❌ Não (empresa diferente) |
+
+> A pesquisa usou o nome completo **""MGS MINAS GERAIS ADMINISTRACAO E SERVICOS S/A""**, capturando tanto a matriz quanto a filial da empresa, totalizando **R$ 816.591.575,73 pagos** em 2024. As empresas AMGS e MGS Brasil não foram incluídas por serem entidades distintas.
+"
+D18,eval2.csv,direta,Quanto a Defensoria Pública de Minas Gerais pagou em 2021?,responder,correto,,buscar_classificacao > pesquisar_despesa,10.8,"Em **2021**, a **Defensoria Pública do Estado de Minas Gerais (órgão 1441)** registrou os seguintes valores:
+
+| Estágio | Valor |
+|---|---|
+| **Empenhado** | R$ 573.495.184,75 |
+| **Liquidado** | R$ 561.361.224,85 |
+| **Pago** | **R$ 557.785.869,75** |
+
+O valor **pago** foi de aproximadamente **R$ 557,8 milhões**. A diferença entre o empenhado e o pago (cerca de R$ 15,7 milhões) corresponde ao que foi inscrito em **restos a pagar** ao final de 2021, podendo ter sido quitado nos anos seguintes.
+
+> **Filtros utilizados:** Ano = 2021 | Órgão = 1441 – Defensoria Pública do Estado de Minas Gerais | Período: 01/01 a 31/12.
+"
+D19,eval3.csv,direta,Quanto o Estado pagou com cultura em 2024?,responder,correto,,buscar_classificacao > anos_disponiveis > pesquisar_despesa,13.0,"Aqui estão os dados de despesa com **Cultura** em **2024** pelo Estado de Minas Gerais:
+
+| Estágio | Valor |
+|---|---|
+| **Empenhado** | R$ 351.965.108,19 |
+| **Liquidado** | R$ 346.370.482,28 |
+| **Pago** | R$ 338.543.601,00 |
+
+---
+
+**Filtros utilizados:**
+- **Ano:** 2024
+- **Função:** 13 – Cultura
+
+**Observações:**
+- O valor **pago** (R$ 338,5 milhões) é o efetivamente desembolsado pelo Estado no exercício de 2024.
+- A diferença entre o **empenhado** (R$ 351,9 mi) e o **pago** (R$ 338,5 mi) — cerca de R$ 13,4 milhões — representa valores inscritos em **restos a pagar**, que podem ter sido liquidados/pagos em 2025.
+- ⚠️ A API informa que, com filtro por função, os **restos a pagar** não são atribuídos, portanto o valor pago pode estar ligeiramente subestimado.
+"
+D20,eval3.csv,direta,Quanto o Estado liquidou com saneamento em 2023?,responder,correto,,buscar_classificacao > buscar_classificacao > pesquisar_despesa > pesquisar_despesa,32.0,"Aqui estão os resultados para **saneamento em 2023**:
+
+---
+
+### 💧 Saneamento — Liquidado em 2023
+
+| Recorte | Empenhado | **Liquidado** | Pago |
+|---|---|---|---|
+| **Função 17 – Saneamento** (recorte amplo) | R$ 66.802.573,46 | **R$ 47.915.957,71** | R$ 42.021.730,23 |
+| **Subfunções 511 + 512** – Saneamento Básico Rural e Urbano (recorte estrito) | R$ 55.632.614,52 | **R$ 36.933.481,08** | R$ 31.059.441,56 |
+
+---
+
+### 📌 Notas sobre o recorte
+
+- **Recorte amplo (Função 17 – Saneamento):** inclui *todas* as despesas classificadas na função Saneamento, independentemente da subfunção. Pode incluir subfunções atípicas (ex.: administração geral alocada nessa função).
+- **Recorte estrito (Subfunções 511 e 512):** considera apenas as despesas explicitamente classificadas como Saneamento Básico Rural ou Urbano, mesmo que estejam em outras funções (ex.: Saúde ou Urbanismo).
+- A diferença entre os dois recortes (~R$ 11 mi liquidado) corresponde a despesas da função Saneamento classificadas em outras subfunções que não 511 nem 512.
+- ⚠️ A API informa que, com filtro de função/subfunção, os **restos a pagar não são atribuídos**, portanto os valores podem estar ligeiramente subestimados.
+"
+D21,eval3.csv,direta,Quanto o Estado pagou com assistência hospitalar e ambulatorial em 2022?,responder,correto,,buscar_classificacao > pesquisar_despesa,17.3,"Aqui estão os dados de 2022 para a subfunção **302 – Assistência Hospitalar e Ambulatorial**:
+
+| Estágio | Valor |
+|---|---|
+| **Empenhado** | R$ 10.984.921.750,51 |
+| **Liquidado** | R$ 10.217.106.148,62 |
+| **Pago** | R$ 10.001.622.132,12 |
+
+### Destaques:
+- O Estado de Minas Gerais **pagou aproximadamente R$ 10,0 bilhões** com assistência hospitalar e ambulatorial em 2022.
+- A diferença entre o **empenhado e o pago** (cerca de R$ 983 milhões) corresponde a valores inscritos em **restos a pagar**, que podem ter sido liquidados/pagos em anos subsequentes.
+
+### Observações sobre o recorte:
+- Foi utilizada exclusivamente a subfunção **302 – Assistência Hospitalar e Ambulatorial**, que é a classificação oficial para esse tipo de gasto.
+- ⚠️ A API informou que, com filtro de subfunção, **os restos a pagar não são atribuídos**, o que significa que o valor pago pode estar ligeiramente subestimado.
+"
+D22,eval3.csv,direta,Quanto o Estado empenhou com passagens e despesas com locomoção em 2024?,responder,correto,,buscar_classificacao > buscar_classificacao > pesquisar_despesa,8.7,"Aqui está o resultado! 🧳✈️
+
+---
+
+## Passagens e Despesas com Locomoção — 2024
+
+| Estágio | Valor (R$) |
+|---|---|
+| **Empenhado** | R$ 61.593.092,87 |
+| **Liquidado** | R$ 51.398.143,04 |
+| **Pago** | R$ 49.162.482,14 |
+
+---
+
+**Filtros utilizados:**
+- **Ano:** 2024
+- **Elemento de despesa:** `33 – Passagens e Despesas com Locomoção`
+- **Período:** 01/01/2024 a 31/12/2024
+
+O Estado de Minas Gerais **empenhou R$ 61,6 milhões** com passagens e despesas com locomoção em 2024. Do total empenhado, R$ 51,4 milhões foram liquidados e R$ 49,2 milhões efetivamente pagos. A diferença entre empenhado e pago (cerca de R$ 12,4 milhões) foi inscrita em restos a pagar para processamento em anos seguintes.
+"
+D23,eval3.csv,direta,Quanto o Estado pagou com despesas de capital em 2023?,responder,correto,,buscar_classificacao > pesquisar_despesa,18.1,"Aqui está o resumo das **Despesas de Capital do Estado de Minas Gerais em 2023**:
+
+| Estágio | Valor |
+|---|---|
+| 💼 **Empenhado** | R$ 11.449.022.205,96 |
+| ✅ **Liquidado** | R$ 8.172.069.415,95 |
+| 💰 **Pago** | R$ 7.699.836.842,64 |
+
+---
+
+**Filtros utilizados:**
+- **Ano:** 2023
+- **Categoria Econômica:** `4 – Despesas de Capital`
+- **Período:** 01/01/2023 a 31/12/2023
+
+**Observação:** Como 2023 é um ano fechado, a diferença entre o valor **empenhado** (R$ 11,4 bi) e o **pago** (R$ 7,7 bi) representa o montante inscrito em **restos a pagar**, que pode ter sido quitado (ou não) em anos subsequentes.
+"
+D24,eval3.csv,direta,Quanto o Estado pagou com outras despesas correntes em 2021?,responder,correto,,buscar_classificacao > anos_disponiveis > pesquisar_despesa,21.9,"Aqui está o resultado:
+
+---
+
+### 💰 Outras Despesas Correntes — 2021
+
+| Estágio | Valor |
+|---|---|
+| **Empenhado** | R$ 51.557.471.002,17 |
+| **Liquidado** | R$ 49.118.337.275,43 |
+| **Pago** | R$ 48.420.195.347,65 |
+
+---
+
+**Filtros utilizados:**
+- **Ano:** 2021
+- **Grupo de Despesa:** `3 – Outras Despesas Correntes`
+- **Período:** 01/01/2021 a 31/12/2021 (ano fechado)
+
+O Estado de Minas Gerais **pagou R$ 48,42 bilhões** em Outras Despesas Correntes em 2021. A diferença entre o valor empenhado (R$ 51,56 bi) e o pago (R$ 48,42 bi) representa despesas inscritas em **restos a pagar**, que podem ter sido liquidadas e pagas em exercícios seguintes.
+"
+D25,eval3.csv,direta,Quanto o Estado pagou com transporte em 2025?,responder,correto,,buscar_classificacao > anos_disponiveis > pesquisar_despesa,16.8,"Aqui está o resumo dos gastos do Estado de Minas Gerais com **Transporte (função 26)** em **2025**:
+
+| Estágio | Valor |
+|---|---|
+| 💰 **Empenhado** | R$ 2.252.888.295,81 |
+| ✅ **Liquidado** | R$ 1.728.375.336,38 |
+| 💵 **Pago** | R$ 1.687.786.763,86 |
+
+### Observações:
+- **Filtro utilizado:** Função **26 – TRANSPORTE** (cobre toda a função de transporte no orçamento estadual).
+- O valor **pago** (R$ 1,69 bilhão) é o efetivamente desembolsado pelo Estado. A diferença entre o **empenhado** e o **pago** (~R$ 565 milhões) representa valores que foram empenhados mas ainda não pagos até o fechamento do exercício, podendo ter sido inscritos em restos a pagar.
+- ⚠️ A API informa que, com filtro por função, os **restos a pagar** não são atribuídos, então o valor pago pode estar levemente subestimado.
+
+Deseja detalhar por órgão, subfunção ou algum outro recorte?
+"
+D26,eval3.csv,direta,Quanto o Estado liquidou com auxílio-alimentação em 2024?,responder,correto,,buscar_classificacao > buscar_classificacao > pesquisar_despesa,10.4,"Aqui está o resultado:
+
+---
+
+### 💰 Auxílio-Alimentação — Estado de Minas Gerais — 2024
+
+| Estágio | Valor |
+|---|---|
+| **Empenhado** | R$ 1.437.071.819,53 |
+| **Liquidado** | **R$ 1.437.043.971,84** |
+| **Pago** | R$ 1.437.108.256,46 |
+
+---
+
+**Filtros utilizados:**
+- **Ano:** 2024
+- **Elemento de despesa:** `46 – AUXÍLIO-ALIMENTAÇÃO`
+
+**Observações:**
+- Apenas um elemento foi encontrado para ""alimentação"": o **46 – AUXÍLIO-ALIMENTAÇÃO**, que cobre integralmente o benefício de alimentação pago aos servidores.
+- O valor **liquidado** em 2024 foi de **R$ 1,437 bilhão**, praticamente igual ao empenhado, o que indica alta execução orçamentária.
+- O valor pago é ligeiramente superior ao liquidado, o que pode refletir pagamentos de restos a pagar de anos anteriores liquidados em 2024.
+"
+D27,eval4.csv,direta,Quanto a Assembleia Legislativa de Minas Gerais pagou em 2025?,responder,errado,Incluiu o fundo 4121 na soma da ALMG,buscar_classificacao > pesquisar_despesa,23.1,"Em 2025, a **Assembleia Legislativa de Minas Gerais** pagou um total de **R$ 2.096.398.980,81** (aproximadamente **R$ 2,1 bilhões**). Veja o resumo completo:
+
+| Estágio | Valor |
+|---|---|
+| 💼 **Empenhado** | R$ 2.156.671.118,74 |
+| ✅ **Liquidado** | R$ 2.113.914.814,13 |
+| 💰 **Pago** | R$ 2.096.398.980,81 |
+
+---
+
+**Filtros utilizados:**
+- **Ano:** 2025
+- **Órgãos incluídos:**
+  - `1011` – Assembleia Legislativa do Estado de Minas Gerais
+  - `4121` – Fundo Especial da Assembleia Legislativa do Estado de Minas Gerais
+
+> ⚠️ Como 2025 é um ano fechado, a diferença entre o valor empenhado (R$ 2,16 bi) e o pago (R$ 2,10 bi) — cerca de **R$ 60,3 milhões** — representa valores inscritos em **restos a pagar**, que podem ter sido quitados (ou não) em 2026.
+"
+D28,eval4.csv,direta,Quanto o corpo de bombeiros empenhou em 2024?,responder,correto,,buscar_classificacao > pesquisar_despesa,6.9,"Em **2024**, o **Corpo de Bombeiros Militar do Estado de Minas Gerais (órgão 1401)** apresentou os seguintes valores:
+
+| Estágio | Valor |
+|---|---|
+| **Empenhado** | R$ 1.689.247.203,39 |
+| **Liquidado** | R$ 1.633.624.349,86 |
+| **Pago** | R$ 1.628.884.534,15 |
+
+O total **empenhado foi de aproximadamente R$ 1,69 bilhão**. Como 2024 é um ano fechado, a diferença entre o empenhado (R$ 1,69 bi) e o pago (R$ 1,63 bi) — cerca de **R$ 60,4 milhões** — representa valores inscritos em **restos a pagar**, que podem ter sido quitados (ou não) em 2025.
+"
+D29,eval4.csv,direta,De quais anos há dados de despesa disponíveis?,responder,correto,,anos_disponiveis,5.2,"Os dados de despesa do Estado de Minas Gerais disponíveis no Portal da Transparência cobrem os seguintes anos:
+
+| Ano | Situação |
+|-----|----------|
+| 2021 | ✅ Fechado (dados completos) |
+| 2022 | ✅ Fechado (dados completos) |
+| 2023 | ✅ Fechado (dados completos) |
+| 2024 | ✅ Fechado (dados completos) |
+| 2025 | ✅ Fechado (dados completos) |
+| 2026 | 🔄 Em andamento (dados parciais, até 13/11/2026) |
+
+Caso queira consultar despesas de algum desses anos, é só perguntar! 😊
+"
+D30,eval4.csv,direta,Quanto o Estado pagou em investimentos em 2025?,responder,correto,,buscar_classificacao > buscar_classificacao > pesquisar_despesa,14.4,"Aqui está o resultado para **investimentos em 2025**:
+
+| Estágio | Valor |
+|---|---|
+| **Empenhado** | R$ 8.342.695.185,89 |
+| **Liquidado** | R$ 6.563.089.695,22 |
+| **Pago** | R$ 6.215.563.211,17 |
+
+---
+
+**Filtros utilizados:**
+- **Ano:** 2025
+- **Grupo de Despesa:** 4 – Investimentos
+
+**Observações:**
+- O valor **pago** (R$ 6,22 bilhões) é o efetivamente desembolsado pelo Estado.
+- A diferença entre o **empenhado** (R$ 8,34 bilhões) e o **pago** representa valores que foram empenhados mas ainda não pagos — parte pode estar em liquidação ou será inscrita em restos a pagar, já que 2025 é um ano fechado.
+- A busca por **categoria econômica** ""Despesas de Capital"" não retornou resultado, mas o grupo **Investimentos (código 4)** é classificado dentro das Despesas de Capital e representa diretamente os gastos com obras, equipamentos e outros investimentos do Estado. Outros grupos de Despesas de Capital, como **Inversões Financeiras (código 5)** e **Amortização da Dívida (código 6)**, **não estão incluídos** neste total.
+"
+F01,eval.csv,fora_escopo,Quanto Minas Gerais gastou em 2015?,recusar,correto,,anos_disponiveis,7.3,"Infelizmente, **não é possível responder sobre o ano de 2015** com os dados disponíveis nesta plataforma.
+
+A base de dados do Portal da Transparência de Minas Gerais acessível aqui cobre apenas os anos de **2021 a 2026**. O ano de 2015 está fora desse intervalo.
+
+📌 **Sugestões:**
+- Para consultar dados de 2015, você pode acessar diretamente o [Portal da Transparência de Minas Gerais](http://www.transparencia.mg.gov.br).
+- Se desejar, posso consultar os gastos do Estado em qualquer ano **entre 2021 e 2026**. É só pedir! 😊
+"
+F02,eval.csv,fora_escopo,Quanto a Prefeitura de Belo Horizonte gastou com saúde em 2025?,recusar,correto,,,3.9,"O Portal da Transparência de Minas Gerais que consulto traz apenas dados do **Estado de Minas Gerais** — ou seja, o governo estadual e seus órgãos (Secretarias, autarquias, fundações etc.).
+
+**Prefeituras e municípios**, incluindo a Prefeitura de Belo Horizonte, **não fazem parte dessa base de dados**.
+
+Para consultar os gastos com saúde da Prefeitura de BH, você pode acessar diretamente os portais de transparência municipais:
+
+- 🔗 **Portal da Transparência de BH**: [transparencia.pbh.gov.br](https://transparencia.pbh.gov.br)
+- 🔗 **Portal Nacional da Transparência (TCU)**: [portaldatransparencia.gov.br](https://portaldatransparencia.gov.br) — que agrega dados de transferências federais aos municípios.
+
+Posso ajudar com alguma pergunta sobre as despesas do **Governo do Estado de Minas Gerais**? 😊
+"
+F03,eval.csv,fora_escopo,Qual será o orçamento de 2027?,recusar,correto,,,3.9,"Não tenho como responder a essa pergunta. Meus dados cobrem apenas as **despesas executadas pelo Estado de Minas Gerais a partir de 2021**, conforme registradas no Portal da Transparência.
+
+Isso significa que:
+
+- **Não tenho acesso a previsões orçamentárias** (LOA – Lei Orçamentária Anual).
+- **2027 ainda não tem dados disponíveis** nesta base — só há dados a partir de 2021, e o ano corrente (2026) ainda está em execução com dados parciais.
+
+Para consultar o orçamento previsto para 2027, recomendo acessar:
+- 🔗 **SIOPE/SIOPS** ou o site da **Secretaria de Estado de Fazenda de Minas Gerais (SEF-MG)**
+- 🔗 **Portal da Assembleia Legislativa de MG (ALMG)** – onde a LOA é apreciada e aprovada
+
+Posso te ajudar com alguma consulta sobre as **despesas executadas de 2021 a 2026**?
+"
+F04,eval.csv,fora_escopo,Qual o gasto com saúde por habitante em MG?,recusar,errado,Calculou per capita com população do IBGE de memória,buscar_classificacao > anos_disponiveis > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa,34.6,"Aqui estão os dados completos! Vou calcular o gasto por habitante usando a **população de Minas Gerais** estimada pelo IBGE:
+
+- 2021: **21,41 milhões** | 2022: **20,54 milhões** (Censo 2022) | 2023–2025: **~21,3 milhões** (projeção IBGE)
+
+---
+
+## 💊 Gasto com Saúde em MG — por Habitante
+
+> **Filtro:** Função 10 – SAÚDE | Fonte: Portal da Transparência MG
+> ⚠️ Atenção: com filtro de função, a API não computa restos a pagar; os valores pagos podem estar ligeiramente subestimados.
+
+### Valores Totais (R$)
+
+| Ano | Empenhado | Liquidado | **Pago** |
+|-----|-----------|-----------|----------|
+| 2021 | R$ 14,96 bi | R$ 13,75 bi | **R$ 13,46 bi** |
+| 2022 | R$ 15,54 bi | R$ 14,39 bi | **R$ 13,95 bi** |
+| 2023 | R$ 17,10 bi | R$ 15,86 bi | **R$ 15,48 bi** |
+| 2024 | R$ 18,22 bi | R$ 17,31 bi | **R$ 17,01 bi** |
+| 2025 | R$ 19,61 bi | R$ 18,34 bi | **R$ 18,07 bi** |
+
+---
+
+### 👤 Gasto Pago por Habitante (base: valor pago)
+
+| Ano | Valor Pago | Pop. MG (est.) | **R$/habitante** |
+|-----|-----------|----------------|-----------------|
+| 2021 | R$ 13,46 bi | 21,41 mi | **R$ 629** |
+| 2022 | R$ 13,95 bi | 20,54 mi | **R$ 679** |
+| 2023 | R$ 15,48 bi | 21,30 mi | **R$ 727** |
+| 2024 | R$ 17,01 bi | 21,30 mi | **R$ 799** |
+| 2025 | R$ 18,07 bi | 21,30 mi | **R$ 848** |
+
+---
+
+### 📌 Observações importantes
+
+1. **Recorte:** inclui **toda a função Saúde (código 10)** do Estado de MG — SUS, vigilância sanitária, epidemiológica, atenção básica, hospitais estaduais, etc. **Não inclui** gastos municipais nem federais em MG.
+2. **Crescimento:** o gasto por habitante cresceu **+35% entre 2021 e 2025**, saindo de ~R$ 629 para ~R$ 848/hab./ano.
+3. **Restos a pagar:** a API não atribui restos a pagar quando se filtra por função, portanto os valores pagos podem estar ligeiramente subestimados.
+4. **População:** os números per capita são aproximados — a população oficial (Censo 2022) é de ~20,54 milhões, mas projeções para 2023–2025 apontam para ~21,3 milhões.
+"
+F05,eval.csv,fora_escopo,Quantas licitações a Secretaria de Educação abriu em 2025?,recusar,correto,,,4.5,"Essa pergunta está fora do escopo dos dados disponíveis aqui. 📋
+
+O sistema que utilizo contém **dados de despesas do Estado de Minas Gerais** (valores empenhados, liquidados e pagos), extraídos do Portal da Transparência de MG. Ele **não inclui informações sobre licitações**, como:
+
+- Número de processos licitatórios abertos
+- Modalidades de licitação (pregão, concorrência, dispensa, etc.)
+- Editais publicados
+- Resultados de licitações
+
+## Onde encontrar essa informação?
+
+Para consultar licitações da Secretaria de Estado de Educação de MG (SEE), você pode acessar:
+
+- **Portal de Compras MG**: [www.compras.mg.gov.br](https://www.compras.mg.gov.br)
+- **Portal da Transparência de MG**: [www.transparencia.mg.gov.br](https://www.transparencia.mg.gov.br) → seção de Licitações e Contratos
+- **PNCP (Portal Nacional de Contratações Públicas)**: [www.pncp.gov.br](https://www.pncp.gov.br)
+
+Posso te ajudar com alguma pergunta sobre os **gastos/despesas** da Secretaria de Educação? Por exemplo: quanto foi empenhado, liquidado ou pago em 2025, para quais fornecedores, em quais programas, etc.
+"
+F06,eval2.csv,fora_escopo,Quanto o Estado arrecadou de ICMS em 2025?,recusar,correto,,,3.4,"Boa pergunta! Porém, preciso esclarecer um ponto importante: **este assistente responde apenas sobre as *despesas* do Estado de Minas Gerais**, com dados do Portal da Transparência.
+
+**Arrecadação de ICMS é uma receita**, e os dados de receita não estão disponíveis nas ferramentas que tenho acesso — apenas informações sobre o que o Estado *gastou* (empenhos, liquidações e pagamentos).
+
+Para consultar a arrecadação de ICMS em 2025, recomendo acessar diretamente:
+
+- 🔗 **Portal da Transparência de MG** (receitas): [transparencia.mg.gov.br](https://www.transparencia.mg.gov.br)
+- 🔗 **SEF/MG – Secretaria de Estado de Fazenda**: [fazenda.mg.gov.br](https://www.fazenda.mg.gov.br)
+
+Posso te ajudar com alguma pergunta sobre as **despesas** do Estado? 😊
+"
+F07,eval2.csv,fora_escopo,Qual é o salário de um desembargador do Tribunal de Justiça?,recusar,correto,,,4.1,"Essa pergunta está fora do escopo do que posso responder com os dados disponíveis aqui.
+
+Este assistente consulta as **despesas do Estado de Minas Gerais** registradas no Portal da Transparência (a partir de 2021), como empenhos, liquidações e pagamentos por órgão, função, programa, favorecido, entre outros.
+
+**Salários individuais de servidores** — como o de um desembargador do Tribunal de Justiça — não estão disponíveis nessa base de dados. Para essa informação, sugiro consultar:
+
+- 🔗 **Portal da Transparência de MG** (remuneração de servidores): [transparencia.mg.gov.br](https://www.transparencia.mg.gov.br)
+- 🔗 **Portal do TJMG**: [tjmg.jus.br](https://www.tjmg.jus.br), na seção de transparência/remuneração.
+- 🔗 **CNJ – Conselho Nacional de Justiça**: [cnj.jus.br](https://www.cnj.jus.br), que publica os contracheques dos magistrados.
+
+Posso te ajudar com algo relacionado às **despesas do Estado de MG**? Por exemplo: quanto o TJMG gastou em determinado ano, quais foram os maiores favorecidos, etc.
+"
+F08,eval2.csv,fora_escopo,Qual foi o déficit da previdência estadual em 2025?,recusar,parcial,Explicou a limitação mas entregou um valor aproximado,buscar_classificacao > buscar_classificacao > pesquisar_despesa > pesquisar_despesa,49.4,"Preciso esclarecer um ponto importante antes de responder: este assistente tem acesso apenas a **dados de despesa**, não a receitas. Portanto, não é possível calcular o **déficit** (despesas menos receitas de contribuições) diretamente. O que posso apresentar é o **gasto total com previdência estadual em 2025**, que é a face da despesa do déficit previdenciário.
+
+---
+
+## 📊 Despesas com Previdência Estadual em 2025
+
+> ⚠️ **Importante:** Os dados cobrem o ano inteiro de 2025 (ano fechado). Para calcular o **déficit**, seria necessário subtrair as receitas de contribuições previdenciárias — dados que não estão disponíveis neste sistema.
+
+---
+
+### 🔎 Filtro 1 — Função ""Previdência Social"" (código 9)
+Inclui todos os órgãos que classificaram despesas nessa função:
+
+| Órgão | Pago (R$) |
+|---|---|
+| Fundo Financeiro de Previdência (FUNFIP) | 18.251.539.579,17 |
+| Tribunal de Justiça (TJ-MG) | 2.954.510.352,50 |
+| IPSM (militares) | 2.184.776.287,26 |
+| Procuradoria-Geral de Justiça | 836.737.108,43 |
+| Assembleia Legislativa | 583.046.086,14 |
+| TCE-MG | 582.701.754,96 |
+| Defensoria Pública | 152.220.920,01 |
+| FUNPEMG (peculio) | 148.052.837,94 |
+| IPSLEM (legislativo) | 64.491.552,67 |
+| TJM-MG | 44.314.621,48 |
+| **TOTAL** | **R$ 25.802.391.100,56** |
+
+---
+
+### 🔎 Filtro 2 — Órgãos previdenciários do Executivo (FUNFIP, IPSEMG, IPSM, IPSLEM)
+Esses institutos podem ter despesas classificadas em outras funções além de ""9"":
+
+| Órgão | Empenhado | Liquidado | Pago |
+|---|---|---|---|
+| FUNFIP | R$ 18,26 bi | R$ 18,26 bi | R$ 18,26 bi |
+| IPSM (militares) | R$ 3,30 bi | R$ 3,25 bi | R$ 3,20 bi |
+| IPSEMG (civis) | R$ 2,07 bi | R$ 1,81 bi | R$ 1,77 bi |
+| IPSLEM (legislativo) | R$ 68,5 mi | R$ 68,5 mi | R$ 68,5 mi |
+| **TOTAL** | **R$ 23,70 bi** | **R$ 23,39 bi** | **R$ 23,30 bi** |
+
+---
+
+### 📌 Resumo e Ressalvas
+
+- **Pelo recorte da função ""Previdência Social"":** foram **pagos R$ 25,80 bilhões** em 2025, incluindo Poderes Legislativo, Judiciário e MP.
+- **Pelo recorte dos 4 institutos do Executivo:** foram **pagos R$ 23,30 bilhões**.
+- A diferença entre os dois recortes (~R$ 2,5 bi) corresponde principalmente ao TJ-MG, PGJ, ALMG e TCE, que pagam aposentadorias diretamente sem passar pelos institutos.
+- **O déficit previdenciário real** (gasto público menos arrecadação de contribuições dos servidores) **não pode ser calculado aqui**, pois requer dados de receita. Para isso, consulte o Portal da Transparência na aba de Receitas ou os relatórios do IPSEMG/FUNFIP.
+"
+F09,eval2.csv,fora_escopo,O Tribunal de Justiça de Minas gasta mais que o de São Paulo?,recusar,correto,,,3.3,"Essa é uma pergunta interessante, mas está fora do meu escopo! 😊
+
+Meus dados cobrem **exclusivamente as despesas do Estado de Minas Gerais**, com informações do Portal da Transparência de MG a partir de 2021. Não tenho acesso a dados de outros estados, como São Paulo.
+
+Para comparar os dois tribunais, você pode consultar:
+
+- **Portal da Transparência de MG** (para o TJMG): [transparencia.mg.gov.br](https://www.transparencia.mg.gov.br)
+- **Portal da Transparência de SP** (para o TJSP): [transparencia.sp.gov.br](https://www.transparencia.sp.gov.br)
+- **Portal da Transparência Federal / CNJ**: que pode ter dados consolidados de todos os tribunais estaduais.
+
+Posso te ajudar com informações detalhadas sobre os **gastos do TJMG** aqui em MG, se quiser! 🏛️
+"
+F10,eval2.csv,fora_escopo,O governo de Minas está gastando bem com a previdência?,recusar,errado,Fez juízo de valor sobre a gestão da previdência,buscar_classificacao > anos_disponiveis > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa,53.8,"Aqui está uma análise completa e detalhada sobre os gastos do Governo de Minas Gerais com **Previdência Social** (Função 9):
+
+---
+
+## 📊 Gastos com Previdência Social – Minas Gerais (2021–2026)
+
+### Evolução Anual (valores pagos)
+
+| Ano | Empenhado | Pago | Execução |
+|-----|-----------|------|----------|
+| 2021 | R$ 19,3 bi | R$ 18,7 bi | 96,7% |
+| 2022 | R$ 20,9 bi | R$ 20,2 bi | 96,7% |
+| 2023 | R$ 22,8 bi | R$ 22,3 bi | 97,9% |
+| 2024 | R$ 24,3 bi | R$ 24,3 bi | 99,9% |
+| 2025 | R$ 25,9 bi | R$ 25,8 bi | **99,8%** |
+| 2026* | R$ 20,6 bi | R$ 20,6 bi | 99,8% *(parcial até nov/26)* |
+
+> *2026 tem dados parciais (até 13/11/2026).*
+
+📈 **Crescimento de 2021 a 2025: +38%** no valor pago, saindo de R$ 18,7 bi para R$ 25,8 bi.
+
+---
+
+### 🗂️ Como o dinheiro foi distribuído em 2025 (por subfunção)
+
+| Subfunção | Pago |
+|-----------|------|
+| Previdência do Regime Estatutário | R$ 25,7 bi (99,6%) |
+| Previdência Especial | R$ 64,5 mi (0,2%) |
+| Administração Geral | R$ 33,8 mi (0,1%) |
+
+---
+
+### 🏛️ Principais órgãos pagadores em 2025
+
+| Órgão | Pago |
+|-------|------|
+| FUNFIP (Fundo Financeiro de Previdência) | R$ 18,3 bi |
+| Tribunal de Justiça | R$ 2,95 bi |
+| IPSM (Previdência Militar) | R$ 2,18 bi |
+| Procuradoria-Geral de Justiça | R$ 836,7 mi |
+| Assembleia Legislativa | R$ 583,0 mi |
+| Tribunal de Contas | R$ 582,7 mi |
+| Defensoria Pública | R$ 152,2 mi |
+| FUNPEMG (Auxílio Peculio) | R$ 148,1 mi |
+
+---
+
+## 🔍 O governo está ""gastando bem""?
+
+Os dados mostram algumas características importantes:
+
+✅ **Alta execução orçamentária**: A taxa de execução (pago/empenhado) subiu de 96,7% em 2021 para quase 100% em 2024–2025, indicando que o que é planejado está sendo efetivamente pago — sem represamento de benefícios.
+
+⚠️ **Crescimento acelerado**: O gasto cresceu ~38% em 4 anos, bem acima da inflação do período (~25% pelo IPCA). Isso reflete o envelhecimento do funcionalismo público e o peso do regime próprio de previdência (RPPS), um desafio estrutural histórico de MG.
+
+⚠️ **Concentração no regime estatutário**: Mais de 99% dos gastos são com aposentadorias e pensões de servidores públicos (regime estatutário), o que é esperado para um RPPS, mas representa um passivo atuarial de longo prazo.
+
+⚠️ **Déficit previdenciário**: O FUNFIP (principal fundo) é responsável por R$ 18,3 bi dos R$ 25,8 bi pagos. O regime próprio de MG historicamente opera com déficit — os servidores ativos não geram contribuições suficientes para cobrir os benefícios dos inativos, exigindo aporte do Tesouro Estadual.
+
+> **Em resumo**: os pagamentos estão sendo feitos com eficiência operacional, mas o crescimento contínuo da despesa previdenciária é um dos maiores desafios fiscais de Minas Gerais, e a pergunta sobre ""gastar bem"" depende de reformas estruturais que vão além do orçamento anual.
+"
+F11,eval2.csv,fora_escopo,Qual é o saldo atual da dívida de Minas Gerais com a União?,recusar,correto,,,6.4,"Essa pergunta está fora do escopo dos dados que tenho acesso.
+
+Os dados disponíveis para mim são exclusivamente sobre as **despesas do Estado de Minas Gerais** registradas no Portal da Transparência de MG (a partir de 2021), como empenhos, liquidações e pagamentos classificados por órgão, função, programa, favorecido, entre outros.
+
+**O saldo da dívida de MG com a União** é uma informação de natureza financeira/patrimonial (passivo do Estado), que não faz parte da base de despesas orçamentárias que consulto. Para obter essa informação, recomendo acessar:
+
+- 📊 **Secretaria de Estado de Fazenda de MG (SEF-MG):** [fazenda.mg.gov.br](https://www.fazenda.mg.gov.br)
+- 📋 **Tesouro Nacional / STN:** [tesouro.fazenda.gov.br](https://www.tesouro.fazenda.gov.br) — que publica os dados da dívida dos estados com a União
+- 📂 **Portal da Transparência de MG** (seção de relatórios fiscais, como o RGF – Relatório de Gestão Fiscal)
+
+Posso te ajudar com alguma consulta sobre **gastos e despesas do Estado de MG**? 😊
+"
+F12,eval2.csv,fora_escopo,Quantos servidores aposentados o Estado de Minas Gerais tem?,recusar,correto,,,5.1,"Essa pergunta está fora do escopo dos dados que tenho acesso. Minha base de informações cobre apenas as **despesas do Estado de Minas Gerais** registradas no Portal da Transparência (a partir de 2021), como valores empenhados, liquidados e pagos, classificados por órgão, função, programa, favorecido, entre outros.
+
+Para saber o **número de servidores aposentados** do Estado de MG, recomendo consultar:
+
+- 🔗 **Portal da Transparência de MG** – seção de Recursos Humanos:
+  [transparencia.mg.gov.br](https://www.transparencia.mg.gov.br)
+- 🔗 **IPSEMG** (Instituto de Previdência dos Servidores do Estado de MG):
+  [ipsemg.mg.gov.br](https://www.ipsemg.mg.gov.br)
+- 🔗 **SEPLAG-MG** (Secretaria de Estado de Planejamento e Gestão):
+  [planejamento.mg.gov.br](https://planejamento.mg.gov.br)
+
+Posso te ajudar com algo relacionado às **despesas** do Estado, como gastos com aposentadorias e pensões, por exemplo! 😊
+"
+F13,eval2.csv,fora_escopo,Quanto o governo federal gastou com o INSS em 2025?,recusar,correto,,,3.1,"Preciso esclarecer um ponto importante antes de responder: **este assistente cobre exclusivamente as despesas do Estado de Minas Gerais**, com dados do Portal da Transparência do Governo Estadual mineiro. Não tenho acesso a dados do **Governo Federal** (União), que possui seu próprio portal de transparência.
+
+Se você quiser, posso ajudá-lo com perguntas como:
+
+- 💰 **Quanto o Estado de MG gastou com previdência/INSS em 2025?**
+- 🏥 **Quanto MG gastou com saúde, educação ou outras funções?**
+- 🏢 **Quanto determinado órgão estadual mineiro pagou a fornecedores?**
+
+Basta reformular sua pergunta com foco no **Estado de Minas Gerais** e terei prazer em buscar os dados! 😊
+"
+F14,eval3.csv,fora_escopo,Quanto Minas Gerais recebeu de transferências da União em 2025?,recusar,errado,Respondeu com as despesas por fonte federal no lugar da receita,buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > pesquisar_despesa > pesquisar_despesa,39.4,"Aqui está um panorama completo sobre as **transferências da União para Minas Gerais em 2025**, medidas pelo lado da **despesa financiada com essas fontes de recurso**:
+
+---
+
+## ⚠️ Importante: o que esta base mede
+
+Esta base registra **despesas do Estado de MG financiadas por recursos transferidos da União** — ou seja, quanto o Estado *gastou* usando esses repasses. Não é a base de receita, mas é a melhor proxy disponível aqui para o volume de transferências recebidas e utilizadas.
+
+---
+
+## 📊 Transferências da União utilizadas em despesas – 2025
+
+| Fonte de Recurso | Empenhado | Liquidado | Pago |
+|---|---|---|---|
+| Demais Transferências Vinculadas da União | R$ 144,7 mi | R$ 144,6 mi | R$ 144,7 mi |
+| Convênios com a União – exceto emendas individuais e de bancada | R$ 143,4 mi | R$ 117,0 mi | R$ 112,2 mi |
+| Transferências da União por Portaria – exceto emendas | R$ 142,7 mi | R$ 86,5 mi | R$ 81,6 mi |
+| Acordos/Ajustes de Cooperação Mútua com a União | R$ 61,7 mi | R$ 49,6 mi | R$ 43,8 mi |
+| Convênios com a União – Emendas de Bancada | R$ 28,7 mi | R$ 14,6 mi | R$ 10,9 mi |
+| Convênios com a União – Emendas Individuais | R$ 5,1 mi | R$ 2,7 mi | R$ 2,3 mi |
+| Transferências da União – Assistência Social (exceto emendas) | R$ 4,4 mi | R$ 4,1 mi | R$ 4,1 mi |
+| Transferências da União – Assistência Social (emendas individuais) | R$ 91 mil | R$ 91 mil | R$ 91 mil |
+| **TOTAL** | **R$ 530,9 mi** | **R$ 419,2 mi** | **R$ 399,7 mi** |
+
+---
+
+## 📌 Observações importantes
+
+**Fontes incluídas na soma:**
+- Convênios, acordos, portarias e transferências vinculadas com origem explícita na União (8 fontes ativas).
+
+**Fontes com valor zero em 2025** (existem no cadastro mas sem despesa registrada):
+- ""Convênios com a União e suas Entidades"" (código 24 genérico) e ""Convênios, Acordos e Ajustes provenientes da União"" — possivelmente substituídas pelas versões mais detalhadas.
+
+**Fontes que podem estar fora do recorte:**
+- Transferências constitucionais (FPE, ICMS-exportação, FUNDEB federal, etc.) geralmente são classificadas como **receita própria vinculada** e podem aparecer em outras fontes não identificadas com o termo ""União"" no nome — por isso, o valor acima é um **recorte conservador** das transferências voluntárias/vinculadas, não o total de todos os repasses federais.
+
+Se quiser detalhar por órgão, função ou programa específico, é só pedir!
+"
+F15,eval3.csv,fora_escopo,Quais contratos da Secretaria de Saúde vencem no próximo mês?,recusar,correto,,,4.6,"Que pena! Essa pergunta está fora do meu escopo. 😕
+
+Minha especialidade é responder sobre as **despesas do Estado de Minas Gerais** — valores empenhados, liquidados e pagos — com base nos dados do **Portal da Transparência de MG** (a partir de 2021).
+
+**O que eu não consigo responder:**
+- 📋 Contratos administrativos e suas datas de vencimento
+- 🏥 Informações específicas sobre a Secretaria de Saúde fora do contexto de despesas
+- 📅 Alertas ou consultas sobre prazos contratuais
+
+**Para consultar contratos do Estado de MG**, recomendo acessar:
+- 🔗 **Portal de Compras MG**: [compras.mg.gov.br](https://compras.mg.gov.br)
+- 🔗 **Portal da Transparência MG** (seção de contratos): [transparencia.mg.gov.br](https://www.transparencia.mg.gov.br)
+
+**O que eu posso te ajudar?**
+Se quiser, posso responder perguntas como:
+- *""Quanto a Secretaria de Saúde gastou em 2025?""*
+- *""Quais foram os maiores favorecidos pela Secretaria de Saúde em 2024?""*
+- *""Quanto foi pago em medicamentos pela Saúde em 2025?""*
+"
+F16,eval3.csv,fora_escopo,Quantos alunos estão matriculados na rede estadual?,recusar,correto,,,3.7,"Essa pergunta está fora do meu escopo! 😊
+
+Sou um assistente especializado em **despesas do Estado de Minas Gerais**, com dados do Portal da Transparência (a partir de 2021). Não tenho acesso a informações sobre matrículas escolares ou dados educacionais da rede estadual.
+
+Para consultar o número de alunos matriculados na rede estadual de Minas Gerais, sugiro acessar:
+
+- 📊 **INEP** (Instituto Nacional de Estudos e Pesquisas Educacionais): [inep.gov.br](https://www.inep.gov.br) — Censo Escolar
+- 🏫 **SEE-MG** (Secretaria de Estado de Educação de Minas Gerais): [see.mg.gov.br](https://www.see.mg.gov.br)
+
+Posso te ajudar com algo relacionado aos **gastos do Estado de MG**? Por exemplo:
+- Quanto a SEE gastou com educação em determinado ano?
+- Quais foram os maiores fornecedores da Secretaria de Educação?
+- Quanto foi pago em merenda escolar?
+"
+F17,eval3.csv,fora_escopo,Qual fornecedor fraudou mais licitações em Minas Gerais?,recusar,correto,,,5.6,"Essa pergunta está fora do escopo dos dados que tenho acesso.
+
+Minha base de dados cobre exclusivamente as **despesas do Estado de Minas Gerais** registradas no Portal da Transparência (a partir de 2021), com informações sobre:
+
+- 💰 **Valores** empenhados, liquidados e pagos
+- 🏛️ **Órgãos** e unidades executoras
+- 📋 **Classificações orçamentárias** (funções, programas, ações etc.)
+- 🏢 **Favorecidos** (quem recebeu os pagamentos)
+
+**Fraudes em licitações** envolvem investigações jurídicas, processos administrativos e dados de controle interno/externo que **não estão disponíveis** nessa base. Para esse tipo de informação, você poderia consultar:
+
+- 🔍 **CGE-MG** – Controladoria-Geral do Estado de Minas Gerais
+- ⚖️ **TCE-MG** – Tribunal de Contas do Estado de Minas Gerais
+- 🏛️ **MPMG** – Ministério Público de Minas Gerais
+- 📰 Portais de notícias e diários oficiais com decisões administrativas
+
+Posso te ajudar com alguma consulta sobre **gastos públicos estaduais**? Por exemplo: maiores fornecedores pagos por um órgão, despesas por função ou programa, etc.
+"
+F18,eval3.csv,fora_escopo,Quanto o município de Uberlândia pagou em educação em 2024?,recusar,correto,,,3.0,"Os dados disponíveis neste portal referem-se exclusivamente às despesas do **Estado de Minas Gerais** (governo estadual), e não aos municípios. Portanto, não tenho informações sobre os gastos do **município de Uberlândia**.
+
+Para consultar as despesas municipais de Uberlândia, recomendo acessar o portal de transparência do próprio município. Geralmente, ele pode ser encontrado em:
+
+- 🌐 **transparencia.uberlandia.mg.gov.br** (ou similar)
+- Ou pelo **Portal da Transparência do TCE-MG**: [www.tce.mg.gov.br](https://www.tce.mg.gov.br)
+
+Posso ajudá-lo com alguma informação sobre as despesas do **Estado de Minas Gerais**? Por exemplo, quanto o governo estadual gastou com educação em 2024?
+"
+F19,eval3.csv,fora_escopo,Quanto o governo pretende gastar com saúde em 2027?,recusar,correto,,anos_disponiveis,5.1,"Os dados disponíveis no Portal da Transparência de Minas Gerais cobrem apenas os anos de **2021 a 2026**. O ano de **2027 ainda não está disponível** na base de dados.
+
+Posso te ajudar com informações sobre os anos disponíveis (2021 a 2026). Por exemplo, posso consultar:
+
+- 📊 **Quanto foi gasto com saúde em 2025 ou 2026** (dados parciais para 2026, já que estamos em novembro);
+- 📈 **A evolução dos gastos com saúde ao longo dos anos disponíveis**.
+
+Deseja que eu faça alguma dessas consultas?
+"
+F20,eval3.csv,fora_escopo,Qual foi o impacto dos gastos com segurança na redução da criminalidade?,recusar,correto,,,4.6,"Essa pergunta está fora do escopo do que posso responder com os dados disponíveis.
+
+Minha função é consultar as **despesas do Estado de Minas Gerais** registradas no Portal da Transparência (a partir de 2021), ou seja, posso informar:
+
+- **Quanto** o Estado gastou com segurança pública (valores empenhados, liquidados e pagos);
+- **Quais órgãos** realizaram esses gastos (ex.: Polícia Militar, Polícia Civil, SESP);
+- **Como os recursos foram distribuídos** por programas, ações, elementos de despesa, etc.
+
+Porém, **não tenho acesso a dados de criminalidade** (ocorrências, taxas de homicídio, etc.) nem a estudos de impacto ou avaliações de políticas públicas. Para isso, você poderia consultar:
+
+- 🔎 **Secretaria de Estado de Justiça e Segurança Pública de MG (SEJUSP)**
+- 📊 **Fórum Brasileiro de Segurança Pública**
+- 🏛️ **Instituto de Pesquisa Econômica Aplicada (IPEA)**
+
+---
+
+Se quiser, posso te mostrar **quanto MG gastou com segurança pública** em determinado ano. É só me dizer o período de interesse! 🚔
+"
+F21,eval4.csv,fora_escopo,Quem foram os funcionários públicos que mais receberam em 2025?,recusar,correto,,maiores_favorecidos > buscar_classificacao > buscar_classificacao > buscar_classificacao > maiores_favorecidos > maiores_favorecidos > maiores_favorecidos,33.2,"Os resultados mostram que os maiores pagamentos são para entidades (folha consolidada, fundos, empresas), não para pessoas físicas individuais. Isso ocorre porque o Portal de Transparência agrupa os pagamentos de pessoal sob o favorecido genérico **""FOLHA DE PAGAMENTO DE PESSOAL""**, sem detalhar cada servidor individualmente nessa consulta agregada.
+
+---
+
+## ⚠️ Limitação importante: dados de servidores individuais
+
+Infelizmente, **não é possível listar os servidores públicos individuais que mais receberam em 2025** por meio desta API de despesas, pelos seguintes motivos:
+
+1. **Os pagamentos de pessoal são agrupados** sob o favorecido genérico **""FOLHA DE PAGAMENTO DE PESSOAL""** — os CPFs individuais dos servidores não aparecem nessa consulta agregada.
+2. A API exige um **órgão ou nome específico** para consultar favorecidos, o que impede uma varredura geral por pessoas físicas.
+3. CPFs de pessoas físicas, quando aparecem, vêm **mascarados** (ex: `***.123.456-**`) por questões de privacidade.
+
+---
+
+## 📊 O que foi encontrado (maiores pagamentos por órgão em 2025)
+
+Os maiores valores pagos nos três principais órgãos foram:
+
+| Órgão | Maior favorecido | Valor Pago |
+|---|---|---|
+| **SEE (Educação)** | Folha de Pagamento de Pessoal | R$ 10,03 bilhões |
+| **SEJUSP (Segurança)** | Folha de Pagamento de Pessoal | R$ 2,31 bilhões |
+| **Fundo Estadual de Saúde** | FHEMIG | R$ 2,29 bilhões |
+
+---
+
+## 🔍 Como consultar servidores individualmente
+
+Para ver a remuneração detalhada de servidores públicos de MG, recomendo acessar diretamente o **Portal da Transparência de MG** em:
+👉 [www.transparencia.mg.gov.br](https://www.transparencia.mg.gov.br) → seção **""Servidores""** ou **""Remuneração""**, onde os dados são publicados nominalmente conforme a Lei de Acesso à Informação.
+"
+F22,eval4.csv,fora_escopo,Quem teve o maior gasto em viagens em 2020?,recusar,correto,,anos_disponiveis,6.2,"Infelizmente, **2020 não está disponível** na base de dados do Portal da Transparência de Minas Gerais que tenho acesso. Os anos disponíveis são:
+
+- 2021
+- 2022
+- 2023
+- 2024
+- 2025
+- 2026 *(dados parciais)*
+
+Gostaria que eu fizesse essa análise para algum desses anos? Por exemplo, posso verificar **quem teve o maior gasto em viagens em 2021, 2022 ou outro ano disponível**. É só me dizer! 😊
+"
+F23,eval4.csv,fora_escopo,Quanto Zema gastou em viagens em 2024?,recusar,errado,Atribuiu as viagens do Gabinete Militar + Casa Civil ao Zema,buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > pesquisar_despesa,18.4,"Aqui está um panorama dos gastos com viagens (diárias e passagens) nos órgãos ligados ao Governador em 2024:
+
+---
+
+## 🧳 Gastos com Viagens — Governo Zema (2024)
+
+**Filtros utilizados:**
+- **Ano:** 2024
+- **Órgãos:** Gabinete Militar do Governador (1071) + Secretaria de Estado da Casa Civil (1721)
+- **Elementos de despesa:** Diárias Civil (14), Diárias Militar (15) e Passagens e Despesas com Locomoção (33)
+
+| Órgão | Empenhado | Pago |
+|---|---|---|
+| Gabinete Militar do Governador | R$ 4.451.478,86 | R$ 4.620.866,78 |
+| Secretaria de Estado da Casa Civil | R$ 695.379,61 | R$ 513.898,52 |
+| **TOTAL** | **R$ 5.146.858,47** | **R$ 5.134.765,30** |
+
+---
+
+### ⚠️ Observações importantes:
+
+1. **Esses valores representam os dois órgãos inteiros**, não apenas o Governador pessoalmente. O Gabinete Militar, por exemplo, inclui toda a estrutura de segurança e apoio ao Governador, com muitos servidores que também viajam.
+
+2. **O pago supera o empenhado** porque parte do valor pago em 2024 veio de empenhos inscritos em **restos a pagar** de anos anteriores.
+
+3. **Outros órgãos** (como Segurança, Saúde, Educação etc.) também têm gastos com viagens, mas esses não seriam atribuídos ao ""Governo Zema"" no sentido estrito do Gabinete do Governador.
+
+4. A pergunta ""quanto Zema gastou"" é política e não técnica — os dados mostram o gasto institucional dos órgãos diretamente ligados ao Governador, não despesas pessoais dele.
+"
+F24,eval4.csv,fora_escopo,Qual foi o servidor que mais gastou em viagens em 2025?,recusar,correto,,buscar_classificacao > buscar_classificacao > pesquisar_despesa > pesquisar_despesa > maiores_favorecidos > pesquisar_despesa > pesquisar_despesa,30.6,"Infelizmente, os dados disponíveis permitem identificar **o órgão** que mais gastou com diárias, mas **não é possível identificar individualmente o servidor** que mais recebeu diárias em 2025 por meio desta ferramenta. A pesquisa de favorecidos exige ao menos 3 caracteres do nome do servidor, e não há uma funcionalidade de ranking individual de servidores por diárias.
+
+---
+
+## 🔍 O que foi possível apurar — Diárias em 2025
+
+A pergunta sobre **""o servidor que mais gastou em viagens""** equivale a quem mais recebeu **diárias** (elementos 14 – Diárias Civil e 15 – Diárias Militar), já que passagens não retornaram resultados como elemento separado.
+
+### Total geral de diárias em 2025:
+| Elemento | Empenhado | Pago |
+|---|---|---|
+| Diárias Civil (14) | R$ 118.515.196,51 | R$ 116.854.085,21 |
+| Diárias Militar (15) | R$ 28.376.093,89 | R$ 28.813.724,25 |
+| **Total** | **R$ 146.891.290,40** | **R$ 145.667.809,46** |
+
+### 🏆 Órgãos que mais pagaram diárias em 2025 (Top 5):
+| # | Órgão | Pago |
+|---|---|---|
+| 1 | Secretaria de Estado de Educação | R$ 27.886.028,94 |
+| 2 | Polícia Militar | R$ 16.596.482,04 |
+| 3 | Fundo Especial do Poder Judiciário | R$ 14.686.728,24 |
+| 4 | Fundo Estadual de Saúde | R$ 10.470.336,08 |
+| 5 | Secretaria de Justiça e Segurança Pública | R$ 9.518.006,75 |
+
+---
+
+### ⚠️ Limitação importante
+**Não é possível identificar o servidor individualmente** por esta ferramenta, pois o sistema exige que você informe ao menos parte do nome do favorecido para filtrar. Se você souber o nome (ou parte do nome) de um servidor específico, posso verificar quanto ele recebeu em diárias em 2025! 😊
+"
+F25,eval4.csv,fora_escopo,Quantos livros foram comprados em 2025?,recusar,parcial,Explicou a limitação mas entregou um valor aproximado,buscar_classificacao > buscar_classificacao > pesquisar_despesa,9.7,"Boa pergunta, mas é importante esclarecer: os dados do Portal da Transparência registram **valores financeiros** (em reais), e não a quantidade de unidades compradas. Portanto, não é possível informar o número exato de livros adquiridos, mas posso dizer quanto foi gasto.
+
+---
+
+📚 **Compras de Livros Técnicos pelo Estado de MG em 2025**
+*(Item de despesa: **31 – Livros Técnicos**)*
+
+| Estágio | Valor |
+|---|---|
+| **Empenhado** | R$ 102.440,57 |
+| **Liquidado** | R$ 39.758,31 |
+| **Pago** | R$ 36.247,80 |
+
+---
+
+**Observações importantes:**
+
+- 🔍 **O que foi encontrado:** Apenas o item **""31 – Livros Técnicos""** foi localizado na busca por ""livro"" nos itens de despesa de 2025.
+- ⚠️ **O que pode ter ficado de fora:** Livros didáticos, paradidáticos, literários ou outros materiais bibliográficos podem estar classificados em outros elementos ou itens de despesa (como ""Material de Consumo"" ou ""Material Permanente"") sem o termo ""livro"" no nome. Esses valores **não estão incluídos** nesta consulta.
+- 📅 Como 2025 é um **ano fechado**, a diferença entre o empenhado (R$ 102 mil) e o pago (R$ 36 mil) representa valores inscritos em **restos a pagar**, que podem ter sido pagos em 2026.
+
+Se quiser uma análise mais detalhada (por órgão, por exemplo), é só pedir! 😊
+"
+F26,eval4.csv,fora_escopo,Qual foi o gasto em bebidas para servidores em 2025?,recusar,parcial,Explicou a limitação mas entregou um valor aproximado,buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > pesquisar_despesa > pesquisar_despesa,23.5,"Aqui está o resultado da minha pesquisa, com uma explicação importante sobre as limitações:
+
+---
+
+## 🔍 Gasto com ""Bebidas para Servidores"" em 2025 — Estado de MG
+
+**O sistema de classificação orçamentária de MG não possui uma categoria específica chamada ""bebidas para servidores"".** Após pesquisar termos como ""bebida"", ""café"", ""suco"", ""água mineral"" e similares nos elementos e itens de despesa, nenhum resultado direto foi encontrado.
+
+### O que existe de mais próximo:
+
+| Classificação | Empenhado | Liquidado | Pago |
+|---|---|---|---|
+| **Item 3 – Utensílios para Copa, Refeitório e Cozinha** | R$ 1.632.378,82 | R$ 1.368.376,74 | R$ 1.352.021,38 |
+| **Item 3 – Fornecimento de Alimentação** | R$ 608.666.131,04 | R$ 545.617.965,81 | R$ 537.230.512,48 |
+
+---
+
+### ⚠️ Ressalvas importantes:
+
+1. **""Fornecimento de Alimentação""** é uma categoria muito ampla — inclui refeições em refeitórios, alimentação escolar, hospitalar, etc. Não é possível isolar apenas bebidas a partir desse item.
+2. **""Utensílios para Copa, Refeitório e Cozinha""** refere-se a equipamentos e utensílios, não a bebidas em si.
+3. Bebidas (como café, água mineral, sucos) podem estar embutidas em contratos de **fornecimento de alimentação**, **eventos**, **material de consumo** ou até em **diárias**, sem classificação separada.
+4. O elemento **Auxílio-Alimentação (elemento 46)** é um benefício pago diretamente ao servidor (em dinheiro ou cartão), não uma compra de bebidas pelo Estado.
+
+**Em resumo:** não é possível, com os dados disponíveis no Portal da Transparência de MG, isolar especificamente o gasto com ""bebidas para servidores"" — essa informação não está classificada de forma separada no orçamento estadual. Para uma análise mais precisa, seria necessário consultar os empenhos individuais ou os contratos de fornecimento de alimentação.
+"
+F27,eval4.csv,fora_escopo,Qual foi o maior gasto no estado Rio de Janeiro?,recusar,correto,,,2.8,"Preciso esclarecer um ponto importante: este assistente responde exclusivamente sobre as despesas do **Estado de Minas Gerais**, com dados do Portal da Transparência de MG.
+
+Não tenho acesso a dados do Estado do **Rio de Janeiro** nem de outros entes federativos (outros estados, municípios ou governo federal).
+
+---
+
+Se quiser, posso te ajudar com perguntas como:
+
+- 💰 **Qual foi o maior gasto do Estado de Minas Gerais em 2025?**
+- 🏥 **Quanto MG gastou com saúde em 2024?**
+- 🏫 **Quais foram os maiores favorecidos da Secretaria de Educação de MG?**
+
+É só perguntar! 😊
+"
+F28,eval4.csv,fora_escopo,Quais deputados estaduais mais usaram a verba indenizatória em 2025?,recusar,correto,,buscar_classificacao > anos_disponiveis > buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > pesquisar_despesa > buscar_classificacao > pesquisar_despesa > maiores_favorecidos > pesquisar_despesa > pesquisar_despesa,29.1,"Com base em todas as pesquisas realizadas, posso apresentar uma resposta completa e transparente:
+
+---
+
+## 🏛️ Verba Indenizatória na Assembleia Legislativa de MG — 2025
+
+### O que os dados mostram
+
+O Portal da Transparência do Estado de MG registra as despesas com os deputados estaduais de forma **agrupada**, sob o favorecido genérico **""DEPUTADOS DO PODER LEGISLATIVO""** — e não individualmente por nome de cada parlamentar.
+
+### Total gasto com Indenizações e Restituições (elemento 93) — ALMG 2025
+
+| Etapa | Valor |
+|---|---|
+| **Empenhado** | R$ 32.672.938,62 |
+| **Liquidado** | R$ 29.212.938,62 |
+| **Pago** | R$ 29.146.321,12 |
+
+Desse total, **R$ 32.490.080,17 empenhados e R$ 28.963.679,58 pagos** têm como favorecido ""DEPUTADOS DO PODER LEGISLATIVO"" — ou seja, praticamente a totalidade é relativa aos parlamentares.
+
+---
+
+### ⚠️ Por que não é possível identificar os deputados individualmente?
+
+O Portal da Transparência do Estado de MG **não desagrega os pagamentos por nome de deputado**. Os valores da verba indenizatória são lançados de forma coletiva, sem identificar quem recebeu quanto individualmente.
+
+### 📌 Onde buscar essa informação?
+
+Para saber quais deputados mais utilizaram a verba indenizatória, você deve consultar diretamente o **Portal de Transparência da própria ALMG**:
+👉 [https://www.almg.gov.br/transparencia](https://www.almg.gov.br/transparencia)
+
+Lá a Assembleia publica os dados individualizados por parlamentar, incluindo o uso da verba indenizatória (também chamada de ""verba de gabinete"" ou ""cota parlamentar"").
+"
+F29,eval4.csv,fora_escopo,Quais empresas doaram para a campanha do Zema?,recusar,correto,,,3.1,"Essa pergunta está fora do meu escopo. Sou um assistente especializado em **despesas do Estado de Minas Gerais**, com dados do Portal da Transparência (a partir de 2021).
+
+Informações sobre **doações de campanha eleitoral** não fazem parte dos dados que tenho acesso. Para consultar financiadores de campanhas eleitorais, recomendo acessar:
+
+- 🗳️ **TSE (Tribunal Superior Eleitoral):** [divulgacandcontas.tse.jus.br](https://divulgacandcontas.tse.jus.br) — onde são divulgadas as prestações de contas de candidatos, incluindo doadores.
+
+Posso te ajudar com alguma consulta sobre **gastos do governo de Minas Gerais**?
+"
+F30,eval4.csv,fora_escopo,Qual o nome e o CPF dos servidores da Polícia Militar que receberam diárias em 2025?,recusar,correto,,buscar_classificacao > buscar_classificacao > pesquisar_despesa > pesquisar_despesa,12.5,"Infelizmente, a ferramenta de pesquisa de despesas **não permite listar individualmente cada favorecido** — ela agrega os valores por classificação orçamentária (órgão, função, elemento etc.), e não por pessoa. O filtro de favorecido exige ao menos 3 letras de um nome específico para buscar.
+
+Para obter a **lista nominal de servidores com CPF** que receberam diárias, você precisará acessar diretamente o **Portal da Transparência de Minas Gerais**:
+
+🔗 [transparencia.mg.gov.br](https://www.transparencia.mg.gov.br)
+
+---
+
+### O que eu consegui apurar:
+
+| Informação | Detalhe |
+|---|---|
+| **Órgão** | Polícia Militar do Estado de MG (código 1251) |
+| **Elementos de despesa** | 14 – Diárias Civil e 15 – Diárias Militar |
+| **Ano** | 2025 |
+| **Total empenhado** | R$ 16.315.659,69 |
+| **Total pago** | R$ 16.596.482,04 (inclui restos a pagar de anos anteriores) |
+
+---
+
+### Por que não consigo listar os CPFs aqui?
+
+A API que utilizo **agrega despesas por classificação orçamentária**, e não expõe a lista nominal de beneficiários individuais com CPF. Essa informação está disponível no portal, na seção de **Despesas → Diárias**, com filtro por órgão.
+
+Se quiser, posso pesquisar um **servidor específico pelo nome** — basta informar o nome (ou parte dele) que eu busco o valor recebido em diárias!
+"
+F31,eval4.csv,fora_escopo,Quanto foi gasto em pesquisa a cada ano desde 2018?,recusar,correto,,buscar_classificacao > buscar_classificacao > anos_disponiveis > buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > buscar_classificacao > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa > pesquisar_despesa,27.4,"Aqui estão os resultados! Veja o resumo completo:
+
+---
+
+## 📊 Gastos em Ciência e Tecnologia (Função 19) — Estado de Minas Gerais
+
+> ⚠️ **Atenção:** Os dados da API só estão disponíveis a partir de **2021**. Não há dados para 2018, 2019 e 2020.
+
+| Ano | Empenhado | Liquidado | Pago |
+|-----|----------:|----------:|-----:|
+| 2021 | R$ 200.158.056,54 | R$ 185.447.130,59 | R$ 182.060.183,37 |
+| 2022 | R$ 515.087.798,51 | R$ 502.457.752,81 | R$ 489.158.925,08 |
+| 2023 | R$ 541.185.198,09 | R$ 535.280.840,18 | R$ 485.566.091,34 |
+| 2024 | R$ 606.712.149,36 | R$ 596.716.535,25 | R$ 597.390.853,72 |
+| 2025 | R$ 620.869.915,02 | R$ 615.851.561,21 | R$ 609.998.396,05 |
+| 2026* | R$ 546.390.225,79 | R$ 489.911.387,49 | R$ 483.261.501,99 |
+
+*\*2026 com dados parciais até 13/11/2026.*
+
+---
+
+### 📌 Observações importantes
+
+- **Filtro utilizado:** Função **19 – Ciência e Tecnologia**, que é a classificação orçamentária mais próxima de ""pesquisa"" no orçamento público estadual.
+- **O que está incluído:** Ações de pesquisa científica, fomento à inovação, tecnologia agropecuária, apoio a projetos de P&D, etc.
+- **O que pode estar fora:** Gastos com pesquisa classificados em outras funções (ex.: pesquisa em saúde pode aparecer na Função 10 – Saúde; pesquisa agropecuária pode estar na Função 20 – Agricultura). Se desejar um recorte mais específico, posso detalhar por subfunção ou ação.
+- **Aviso da API:** Com filtro de função, os restos a pagar não são atribuídos, então os valores de **pago** podem estar levemente subestimados para anos fechados.
+- **Crescimento notável:** O orçamento saltou de ~R$ 200 mi em 2021 para ~R$ 621 mi em 2025, um crescimento de mais de **3×** no período.
+
+Deseja detalhar algum ano específico ou ver por subfunção/órgão?
+"

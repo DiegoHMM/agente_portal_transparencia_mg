@@ -1,0 +1,6 @@
+Categoria	N	GPT OSS – correto	GPT OSS – parcial	GPT OSS – errado	Sonnet – correto	Sonnet – parcial	Sonnet – errado
+Direta	90	84% (76)	3% (3)	12% (11)	88% (79)	6% (5)	7% (6)
+Composta	90	94% (85)	0% (0)	6% (5)	94% (85)	1% (1)	4% (4)
+Ambígua	87	62% (54)	1% (1)	37% (32)	34% (30)	37% (32)	29% (25)
+Fora de escopo	93	86% (80)	0% (0)	14% (13)	91% (85)	5% (5)	3% (3)
+Total	360	82% (295)	1% (4)	17% (61)	78% (279)	12% (43)	11% (38)
